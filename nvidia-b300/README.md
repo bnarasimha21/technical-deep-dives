@@ -870,14 +870,84 @@ The AI Factory era is here. B300 is the assembly line.
 
 ## References
 
-1. NVIDIA Blackwell Architecture Technical Brief
-2. NVIDIA DGX B300 Datasheet
-3. NVIDIA Developer Blog: "Inside NVIDIA Blackwell Ultra"
-4. TechPowerUp GPU Database
-5. NVIDIA GTC 2025 Keynote
-6. HPE GB300 NVL72 QuickSpecs
-7. Microsoft Azure ND GB300 v6 Documentation
-8. AWS EC2 P6-B300 Announcement
+### Official NVIDIA Sources
+
+1. **NVIDIA DGX B300 Product Page**
+   - https://www.nvidia.com/en-us/data-center/dgx-b300/
+
+2. **NVIDIA Blackwell Architecture Overview**
+   - https://www.nvidia.com/en-us/data-center/technologies/blackwell-architecture/
+
+3. **NVIDIA Developer Blog: "Inside NVIDIA Blackwell Ultra: The Chip Powering the AI Factory Era"**
+   - https://developer.nvidia.com/blog/inside-nvidia-blackwell-ultra-the-chip-powering-the-ai-factory-era/
+
+4. **NVIDIA Developer Blog: "Introducing NVFP4 for Efficient and Accurate Low-Precision Inference"**
+   - https://developer.nvidia.com/blog/introducing-nvfp4-for-efficient-and-accurate-low-precision-inference/
+
+5. **NVIDIA DGX B300 User Guide**
+   - https://docs.nvidia.com/dgx/dgxb300-user-guide/introduction-to-dgxb300.html
+
+6. **NVIDIA Newsroom: "Blackwell Ultra AI Factory Platform"**
+   - https://nvidianews.nvidia.com/news/nvidia-blackwell-ultra-ai-factory-platform-paves-way-for-age-of-ai-reasoning
+
+7. **NVIDIA DGX B300 Datasheet (PDF)**
+   - https://resources.nvidia.com/en-us-dgx-systems/dgx-b300-datasheet
+
+### Hardware Specifications
+
+8. **TechPowerUp GPU Database: B300 Specs**
+   - https://www.techpowerup.com/gpu-specs/b300.c4375
+
+9. **Supermicro NVIDIA HGX B300 Datasheet (PDF)**
+   - https://www.supermicro.com/datasheet/datasheet_SuperCluster_B300_Front_IO.pdf
+
+10. **Supermicro GB300 NVL72 Datasheet (PDF)**
+    - https://www.supermicro.com/datasheet/datasheet_SuperCluster_GB300_NVL72.pdf
+
+### Cloud Provider Documentation
+
+11. **AWS EC2 P6-B300 Instances Announcement**
+    - https://aws.amazon.com/about-aws/whats-new/2025/11/amazon-ec2-p6-b300-instances-nvidia-blackwell-ultra-gpus-available/
+
+12. **Microsoft Azure ND GB300 v6 Series**
+    - https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/gpu-accelerated/nd-gb300-v6-series
+
+13. **Microsoft Azure Blog: "NVIDIA GB300 NVL72 for OpenAI Workloads"**
+    - https://azure.microsoft.com/en-us/blog/microsoft-azure-delivers-the-first-large-scale-cluster-with-nvidia-gb300-nvl72-for-openai-workloads/
+
+### Partner & Vendor Sources
+
+14. **HPE GB300 NVL72 QuickSpecs**
+    - https://www.hpe.com/psnow/doc/a50009244enw
+
+15. **AMAX DGX B300 Datasheet (PDF)**
+    - https://www.amax.com/content/files/2025/12/NVIDIA-DGX-B300-datasheet_amax-1.pdf
+
+### Analysis & Comparisons
+
+16. **DigitalOcean: "What is the NVIDIA B300?"**
+    - https://www.digitalocean.com/community/tutorials/nvidia-b300
+
+17. **Introl Blog: "NVIDIA Blackwell Ultra and B300 Infrastructure Requirements"**
+    - https://introl.com/blog/nvidia-blackwell-ultra-b300-infrastructure-requirements-2025
+
+18. **Introl Blog: "NVIDIA GB300 NVL72 Deployment"**
+    - https://introl.com/blog/why-nvidia-gb300-nvl72-blackwell-ultra-matters
+
+19. **Tom's Hardware: "Nvidia announces Blackwell Ultra B300"**
+    - https://www.tomshardware.com/pc-components/gpus/nvidia-announces-blackwell-ultra-b300-1-5x-faster-than-b200-with-288gb-hbm3e-and-15-pflops-dense-fp4
+
+20. **Verda Blog: "NVIDIA B300 vs B200 Complete Comparison"**
+    - https://verda.com/blog/nvidia-b300-vs-b200-complete-gpu-comparison-to-date
+
+21. **Ori Blog: "Overview of NVIDIA Blackwell Ultra (B300 and GB300)"**
+    - https://www.ori.co/blog/nvidia-blackwell-ultra-b300-gb300-gpus
+
+22. **Glenn K. Lockwood: "NVIDIA B300"**
+    - https://glennklockwood.com/garden/processors/B300
+
+23. **CNBC: "Nvidia announces Blackwell Ultra and Vera Rubin AI chips"**
+    - https://www.cnbc.com/2025/03/18/nvidia-announces-blackwell-ultra-and-vera-rubin-ai-chips-.html
 
 ---
 
