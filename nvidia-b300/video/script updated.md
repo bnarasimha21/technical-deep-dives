@@ -56,7 +56,7 @@ Now, the trade-off. Power.
 
 ***[TDP row: 1,400W highlighted in amber]***
 
-The B300 draws up to 1,400 watts. That's 200 watts more than the base Blackwell's 1,200 watts, and double the H100's 700. At rack scale, we're talking 120 to 140 kilowatts. Liquid cooling becomes mandatory.
+The B300 draws up to 1,400 watts. That's 200 watts more than the base Blackwell's 1,200 watts, and double the H100's 700. At rack scale, an 8-GPU system draws about 14 kilowatts. Air-cooled configurations are available, though higher-density deployments may require liquid cooling.
 
 But here's what's interesting. NVIDIA claims 5x higher throughput per megawatt compared to Hopper. More power in, but disproportionately more intelligence out.
 
@@ -174,7 +174,7 @@ Inside the node, NVLink 5 connects all 8 GPUs at 1,800 gigabytes per second per 
 
 ***[Multi-node scaling graphic]***
 
-For even larger workloads, you connect multiple nodes over high-speed networking, typically 800 gigabit Ethernet with RoCEv2. NVLink handles the fast communication within a node, and the network handles communication between nodes.
+For even larger workloads, you connect multiple nodes over high-speed networking, up to 800 gigabits per second InfiniBand or Ethernet using NVIDIA ConnectX-8. NVLink handles the fast communication within a node, and the network handles communication between nodes.
 
 This two-tier architecture, NVLink inside and Ethernet outside, is how most cloud providers deploy B300 at scale.
 
