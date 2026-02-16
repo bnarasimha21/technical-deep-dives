@@ -128,19 +128,19 @@
 
 ---
 
-## Scene 7: NVLink 5 & System Scale (7:00 – 8:15)
+## Scene 7: Multi-GPU Scaling (7:00 – 8:15)
 
-**Visual:** Network topology animation — 8-GPU DGX, then expanding to 72-GPU NVL72
+**Visual:** Network topology animation — 8-GPU node with NVLink, multi-node with Ethernet
 
 **Key Points:**
 - NVLink 5: 1,800 GB/s per GPU (2x Hopper)
-- DGX B300: 8 GPUs, 2.3 TB total memory, 14.4 TB/s aggregate NVLink
-- GB300 NVL72: 72 GPUs in a rack, 20.7 TB memory, 1.1 ExaFLOPS
-- All 72 GPUs in NVL72 appear as one NVLink domain
+- 8-GPU B300 node: 2.3 TB total memory, 14.4 TB/s aggregate NVLink bandwidth
+- Multi-node: 800 Gbps RoCEv2 Ethernet between nodes
+- Two-tier architecture: NVLink inside the node, Ethernet outside — standard cloud deployment model
 
 **On-Screen Graphics:**
-- DGX B300 block diagram
-- NVL72 rack visualization
+- 8-GPU node block diagram with NVLink
+- Multi-node scaling graphic (NVLink intra-node, Ethernet inter-node)
 - NVLink bandwidth comparison: NVLink 4 vs 5
 
 **Transition:** "Let's talk real-world performance"
@@ -153,13 +153,12 @@
 
 **Key Points (Official NVIDIA Claims):**
 - B300 delivers 1.5x more AI compute than B200 in NVFP4, 7.5x more than H100 in FP8
-- HGX B300: 11x faster LLM inference vs Hopper, 7x more compute, 4x more memory
-- NVL72: 50x higher AI factory output vs Hopper, 10x better latency per user
+- 8-GPU B300 systems: 11x faster LLM inference vs Hopper, 7x more compute, 4x more memory
 - Efficiency: 5x higher throughput per megawatt compared to Hopper
 
 **On-Screen Graphics:**
-- Relative performance comparison bars (vs Hopper generation)
-- HGX B300 vs NVL72 system-level claims
+- Per-GPU compute comparison bars (vs B200, H100)
+- 8-GPU system-level performance claims
 - Efficiency: 5x throughput/MW callout
 
 **Transition:** "So who should actually use this?"
