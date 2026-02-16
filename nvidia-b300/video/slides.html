@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NVIDIA B300 Blackwell Ultra — Technical Deep Dive</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css">
+<style>
+  :root {
+    --accent: #76b900;       /* NVIDIA green */
+    --accent2: #0080ff;      /* DigitalOcean-ish blue */
+    --bg-dark: #0d1117;
+    --text-muted: #8b949e;
+  }
+  .reveal { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+  .reveal h1, .reveal h2, .reveal h3 { color: var(--accent); text-transform: none; font-weight: 700; }
+  .reveal h1 { font-size: 2.2em; }
+  .reveal h2 { font-size: 1.6em; }
+  .reveal h3 { font-size: 1.2em; color: var(--accent2); }
+  .reveal p, .reveal li { font-size: 0.75em; line-height: 1.6; }
+  .reveal .subtitle { color: var(--text-muted); font-size: 0.9em; margin-top: -0.3em; }
+  .reveal table { font-size: 0.65em; margin: 0.5em auto; border-collapse: collapse; }
+  .reveal table th { background: rgba(118,185,0,0.15); color: var(--accent); padding: 0.4em 0.8em; border-bottom: 2px solid var(--accent); }
+  .reveal table td { padding: 0.35em 0.8em; border-bottom: 1px solid #333; }
+  .reveal table tr:last-child td { border-bottom: none; }
+  .reveal .highlight { color: var(--accent); font-weight: 700; }
+  .reveal .stat-grid { display: flex; justify-content: center; gap: 2em; margin: 1em 0; flex-wrap: wrap; }
+  .reveal .stat-box { text-align: center; padding: 0.8em 1.2em; border: 2px solid var(--accent); border-radius: 12px; min-width: 160px; }
+  .reveal .stat-box .number { font-size: 2em; font-weight: 800; color: var(--accent); display: block; }
+  .reveal .stat-box .label { font-size: 0.6em; color: var(--text-muted); }
+  .reveal .diagram { background: rgba(255,255,255,0.03); border: 1px solid #333; border-radius: 8px; padding: 1em; font-family: 'Courier New', monospace; font-size: 0.55em; line-height: 1.4; text-align: left; white-space: pre; overflow-x: auto; }
+  .reveal .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5em; align-items: start; }
+  .reveal .callout { background: rgba(118,185,0,0.08); border-left: 4px solid var(--accent); padding: 0.6em 1em; border-radius: 0 8px 8px 0; font-size: 0.7em; margin: 0.5em 0; }
+  .reveal .red { color: #f85149; }
+  .reveal .green { color: #76b900; }
+  .reveal .blue { color: var(--accent2); }
+  .reveal .amber { color: #d29922; }
+  .reveal ul { list-style: none; padding-left: 0; }
+  .reveal ul li::before { content: "▸ "; color: var(--accent); font-weight: bold; }
+  .reveal .section-title { font-size: 2.5em !important; }
+  .reveal .fragment.fade-in-then-semi-out.visible:not(.current-fragment) { opacity: 0.4; }
+  .slide-number { font-size: 12px !important; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============ SLIDE 1: TITLE ============ -->
+<section>
+  <h1>NVIDIA B300</h1>
+  <h2 style="color: #ccc; font-size: 1.1em;">Blackwell Ultra: Technical Deep Dive</h2>
+  <p class="subtitle">The GPU Powering the AI Factory Era</p>
+  <br>
+  <div class="stat-grid">
+    <div class="stat-box"><span class="number">15</span><span class="label">PFLOPS (FP4)</span></div>
+    <div class="stat-box"><span class="number">288</span><span class="label">GB HBM3e</span></div>
+    <div class="stat-box"><span class="number">208B</span><span class="label">Transistors</span></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2: WHY B300 EXISTS ============ -->
+<section>
+  <h2>The AI Factory Era</h2>
+  <p>Models are growing faster than hardware can keep up</p>
+  <br>
+  <div class="stat-grid">
+    <div class="stat-box"><span class="number">175B</span><span class="label">GPT-3 (2020)</span></div>
+    <div class="stat-box"><span class="number">1T+</span><span class="label">GPT-4 (2023)</span></div>
+    <div class="stat-box"><span class="number">???</span><span class="label">Reasoning Models (2025)</span></div>
+  </div>
+  <br>
+  <div class="callout">
+    The bottleneck isn't compute — it's <span class="highlight">memory</span>.<br>
+    If the model doesn't fit, you split across GPUs → more cost, more complexity.
+  </div>
+</section>
+
+<!-- ============ SLIDE 3: GPU EVOLUTION ============ -->
+<section>
+  <h2>GPU Evolution</h2>
+  <table>
+    <tr><th>Year</th><th>GPU</th><th>Architecture</th><th>AI Compute</th><th>Memory</th></tr>
+    <tr class="fragment"><td>2020</td><td>A100</td><td>Ampere</td><td>0.6 PFLOPS</td><td>80 GB</td></tr>
+    <tr class="fragment"><td>2022</td><td>H100</td><td>Hopper</td><td>2 PFLOPS</td><td>80 GB</td></tr>
+    <tr class="fragment"><td>2024</td><td>B200</td><td>Blackwell</td><td>10 PFLOPS</td><td>192 GB</td></tr>
+    <tr class="fragment" style="color: var(--accent); font-weight: 700;"><td>2025</td><td>B300</td><td>Blackwell Ultra</td><td>15 PFLOPS</td><td>288 GB</td></tr>
+  </table>
+  <p class="fragment" style="margin-top: 1em;"><span class="highlight">7.5x</span> compute and <span class="highlight">3.6x</span> memory vs. H100 in 3 years</p>
+</section>
+
+<!-- ============ SLIDE 4: THE NUMBERS ============ -->
+<section>
+  <h2>B300 vs B200 vs H100</h2>
+  <table>
+    <tr><th>Metric</th><th>H100</th><th>B200</th><th style="color: var(--accent);">B300</th></tr>
+    <tr><td>FP4 Dense</td><td>2 PFLOPS*</td><td>10 PFLOPS</td><td class="highlight">15 PFLOPS</td></tr>
+    <tr><td>HBM3e Memory</td><td>80 GB</td><td>192 GB</td><td class="highlight">288 GB</td></tr>
+    <tr><td>Memory Bandwidth</td><td>3.35 TB/s</td><td>8 TB/s</td><td class="highlight">8 TB/s</td></tr>
+    <tr><td>NVLink BW</td><td>900 GB/s</td><td>1,800 GB/s</td><td class="highlight">1,800 GB/s</td></tr>
+    <tr><td>TDP</td><td>700W</td><td>1,200W</td><td class="amber">1,400W</td></tr>
+  </table>
+  <p style="font-size: 0.55em; color: var(--text-muted);">*H100 equivalent with INT8/FP8</p>
+</section>
+
+<!-- ============ SLIDE 5: DUAL RETICLE ============ -->
+<section>
+  <h2>Dual-Reticle Architecture</h2>
+  <p>Two dies. One GPU.</p>
+  <div class="diagram">
+┌───────────────────────────────────────────────┐
+│                 B300 Package                    │
+│                                                 │
+│  ┌──────────────┐       ┌──────────────┐       │
+│  │    Die A      │       │    Die B      │       │
+│  │   104B trans  │◄─────►│   104B trans  │       │
+│  │   80 SMs      │ NV-HBI│   80 SMs      │       │
+│  │   320 TCs     │10 TB/s│   320 TCs     │       │
+│  └──────────────┘       └──────────────┘       │
+│                                                 │
+│          ┌──────────────────────┐               │
+│          │  Unified L2: 50 MB   │               │
+│          └──────────────────────┘               │
+│    ████ ████ ████ ████ ████ ████ ████ ████     │
+│    36GB 36GB 36GB 36GB 36GB 36GB 36GB 36GB     │
+│              8× HBM3e = 288 GB                  │
+└───────────────────────────────────────────────┘</div>
+  <p class="fragment callout">Appears as a <span class="highlight">single CUDA device</span> — transparent to developers</p>
+</section>
+
+<!-- ============ SLIDE 6: TENSOR CORES ============ -->
+<section>
+  <h2>5th-Gen Tensor Cores</h2>
+  <div class="two-col">
+    <div>
+      <h3>Evolution</h3>
+      <table>
+        <tr><th>Gen</th><th>Arch</th><th>Innovation</th></tr>
+        <tr><td>1st</td><td>Volta</td><td>Matrix multiply</td></tr>
+        <tr><td>2nd</td><td>Turing</td><td>INT8, INT4</td></tr>
+        <tr><td>3rd</td><td>Ampere</td><td>TF32, sparsity</td></tr>
+        <tr><td>4th</td><td>Hopper</td><td>FP8, Transformer Engine</td></tr>
+        <tr style="color: var(--accent);"><td>5th</td><td>Blackwell</td><td>NVFP4, 2x attention</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>What's New</h3>
+      <ul>
+        <li class="fragment">Native <span class="highlight">NVFP4</span> support</li>
+        <li class="fragment"><span class="highlight">2x</span> attention acceleration (softmax)</li>
+        <li class="fragment"><span class="highlight">Tensor Memory</span> (256 KB/SM)</li>
+        <li class="fragment">Dual-Thread-Block MMA</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 7: NVFP4 ============ -->
+<section>
+  <h2>NVFP4: The Precision Revolution</h2>
+  <p>4-bit floating point with two-level scaling</p>
+  <br>
+  <table>
+    <tr><th>Format</th><th>Bits/Weight</th><th>Memory Use</th><th>Compute</th><th>Accuracy Loss</th></tr>
+    <tr><td>FP16</td><td>16</td><td>1x</td><td>1x</td><td>0%</td></tr>
+    <tr><td>FP8</td><td>8</td><td>0.5x</td><td>2x</td><td>~0.5%</td></tr>
+    <tr style="color: var(--accent); font-weight: 700;"><td>NVFP4</td><td>4</td><td>~0.29x (~3.5x reduction)</td><td>4x</td><td>~1%</td></tr>
+  </table>
+  <br>
+  <div class="callout fragment">
+    <strong>Llama-3 405B:</strong> 810 GB in FP16 (3+ GPUs) → <span class="highlight">202 GB in FP4 (1 GPU!)</span>
+  </div>
+</section>
+
+<!-- ============ SLIDE 8: MEMORY ARCHITECTURE ============ -->
+<section>
+  <h2>288 GB HBM3e</h2>
+  <p>Memory is the killer feature</p>
+  <br>
+  <div class="two-col">
+    <div>
+      <h3>Configuration</h3>
+      <ul>
+        <li>8× 12-Hi HBM3e stacks</li>
+        <li>36 GB per stack</li>
+        <li>8,192-bit interface</li>
+        <li>8 TB/s bandwidth</li>
+      </ul>
+      <br>
+      <h3>Memory Hierarchy</h3>
+      <table>
+        <tr><th>Level</th><th>Size</th><th>Latency</th></tr>
+        <tr><td>Registers</td><td>256 KB/SM</td><td>0 cycles</td></tr>
+        <tr><td>TMEM</td><td>256 KB/SM</td><td>~few</td></tr>
+        <tr><td>L1/Shared</td><td>228 KB/SM</td><td>~20-30</td></tr>
+        <tr><td>L2 Cache</td><td>50 MB</td><td>~200</td></tr>
+        <tr><td>HBM3e</td><td>288 GB</td><td>~400</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Why It Matters</h3>
+      <ul>
+        <li class="fragment"><span class="highlight">Larger models</span> on fewer GPUs</li>
+        <li class="fragment"><span class="highlight">Bigger KV caches</span> → longer context</li>
+        <li class="fragment"><span class="highlight">Higher batch sizes</span> → better throughput</li>
+        <li class="fragment"><span class="highlight">Lower cost</span> per inference</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 9: NVLINK & SCALE ============ -->
+<section>
+  <h2>NVLink 5 & System Scale</h2>
+  <br>
+  <div class="two-col">
+    <div>
+      <h3>DGX B300 (8-GPU)</h3>
+      <div class="stat-grid" style="gap: 0.8em;">
+        <div class="stat-box" style="min-width: 120px;"><span class="number" style="font-size: 1.4em;">8</span><span class="label">B300 GPUs</span></div>
+        <div class="stat-box" style="min-width: 120px;"><span class="number" style="font-size: 1.4em;">2.3 TB</span><span class="label">GPU Memory</span></div>
+      </div>
+      <ul style="font-size: 0.65em;">
+        <li>14.4 TB/s NVLink aggregate</li>
+        <li>120 PFLOPS FP4 Dense (8 × 15)</li>
+        <li>Air-cooled, 10U, ~14 kW</li>
+      </ul>
+    </div>
+    <div>
+      <h3>GB300 NVL72 (Full Rack)</h3>
+      <div class="stat-grid" style="gap: 0.8em;">
+        <div class="stat-box" style="min-width: 120px;"><span class="number" style="font-size: 1.4em;">72</span><span class="label">B300 GPUs</span></div>
+        <div class="stat-box" style="min-width: 120px;"><span class="number" style="font-size: 1.4em;">20.7 TB</span><span class="label">GPU Memory</span></div>
+      </div>
+      <ul style="font-size: 0.65em;">
+        <li>130 TB/s NVLink aggregate</li>
+        <li><span class="highlight">1.1 ExaFLOPS</span> FP4</li>
+        <li>Liquid-cooled, 120-140 kW</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 10: INFERENCE PERFORMANCE ============ -->
+<section>
+  <h2>Performance — Official NVIDIA Claims</h2>
+  <p>B300 vs. previous generations</p>
+  <br>
+  <div class="stat-grid">
+    <div class="stat-box"><span class="number">1.5x</span><span class="label">vs B200 (NVFP4)</span></div>
+    <div class="stat-box"><span class="number">7.5x</span><span class="label">vs H100 (FP8)</span></div>
+  </div>
+  <br>
+  <div class="two-col fragment">
+    <div class="callout">
+      <strong>HGX B300 (8-GPU)</strong><br>
+      <span class="highlight">11x</span> faster LLM inference vs Hopper<br>
+      <span class="highlight">7x</span> more compute, <span class="highlight">4x</span> more memory
+    </div>
+    <div class="callout">
+      <strong>GB300 NVL72 (72-GPU)</strong><br>
+      <span class="highlight">50x</span> higher AI factory output vs Hopper<br>
+      <span class="highlight">10x</span> better latency per user
+    </div>
+  </div>
+  <br>
+  <div class="callout fragment">
+    <strong>Efficiency:</strong> <span class="highlight">5x</span> higher throughput per megawatt vs Hopper
+  </div>
+</section>
+
+<!-- ============ SLIDE 11: EFFICIENCY ============ -->
+<section>
+  <h2>Efficiency & Power</h2>
+  <p>More intelligence per watt</p>
+  <br>
+  <div class="stat-grid">
+    <div class="stat-box"><span class="number">5x</span><span class="label">Throughput/MW vs Hopper</span></div>
+    <div class="stat-box"><span class="number">1,400W</span><span class="label">TDP per GPU</span></div>
+  </div>
+  <br>
+  <div class="callout fragment">
+    <strong>The trade-off:</strong> Higher power draw per GPU, but <span class="highlight">disproportionately more output</span>.<br>
+    More power in → far more intelligence out. Liquid cooling required at rack scale.
+  </div>
+  <br>
+  <div class="callout fragment">
+    <strong>NVL72 rack:</strong> 120–140 kW total, delivering <span class="highlight">1.1 ExaFLOPS</span> of FP4 compute.
+  </div>
+</section>
+
+<!-- ============ SLIDE 12: USE CASES ============ -->
+<section>
+  <h2>Who Should Use B300?</h2>
+  <br>
+  <div class="two-col">
+    <div>
+      <h3 style="color: var(--accent);">Ideal For</h3>
+      <ul>
+        <li>LLM inference at scale</li>
+        <li>AI reasoning / chain-of-thought</li>
+        <li>Multimodal AI (vision + language)</li>
+        <li>Training large foundation models</li>
+        <li>Mixture of Experts (MoE)</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="red">Not Ideal For</h3>
+      <ul>
+        <li><span class="red">FP64 HPC</span> — only 1.2 TFLOPS</li>
+        <li><span class="red">Graphics/rendering</span> — no displays</li>
+        <li><span class="red">Edge deployment</span> — 1,400W</li>
+        <li><span class="red">Budget workloads</span> — premium pricing</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 13: CLOUD ECONOMICS ============ -->
+<section>
+  <h2>Cloud GPU Economics</h2>
+  <br>
+  <table>
+    <tr><th>Provider</th><th>Instance</th><th>Status</th></tr>
+    <tr><td>AWS</td><td>P6-B300</td><td class="green">Available</td></tr>
+    <tr><td>Azure</td><td>ND GB300 v6</td><td class="green">Available</td></tr>
+    <tr><td>GCP</td><td>A3 Ultra</td><td class="amber">Coming 2026</td></tr>
+    <tr><td>Oracle Cloud</td><td>BM.GPU.B300</td><td class="green">Available</td></tr>
+  </table>
+  <br>
+  <div class="callout fragment">
+    <strong>Value proposition:</strong> NVIDIA claims <span class="highlight">5x throughput per megawatt</span> vs Hopper.<br>
+    More work per GPU → fewer GPUs needed → simpler architecture, lower total cost.
+  </div>
+  <br>
+  <p class="fragment" style="font-size: 0.65em;">
+    <strong>Choose B300:</strong> Large models (70B+), throughput-sensitive, latency-critical<br>
+    <strong>Choose H100:</strong> Smaller models, experimentation, FP64 workloads
+  </p>
+</section>
+
+<!-- ============ SLIDE 14: SOFTWARE STACK ============ -->
+<section>
+  <h2>Software Stack</h2>
+  <p>Seamless compatibility — no rewrites needed</p>
+  <br>
+  <div class="two-col">
+    <div>
+      <h3>Frameworks</h3>
+      <table>
+        <tr><td>PyTorch</td><td class="green">Native</td></tr>
+        <tr><td>TensorFlow</td><td class="green">Supported</td></tr>
+        <tr><td>JAX</td><td class="green">Supported</td></tr>
+        <tr><td>vLLM</td><td class="green">NVFP4 Day-1</td></tr>
+        <tr><td>SGLang</td><td class="green">NVFP4 Day-1</td></tr>
+        <tr><td>TensorRT-LLM</td><td class="green">Optimized</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Key Libraries</h3>
+      <table>
+        <tr><td>CUDA</td><td>12.x+ (backward compat)</td></tr>
+        <tr><td>cuDNN</td><td>FP4/FP8 kernels</td></tr>
+        <tr><td>cuBLAS</td><td>Tensor Core paths</td></tr>
+        <tr><td>NCCL</td><td>NVLink 5 aware</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 15: KEY TAKEAWAYS ============ -->
+<section>
+  <h2>Five Things to Remember</h2>
+  <br>
+  <ol style="list-style: none; padding: 0; font-size: 0.75em;">
+    <li class="fragment" style="margin-bottom: 0.6em;">
+      <span class="highlight" style="font-size: 1.3em;">1.</span>
+      <strong>15 PFLOPS FP4</strong> — the fastest AI GPU available
+    </li>
+    <li class="fragment" style="margin-bottom: 0.6em;">
+      <span class="highlight" style="font-size: 1.3em;">2.</span>
+      <strong>288 GB HBM3e</strong> — fit 400B+ models on a single GPU
+    </li>
+    <li class="fragment" style="margin-bottom: 0.6em;">
+      <span class="highlight" style="font-size: 1.3em;">3.</span>
+      <strong>2x attention acceleration</strong> — built for reasoning models
+    </li>
+    <li class="fragment" style="margin-bottom: 0.6em;">
+      <span class="highlight" style="font-size: 1.3em;">4.</span>
+      <strong>NVFP4</strong> — ~3.5x memory reduction vs FP16, ~1% accuracy trade-off
+    </li>
+    <li class="fragment" style="margin-bottom: 0.6em;">
+      <span class="highlight" style="font-size: 1.3em;">5.</span>
+      <strong>Cloud-ready</strong> — available now, no hardware purchase needed
+    </li>
+  </ol>
+</section>
+
+<!-- ============ SLIDE 16: ROADMAP ============ -->
+<section>
+  <h2>What's Next</h2>
+  <br>
+  <table>
+    <tr><th>Year</th><th>Architecture</th><th>Status</th></tr>
+    <tr style="color: var(--accent); font-weight: 700;"><td>2025</td><td>Blackwell Ultra (B300)</td><td>Available Now</td></tr>
+    <tr><td>2026</td><td>Vera Rubin</td><td>Announced</td></tr>
+    <tr><td>2027</td><td>Rubin Ultra</td><td>Announced</td></tr>
+  </table>
+  <br>
+  <div class="callout">
+    NVIDIA's annual cadence: today's flagship is next year's baseline.
+  </div>
+  <br>
+  <h3 class="fragment" style="color: #fff; font-size: 1.1em;">The AI Factory era is here.<br><span class="highlight">B300 is the assembly line.</span></h3>
+</section>
+
+<!-- ============ SLIDE 17: END ============ -->
+<section>
+  <h1 style="font-size: 2em;">Thank You</h1>
+  <br>
+  <p class="subtitle">NVIDIA B300 Blackwell Ultra — Technical Deep Dive</p>
+  <br>
+  <p style="font-size: 0.6em; color: var(--text-muted);">
+    Sources: NVIDIA Developer Blog, NVIDIA Newsroom, TechPowerUp, AWS, Azure<br>
+    Full write-up available on GitHub
+  </p>
+</section>
+
+</div><!-- /slides -->
+</div><!-- /reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  slideNumber: 'c/t',
+  transition: 'slide',
+  transitionSpeed: 'default',
+  backgroundTransition: 'fade',
+  center: true,
+  width: 1280,
+  height: 720,
+  margin: 0.08,
+  pdfMaxPagesPerSlide: 1,
+});
+</script>
+</body>
+</html>
