@@ -95,7 +95,7 @@
   - Micro-block scale (FP8) per 16 values
   - Tensor-level scale (FP32) across entire tensor
 - Why it matters: ~3.5x memory reduction vs FP16, ~1.8x vs FP8, ~1% accuracy trade-off
-- Real example: Llama-3 405B in FP4 = 202 GB → fits on a SINGLE B300
+- Real example: DeepSeek-R1 671B → 17 H100s (FP16), 9 H100s (FP8), just 2 B300s (NVFP4)
 
 **On-Screen Graphics:**
 - Tensor core gen 1-5 evolution table
@@ -130,18 +130,20 @@
 
 ## Scene 7: Multi-GPU Scaling (7:00 – 8:15)
 
-**Visual:** Network topology animation — 8-GPU node with NVLink, multi-node with Ethernet
+**Visual:** Network topology animation — 8-GPU node with NVLink, multi-node with InfiniBand/Ethernet
 
 **Key Points:**
-- NVLink 5: 1,800 GB/s per GPU (2x Hopper)
-- 8-GPU B300 node: 2.3 TB total memory, 14.4 TB/s aggregate NVLink bandwidth
-- Multi-node: 800 Gbps RoCEv2 Ethernet between nodes
-- Two-tier architecture: NVLink inside the node, Ethernet outside — standard cloud deployment model
+- 8× B300 GPUs + Intel Xeon CPUs + 2 TB system memory per node
+- System compute: 108 PFLOPS FP4 dense, 144 PFLOPS sparse, 72 PFLOPS FP8
+- 2.3 TB total GPU memory, ~14 kW system power
+- 2× 5th-gen NVSwitch, NVLink 5: 1,800 GB/s per GPU (2x Hopper), 14.4 TB/s aggregate
+- Multi-node: up to 800 Gb/s InfiniBand or Ethernet via NVIDIA ConnectX-8
+- Two-tier architecture: NVLink inside the node, high-speed networking outside
 
 **On-Screen Graphics:**
-- 8-GPU node block diagram with NVLink
-- Multi-node scaling graphic (NVLink intra-node, Ethernet inter-node)
-- NVLink bandwidth comparison: NVLink 4 vs 5
+- 8-GPU node block diagram with NVSwitch and NVLink
+- System-level compute stats (108/144 PFLOPS, 72 FP8)
+- Multi-node scaling graphic (NVLink intra-node, InfiniBand/Ethernet inter-node)
 
 **Transition:** "Let's talk real-world performance"
 

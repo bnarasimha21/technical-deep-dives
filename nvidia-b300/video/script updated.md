@@ -118,9 +118,11 @@ Here's the real-world payoff.
 
 ***[Model footprint graphic]***
 
-A 405-billion parameter model like Llama 3 in FP16 needs 810 gigabytes. That's 3 GPUs minimum. In FP4? 202 gigabytes. That fits on a  single B300.
+A 671-billion parameter model like DeepSeek-R1 in FP16 needs 1,342 gigabytes. That's 17 H100s. Even in FP8, you still need 9 H100s. But with NVFP4 on B300? About 383 gigabytes. That fits on just 2 B300s.
 
-***[Single GPU highlight]***
+***[GPU comparison: 9× H100 vs 2× B300]***
+
+9 GPUs down to 2. Less hardware, less communication overhead, simpler deployment.
 
 Second, 2x attention acceleration. The softmax operation in transformer attention is a bottleneck. Blackwell Ultra doubles the special function unit throughput for exponentials and division. This directly speeds up every attention layer.
 
@@ -168,9 +170,11 @@ One B300 is impressive. But production AI runs on multi-GPU servers.
 
 ***[8-GPU node diagram]***
 
-A typical B300 server packs 8 GPUs into a single node. That gives you 2.3 terabytes of total GPU memory, enough to run even the largest models without splitting across nodes.
+A typical B300 server packs 8 GPUs into a single node, paired with Intel Xeon processors and 2 terabytes of system memory. That gives you 2.3 terabytes of total GPU memory, enough to run even the largest models without splitting across nodes.
 
-Inside the node, NVLink 5 connects all 8 GPUs at 1,800 gigabytes per second per GPU, double what Hopper offered. That's 14.4 terabytes per second of aggregate bandwidth, so GPUs can share data almost as fast as reading local memory.
+At the system level, you get 108 petaflops of dense FP4 compute, or 144 petaflops with sparsity. For FP8 training workloads, that's 72 petaflops. The whole system draws about 14 kilowatts.
+
+Inside the node, two fifth-generation NVSwitch chips connect all 8 GPUs over NVLink 5 at 1,800 gigabytes per second per GPU, double what Hopper offered. That's 14.4 terabytes per second of aggregate bandwidth, so GPUs can share data almost as fast as reading local memory.
 
 ***[Multi-node scaling graphic]***
 

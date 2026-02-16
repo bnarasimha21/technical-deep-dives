@@ -68,7 +68,7 @@
   <div class="stat-grid">
     <div class="stat-box"><span class="number">175B</span><span class="label">GPT-3 (2020)</span></div>
     <div class="stat-box"><span class="number">1T+</span><span class="label">GPT-4 (2023)</span></div>
-    <div class="stat-box"><span class="number">???</span><span class="label">Reasoning Models (2025)</span></div>
+    <div class="stat-box"><span class="number">???</span><span class="label">Reasoning Models (2026)</span></div>
   </div>
   <br>
   <div class="callout">
@@ -107,25 +107,45 @@
 <!-- ============ SLIDE 5: DUAL RETICLE ============ -->
 <section>
   <h2>Dual-Reticle Architecture</h2>
-  <p>Two dies. One GPU.</p>
-  <div class="diagram">
-┌───────────────────────────────────────────────┐
-│                 B300 Package                    │
-│                                                 │
-│  ┌──────────────┐       ┌──────────────┐       │
-│  │    Die A      │       │    Die B      │       │
-│  │   104B trans  │◄─────►│   104B trans  │       │
-│  │   80 SMs      │ NV-HBI│   80 SMs      │       │
-│  │   320 TCs     │10 TB/s│   320 TCs     │       │
-│  └──────────────┘       └──────────────┘       │
-│                                                 │
-│          ┌──────────────────────┐               │
-│          │  Unified L2: 50 MB   │               │
-│          └──────────────────────┘               │
-│    ████ ████ ████ ████ ████ ████ ████ ████     │
-│    36GB 36GB 36GB 36GB 36GB 36GB 36GB 36GB     │
-│              8× HBM3e = 288 GB                  │
-└───────────────────────────────────────────────┘</div>
+  <p>Two dies. One GPU. 208 billion transistors.</p>
+  <br>
+  <div style="display: flex; justify-content: center; align-items: center; gap: 0;">
+    <!-- Die A -->
+    <div style="border: 2px solid var(--accent); border-radius: 10px; padding: 0.8em 1.2em; text-align: center; min-width: 180px; background: rgba(118,185,0,0.05);">
+      <div style="font-size: 1em; font-weight: 700; color: var(--accent);">Die A</div>
+      <div style="font-size: 0.55em; color: var(--text-muted); margin-top: 0.3em;">104B transistors<br>80 SMs · 320 Tensor Cores</div>
+    </div>
+    <!-- NV-HBI arrow -->
+    <div style="display: flex; flex-direction: column; align-items: center; padding: 0 0.8em;">
+      <div style="font-size: 0.55em; color: var(--accent); font-weight: 700;">NV-HBI</div>
+      <div style="font-size: 1.5em; color: var(--accent); letter-spacing: -2px;">◄──►</div>
+      <div style="font-size: 0.55em; color: var(--accent); font-weight: 700;">10 TB/s</div>
+    </div>
+    <!-- Die B -->
+    <div style="border: 2px solid var(--accent); border-radius: 10px; padding: 0.8em 1.2em; text-align: center; min-width: 180px; background: rgba(118,185,0,0.05);">
+      <div style="font-size: 1em; font-weight: 700; color: var(--accent);">Die B</div>
+      <div style="font-size: 0.55em; color: var(--text-muted); margin-top: 0.3em;">104B transistors<br>80 SMs · 320 Tensor Cores</div>
+    </div>
+  </div>
+  <br>
+  <!-- Unified L2 -->
+  <div style="max-width: 500px; margin: 0 auto;">
+    <div style="border: 1px solid var(--accent2); border-radius: 6px; padding: 0.3em; text-align: center; font-size: 0.6em; color: var(--accent2); background: rgba(0,128,255,0.05);">
+      Unified L2 Cache: 50 MB
+    </div>
+  </div>
+  <!-- HBM3e -->
+  <div style="display: flex; justify-content: center; gap: 0.4em; margin-top: 0.6em;">
+    <div style="background: var(--accent); border-radius: 3px; padding: 0.2em 0.5em; font-size: 0.45em; color: #000; font-weight: 700;">36 GB</div>
+    <div style="background: var(--accent); border-radius: 3px; padding: 0.2em 0.5em; font-size: 0.45em; color: #000; font-weight: 700;">36 GB</div>
+    <div style="background: var(--accent); border-radius: 3px; padding: 0.2em 0.5em; font-size: 0.45em; color: #000; font-weight: 700;">36 GB</div>
+    <div style="background: var(--accent); border-radius: 3px; padding: 0.2em 0.5em; font-size: 0.45em; color: #000; font-weight: 700;">36 GB</div>
+    <div style="background: var(--accent); border-radius: 3px; padding: 0.2em 0.5em; font-size: 0.45em; color: #000; font-weight: 700;">36 GB</div>
+    <div style="background: var(--accent); border-radius: 3px; padding: 0.2em 0.5em; font-size: 0.45em; color: #000; font-weight: 700;">36 GB</div>
+    <div style="background: var(--accent); border-radius: 3px; padding: 0.2em 0.5em; font-size: 0.45em; color: #000; font-weight: 700;">36 GB</div>
+    <div style="background: var(--accent); border-radius: 3px; padding: 0.2em 0.5em; font-size: 0.45em; color: #000; font-weight: 700;">36 GB</div>
+  </div>
+  <p style="font-size: 0.5em; color: var(--text-muted); margin-top: 0.3em;">8× HBM3e stacks = 288 GB @ 8 TB/s</p>
   <p class="fragment callout">Appears as a <span class="highlight">single CUDA device</span> — transparent to developers</p>
 </section>
 
@@ -169,25 +189,23 @@
   </table>
   <br>
   <div class="callout fragment">
-    <strong>Llama-3 405B:</strong> 810 GB in FP16 (3+ GPUs) → <span class="highlight">202 GB in FP4 (1 GPU!)</span>
+    <strong>DeepSeek-R1 671B:</strong> 1,342 GB in FP16 → <span class="highlight">~383 GB in NVFP4</span>
   </div>
+  <br>
+  <table class="fragment" style="font-size: 0.6em;">
+    <tr><th>GPU</th><th>Precision</th><th>Model Size</th><th>GPUs Needed</th></tr>
+    <tr><td>H100 (80 GB)</td><td>FP16</td><td>1,342 GB</td><td class="red">17</td></tr>
+    <tr><td>H100 (80 GB)</td><td>FP8</td><td>~671 GB</td><td class="red">9</td></tr>
+    <tr style="color: var(--accent); font-weight: 700;"><td>B300 (288 GB)</td><td>NVFP4</td><td>~383 GB</td><td>2</td></tr>
+  </table>
 </section>
 
 <!-- ============ SLIDE 8: MEMORY ARCHITECTURE ============ -->
 <section>
   <h2>288 GB HBM3e</h2>
-  <p>Memory is the killer feature</p>
-  <br>
+  <p style="margin-bottom: 0.2em;">8× 12-Hi stacks · 8 TB/s bandwidth · 8,192-bit interface</p>
   <div class="two-col">
     <div>
-      <h3>Configuration</h3>
-      <ul>
-        <li>8× 12-Hi HBM3e stacks</li>
-        <li>36 GB per stack</li>
-        <li>8,192-bit interface</li>
-        <li>8 TB/s bandwidth</li>
-      </ul>
-      <br>
       <h3>Memory Hierarchy</h3>
       <table>
         <tr><th>Level</th><th>Size</th><th>Latency</th></tr>
@@ -213,26 +231,28 @@
 <!-- ============ SLIDE 9: NVLINK & SCALE ============ -->
 <section>
   <h2>Multi-GPU Scaling</h2>
-  <p>NVLink inside the node, Ethernet between nodes</p>
+  <p>8× B300 GPUs + Intel Xeon CPUs + 2 TB system memory</p>
   <br>
   <div class="stat-grid">
-    <div class="stat-box"><span class="number">8</span><span class="label">B300 GPUs / Node</span></div>
-    <div class="stat-box"><span class="number">2.3 TB</span><span class="label">GPU Memory / Node</span></div>
-    <div class="stat-box"><span class="number">1,800</span><span class="label">GB/s NVLink per GPU</span></div>
+    <div class="stat-box"><span class="number">2.3 TB</span><span class="label">GPU Memory</span></div>
+    <div class="stat-box"><span class="number">108</span><span class="label">PFLOPS FP4 Dense</span></div>
+    <div class="stat-box"><span class="number">~14 kW</span><span class="label">System Power</span></div>
   </div>
   <br>
   <div class="two-col fragment">
     <div class="callout">
       <strong>Intra-node: NVLink 5</strong><br>
-      14.4 TB/s aggregate bandwidth<br>
+      2× NVSwitch (5th gen)<br>
+      14.4 TB/s aggregate, 1,800 GB/s per GPU<br>
       2x faster than Hopper generation
     </div>
     <div class="callout">
-      <strong>Inter-node: 800 Gbps Ethernet</strong><br>
-      RoCEv2 for multi-node scaling<br>
+      <strong>Inter-node: up to 800 Gb/s</strong><br>
+      InfiniBand or Ethernet via ConnectX-8<br>
       Standard datacenter networking
     </div>
   </div>
+  <p class="fragment" style="font-size: 0.55em; color: var(--text-muted);">144 PFLOPS FP4 sparse | 72 PFLOPS FP8 training</p>
 </section>
 
 <!-- ============ SLIDE 10: INFERENCE PERFORMANCE ============ -->
@@ -269,7 +289,7 @@
   <br>
   <div class="callout fragment">
     <strong>The trade-off:</strong> Higher power draw per GPU, but <span class="highlight">disproportionately more output</span>.<br>
-    More power in → far more intelligence out. Liquid cooling required at rack scale.
+    More power in → far more intelligence out. Air-cooled configs available; liquid cooling for higher-density deployments.
   </div>
   <br>
   <div class="callout fragment">
@@ -304,28 +324,6 @@
   </div>
 </section>
 
-<!-- ============ SLIDE 13: CLOUD ECONOMICS ============ -->
-<section>
-  <h2>Cloud GPU Economics</h2>
-  <br>
-  <table>
-    <tr><th>Provider</th><th>Instance</th><th>Status</th></tr>
-    <tr><td>AWS</td><td>P6-B300</td><td class="green">Available</td></tr>
-    <tr><td>Azure</td><td>ND GB300 v6</td><td class="green">Available</td></tr>
-    <tr><td>GCP</td><td>A3 Ultra</td><td class="amber">Coming 2026</td></tr>
-    <tr><td>Oracle Cloud</td><td>BM.GPU.B300</td><td class="green">Available</td></tr>
-  </table>
-  <br>
-  <div class="callout fragment">
-    <strong>Value proposition:</strong> NVIDIA claims <span class="highlight">5x throughput per megawatt</span> vs Hopper.<br>
-    More work per GPU → fewer GPUs needed → simpler architecture, lower total cost.
-  </div>
-  <br>
-  <p class="fragment" style="font-size: 0.65em;">
-    <strong>Choose B300:</strong> Large models (70B+), throughput-sensitive, latency-critical<br>
-    <strong>Choose H100:</strong> Smaller models, experimentation, FP64 workloads
-  </p>
-</section>
 
 <!-- ============ SLIDE 14: SOFTWARE STACK ============ -->
 <section>
@@ -409,8 +407,7 @@
   <p class="subtitle">NVIDIA B300 Blackwell Ultra — Technical Deep Dive</p>
   <br>
   <p style="font-size: 0.6em; color: var(--text-muted);">
-    Sources: NVIDIA Developer Blog, NVIDIA Newsroom, TechPowerUp, AWS, Azure<br>
-    Full write-up available on GitHub
+    Sources: NVIDIA Developer Blog, NVIDIA Newsroom, NVIDIA NVFP4 Blog
   </p>
 </section>
 
