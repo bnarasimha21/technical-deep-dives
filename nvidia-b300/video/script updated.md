@@ -301,21 +301,3 @@ The AI factory era is here. The B300 is the assembly line.
 
 Thanks for watching.
 
----
-
-## Script Notes
-
-### Pronunciation Guide
-- PFLOPS = "petaflops"
-- HBM3e = "H-B-M three E"
-- NVFP4 = "N-V-F-P four"
-- NVLink = "N-V-Link"
-- NV-HBI = "N-V-H-B-I"
-- TMEM = "T-mem"
-- SFU = "S-F-U"
-- MoE = "mixture of experts" (spell out, don't say "moe")
-
-### Word Count & Timing
-- Total script: ~1,900 words
-- At ~150 words/minute narration pace = ~13 minutes
-- With pauses, transitions, and visual beats = ~13-14 minutes
