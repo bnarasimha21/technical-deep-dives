@@ -218,7 +218,7 @@ B300 is ideal for: LLM inference at scale, this is the primary use case. AI reas
 
 ***[Red X marks animate in]***
 
-B300 is not for: Scientific computing that needs FP64, since the B300 deliberately sacrifices double-precision performance, down to just 1.2 teraflops. Graphics and rendering, no display outputs. Edge deployment, 1,400 watts isn't going on any edge device. And if you're budget-constrained or running smaller models, an H100 instance may still be the smarter choice.
+B300 is not for: Scientific computing that needs FP64, since the B300 deliberately sacrifices double-precision performance, down to just 1.2 teraflops. Edge deployment, 1,400 watts isn't going on any edge device. And if you're budget-constrained or running smaller models, an H100 instance may still be the smarter choice.
 
 ***[Transition: "What does this mean for cloud developers?"]***
 

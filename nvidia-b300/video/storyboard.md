@@ -180,7 +180,6 @@
   - Mixture of Experts architectures
 - **Not ideal for:**
   - FP64 HPC / scientific computing (only 1.2 TFLOPS FP64)
-  - Graphics/rendering (no display outputs)
   - Edge deployment (1,400W)
   - Budget-conscious workloads
 
