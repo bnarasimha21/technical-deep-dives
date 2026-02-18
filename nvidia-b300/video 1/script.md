@@ -132,7 +132,7 @@ A 671-billion parameter model like DeepSeek-R1 in FP16 needs 1,342 gigabytes. Th
 
 ***[GPU comparison: 9× H100 vs 2× B300]***
 
-9 GPUs down to 2. That's less hardware, less communication overhead, simpler deployment, and a fraction of the compute cost.
+9 GPUs down to 2. That's less hardware, less communication overhead, simpler deployment, and potentially lower total serving cost.
 
 The B300 also doubles attention calculation speed. The softmax operation in transformer attention is a well-known bottleneck, and Blackwell Ultra doubles the special function unit throughput for the exponential and division operations that softmax relies on. This directly speeds up every attention layer.
 
@@ -204,7 +204,7 @@ At the 8-GPU system level, NVIDIA says B300 servers deliver 11x faster inference
 
 ***[Efficiency comparison]***
 
-On efficiency, NVIDIA reports 5x higher throughput per megawatt compared to Hopper. That's the number that matters for total cost of ownership. Each watt delivers significantly more useful AI work than the previous generation.
+On efficiency, NVIDIA reports 5x higher throughput per megawatt compared to Hopper. That's the number that matters for total cost of ownership. Each watt delivers significantly more useful AI work than the previous generation. For cloud customers renting GPU instances, this translates to more AI throughput per GPU-hour, meaning you can serve more requests or run larger models on fewer instances.
 
 ***[End card: title + links]***
 
