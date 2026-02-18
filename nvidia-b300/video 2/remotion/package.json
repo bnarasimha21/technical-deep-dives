@@ -1,0 +1,21 @@
+{
+  "name": "nvidia-b300-video2",
+  "version": "1.0.0",
+  "description": "Should You Switch to B300? - Use Cases, Economics & Software (Video 2)",
+  "scripts": {
+    "start": "npx remotion studio",
+    "build": "npx remotion render Video2 out/video2.mp4",
+    "preview": "npx remotion preview"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.252",
+    "@remotion/player": "4.0.252",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "4.0.252"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "typescript": "^5.7.0"
+  }
+}
