@@ -72,8 +72,8 @@
   </div>
   <br>
   <div class="callout">
-    The bottleneck isn't compute — it's <span class="highlight">memory</span>.<br>
-    If the model doesn't fit, you split across GPUs → more cost, more complexity.
+    The best models today <span class="highlight">do not fit</span> on a single GPU.<br>
+    Split across GPUs → more hardware, more complexity, more cost.
   </div>
 </section>
 
@@ -185,7 +185,7 @@
     <tr><th>Format</th><th>Bits/Weight</th><th>Memory Use</th><th>Compute</th><th>Accuracy Loss</th></tr>
     <tr><td>FP16</td><td>16</td><td>1x</td><td>1x</td><td>0%</td></tr>
     <tr><td>FP8</td><td>8</td><td>0.5x</td><td>2x</td><td>~0.5%</td></tr>
-    <tr style="color: var(--accent); font-weight: 700;"><td>NVFP4</td><td>4</td><td>~0.29x (~3.5x reduction)</td><td>4x</td><td>~1%</td></tr>
+    <tr style="color: var(--accent); font-weight: 700;"><td>NVFP4</td><td>4</td><td>~0.29x (~3.5x savings)</td><td>4x</td><td>~1%</td></tr>
   </table>
   <br>
   <div class="callout fragment">
@@ -204,18 +204,12 @@
 <section>
   <h2>288 GB HBM3e</h2>
   <p style="margin-bottom: 0.2em;">8× 12-Hi stacks · 8 TB/s bandwidth · 8,192-bit interface</p>
+  <br>
+  <div class="callout">
+    8 TB/s bandwidth feeds data to tensor cores fast enough to keep up with compute.
+  </div>
+  <br>
   <div class="two-col">
-    <div>
-      <h3>Memory Hierarchy</h3>
-      <table>
-        <tr><th>Level</th><th>Size</th><th>Latency</th></tr>
-        <tr><td>Registers</td><td>256 KB/SM</td><td>0 cycles</td></tr>
-        <tr><td>TMEM</td><td>256 KB/SM</td><td>~few</td></tr>
-        <tr><td>L1/Shared</td><td>228 KB/SM</td><td>~20-30</td></tr>
-        <tr><td>L2 Cache</td><td>50 MB</td><td>~200</td></tr>
-        <tr><td>HBM3e</td><td>288 GB</td><td>~400</td></tr>
-      </table>
-    </div>
     <div>
       <h3>Why It Matters</h3>
       <ul>
@@ -224,6 +218,10 @@
         <li class="fragment"><span class="highlight">Higher batch sizes</span> → better throughput</li>
         <li class="fragment"><span class="highlight">Lower cost</span> per inference</li>
       </ul>
+    </div>
+    <div>
+      <h3>Frame of Reference</h3>
+      <p style="font-size: 0.65em;">DeepSeek-R1 671B in NVFP4: ~383 GB<br>→ Fits on <span class="highlight">2 B300s</span> vs 9 H100s</p>
     </div>
   </div>
 </section>
@@ -280,7 +278,7 @@
 <!-- ============ SLIDE 11: EFFICIENCY ============ -->
 <section>
   <h2>Efficiency & Power</h2>
-  <p>More intelligence per watt</p>
+  <p>More AI throughput per watt</p>
   <br>
   <div class="stat-grid">
     <div class="stat-box"><span class="number">5x</span><span class="label">Throughput/MW vs Hopper</span></div>
@@ -289,121 +287,21 @@
   <br>
   <div class="callout fragment">
     <strong>The trade-off:</strong> Higher power draw per GPU, but <span class="highlight">disproportionately more output</span>.<br>
-    More power in → far more intelligence out. Air-cooled configs available; liquid cooling for higher-density deployments.
+    More power in → far more AI throughput out. Air-cooled configs available; liquid cooling for higher-density deployments.
   </div>
   <br>
   <div class="callout fragment">
-    <strong>8-GPU node:</strong> 120 PFLOPS FP4 total, with 2.3 TB of unified GPU memory.
+    <strong>8-GPU node:</strong> 108 PFLOPS FP4 dense, with 2.3 TB of unified GPU memory.
   </div>
 </section>
 
-<!-- ============ SLIDE 12: USE CASES ============ -->
-<section>
-  <h2>Who Should Use B300?</h2>
-  <br>
-  <div class="two-col">
-    <div>
-      <h3 style="color: var(--accent);">Ideal For</h3>
-      <ul>
-        <li>LLM inference at scale</li>
-        <li>AI reasoning / chain-of-thought</li>
-        <li>Multimodal AI (vision + language)</li>
-        <li>Training large foundation models</li>
-        <li>Mixture of Experts (MoE)</li>
-      </ul>
-    </div>
-    <div>
-      <h3 class="red">Not Ideal For</h3>
-      <ul>
-        <li><span class="red">FP64 HPC</span> — only 1.2 TFLOPS</li>
-        <li><span class="red">Edge deployment</span> — 1,400W</li>
-        <li><span class="red">Budget workloads</span> — premium pricing</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-
-<!-- ============ SLIDE 14: SOFTWARE STACK ============ -->
-<section>
-  <h2>Software Stack</h2>
-  <p>Seamless compatibility — no rewrites needed</p>
-  <br>
-  <div class="two-col">
-    <div>
-      <h3>Frameworks</h3>
-      <table>
-        <tr><td>PyTorch</td><td class="green">Native</td></tr>
-        <tr><td>TensorFlow</td><td class="green">Supported</td></tr>
-        <tr><td>JAX</td><td class="green">Supported</td></tr>
-        <tr><td>vLLM</td><td class="green">NVFP4 Day-1</td></tr>
-        <tr><td>SGLang</td><td class="green">NVFP4 Day-1</td></tr>
-        <tr><td>TensorRT-LLM</td><td class="green">Optimized</td></tr>
-      </table>
-    </div>
-    <div>
-      <h3>Key Libraries</h3>
-      <table>
-        <tr><td>CUDA</td><td>12.x+ (backward compat)</td></tr>
-        <tr><td>cuDNN</td><td>FP4/FP8 kernels</td></tr>
-        <tr><td>cuBLAS</td><td>Tensor Core paths</td></tr>
-        <tr><td>NCCL</td><td>NVLink 5 aware</td></tr>
-      </table>
-    </div>
-  </div>
-</section>
-
-<!-- ============ SLIDE 15: KEY TAKEAWAYS ============ -->
-<section>
-  <h2>Five Things to Remember</h2>
-  <br>
-  <ol style="list-style: none; padding: 0; font-size: 0.75em;">
-    <li class="fragment" style="margin-bottom: 0.6em;">
-      <span class="highlight" style="font-size: 1.3em;">1.</span>
-      <strong>15 PFLOPS FP4</strong> — the fastest AI GPU available
-    </li>
-    <li class="fragment" style="margin-bottom: 0.6em;">
-      <span class="highlight" style="font-size: 1.3em;">2.</span>
-      <strong>288 GB HBM3e</strong> — fit 400B+ models on a single GPU
-    </li>
-    <li class="fragment" style="margin-bottom: 0.6em;">
-      <span class="highlight" style="font-size: 1.3em;">3.</span>
-      <strong>2x attention acceleration</strong> — built for reasoning models
-    </li>
-    <li class="fragment" style="margin-bottom: 0.6em;">
-      <span class="highlight" style="font-size: 1.3em;">4.</span>
-      <strong>NVFP4</strong> — ~3.5x memory reduction vs FP16, ~1% accuracy trade-off
-    </li>
-    <li class="fragment" style="margin-bottom: 0.6em;">
-      <span class="highlight" style="font-size: 1.3em;">5.</span>
-      <strong>Cloud-ready</strong> — available now, no hardware purchase needed
-    </li>
-  </ol>
-</section>
-
-<!-- ============ SLIDE 16: ROADMAP ============ -->
-<section>
-  <h2>What's Next</h2>
-  <br>
-  <table>
-    <tr><th>Year</th><th>Architecture</th><th>Status</th></tr>
-    <tr style="color: var(--accent); font-weight: 700;"><td>2025</td><td>Blackwell Ultra (B300)</td><td>Available Now</td></tr>
-    <tr><td>2026</td><td>Vera Rubin</td><td>Announced</td></tr>
-    <tr><td>2027</td><td>Rubin Ultra</td><td>Announced</td></tr>
-  </table>
-  <br>
-  <div class="callout">
-    NVIDIA's annual cadence: today's flagship is next year's baseline.
-  </div>
-  <br>
-  <h3 class="fragment" style="color: #fff; font-size: 1.1em;">The AI Factory era is here.<br><span class="highlight">B300 is the assembly line.</span></h3>
-</section>
-
-<!-- ============ SLIDE 17: END ============ -->
+<!-- ============ SLIDE 12: END ============ -->
 <section>
   <h1 style="font-size: 2em;">Thank You</h1>
   <br>
   <p class="subtitle">NVIDIA B300 Blackwell Ultra — Technical Deep Dive</p>
+  <br>
+  <p style="font-size: 0.7em;">Next video: <span class="highlight">Should You Switch to B300?</span></p>
   <br>
   <p style="font-size: 0.6em; color: var(--text-muted);">
     Sources: NVIDIA Developer Blog, NVIDIA Newsroom, NVIDIA NVFP4 Blog
