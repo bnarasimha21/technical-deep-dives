@@ -1,0 +1,21 @@
+{
+  "name": "nvidia-b300-video1",
+  "version": "1.0.0",
+  "description": "NVIDIA B300 Blackwell Ultra - Technical Deep Dive (Video 1)",
+  "scripts": {
+    "start": "npx remotion studio",
+    "build": "npx remotion render Video1 out/video1.mp4",
+    "preview": "npx remotion preview"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.252",
+    "@remotion/player": "4.0.252",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "4.0.252"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "typescript": "^5.7.0"
+  }
+}
