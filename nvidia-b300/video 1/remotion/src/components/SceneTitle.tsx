@@ -10,11 +10,11 @@ interface SceneTitleProps {
 
 export const SceneTitle: React.FC<SceneTitleProps> = ({ title, subtitle, delay = 0 }) => {
   return (
-    <div style={{ textAlign: 'center' }}>
+    <div style={{ textAlign: 'center', marginBottom: 50 }}>
       <FadeIn delay={delay} direction="up">
         <h2
           style={{
-            fontSize: 72,
+            fontSize: 92,
             fontWeight: 700,
             color: theme.colors.accent,
             margin: 0,
@@ -28,9 +28,9 @@ export const SceneTitle: React.FC<SceneTitleProps> = ({ title, subtitle, delay =
         <FadeIn delay={delay + 10} direction="up">
           <p
             style={{
-              fontSize: 32,
+              fontSize: 40,
               color: theme.colors.textMuted,
-              marginTop: 12,
+              marginTop: 16,
             }}
           >
             {subtitle}
