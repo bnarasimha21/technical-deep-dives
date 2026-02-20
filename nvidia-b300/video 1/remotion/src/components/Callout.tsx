@@ -19,11 +19,11 @@ export const Callout: React.FC<CalloutProps> = ({
     <FadeIn delay={delay}>
       <div
         style={{
-          background: 'rgba(118, 185, 0, 0.08)',
+          background: `${color}14`,
           borderLeft: `4px solid ${color}`,
-          padding: '18px 28px',
+          padding: '24px 36px',
           borderRadius: '0 12px 12px 0',
-          fontSize: 28,
+          fontSize: 36,
           lineHeight: 1.6,
           ...style,
         }}

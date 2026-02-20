@@ -8,6 +8,8 @@ interface TableRowProps {
   isHeader?: boolean;
   highlight?: boolean;
   highlightColor?: string;
+  cellHighlightDelays?: (number | null)[];
+  cellHighlightColor?: string;
 }
 
 export const TableRow: React.FC<TableRowProps> = ({
@@ -16,6 +18,8 @@ export const TableRow: React.FC<TableRowProps> = ({
   isHeader = false,
   highlight = false,
   highlightColor = theme.colors.accent,
+  cellHighlightDelays,
+  cellHighlightColor = theme.colors.accent,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -29,19 +33,6 @@ export const TableRow: React.FC<TableRowProps> = ({
   const opacity = interpolate(progress, [0, 1], [0, 1]);
   const translateX = interpolate(progress, [0, 1], [-30, 0]);
 
-  const cellStyle: React.CSSProperties = {
-    padding: '14px 24px',
-    borderBottom: isHeader ? `2px solid ${theme.colors.accent}` : `1px solid ${theme.colors.border}`,
-    fontSize: isHeader ? 24 : 26,
-    fontWeight: isHeader ? 700 : highlight ? 700 : 400,
-    color: isHeader
-      ? theme.colors.accent
-      : highlight
-        ? highlightColor
-        : theme.colors.text,
-    background: isHeader ? 'rgba(118, 185, 0, 0.1)' : 'transparent',
-  };
-
   return (
     <tr
       style={{
@@ -49,11 +40,40 @@ export const TableRow: React.FC<TableRowProps> = ({
         transform: `translateX(${translateX}px)`,
       }}
     >
-      {cells.map((cell, i) => (
-        <td key={i} style={cellStyle}>
-          {cell}
-        </td>
-      ))}
+      {cells.map((cell, i) => {
+        const cellHlDelay = cellHighlightDelays?.[i];
+        const cellHlProgress = (cellHlDelay != null && frame >= cellHlDelay)
+          ? spring({ frame: Math.max(0, frame - cellHlDelay), fps, config: { damping: 10, stiffness: 120 } })
+          : 0;
+        // Bounce: scale up to 1.25 then back to 1
+        const bounceScale = cellHlProgress > 0
+          ? interpolate(cellHlProgress, [0, 0.4, 1], [1, 1.25, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })
+          : 1;
+        const isHighlighted = cellHlProgress > 0.1;
+
+        const cellStyle: React.CSSProperties = {
+          padding: '18px 32px',
+          borderBottom: isHeader ? `2px solid ${theme.colors.accent}` : `1px solid ${theme.colors.border}`,
+          fontSize: isHeader ? 30 : 32,
+          fontWeight: isHeader ? 700 : (highlight || isHighlighted) ? 700 : 400,
+          color: isHeader
+            ? theme.colors.accent
+            : isHighlighted
+              ? cellHighlightColor
+              : highlight
+                ? highlightColor
+                : theme.colors.text,
+          background: isHeader ? 'rgba(118, 185, 0, 0.1)' : 'transparent',
+        };
+
+        return (
+          <td key={i} style={cellStyle}>
+            <div style={{ transform: `scale(${bounceScale})`, display: 'inline-block' }}>
+              {cell}
+            </div>
+          </td>
+        );
+      })}
     </tr>
   );
 };

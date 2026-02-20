@@ -25,7 +25,7 @@ export const theme = {
 export const sceneDurations = {
   scene1_hook: 53,
   scene2_whyB300: 90,
-  scene3_numbers: 101,
+  scene3_numbers: 98,
   scene4_dualReticle: 95,
   scene5_tensorCores: 163,
   scene6_memory: 73,
