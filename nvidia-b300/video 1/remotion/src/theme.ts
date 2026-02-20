@@ -21,16 +21,16 @@ export const theme = {
   height: 1080,
 } as const;
 
-// Scene durations in seconds (from storyboard)
+// Scene durations in seconds (matched to voiceover audio + 2s padding)
 export const sceneDurations = {
-  scene1_hook: 45,
-  scene2_whyB300: 75,
-  scene3_numbers: 75,
-  scene4_dualReticle: 75,
-  scene5_tensorCores: 105,
-  scene6_memory: 60,
-  scene7_multiGpu: 75,
-  scene8_performance: 75,
+  scene1_hook: 53,
+  scene2_whyB300: 93,
+  scene3_numbers: 101,
+  scene4_dualReticle: 95,
+  scene5_tensorCores: 163,
+  scene6_memory: 73,
+  scene7_multiGpu: 89,
+  scene8_performance: 82,
 } as const;
 
 // Convert seconds to frames
