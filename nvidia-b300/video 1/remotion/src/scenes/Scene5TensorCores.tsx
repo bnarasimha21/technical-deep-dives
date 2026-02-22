@@ -239,7 +239,7 @@ const AttentionPipeline: React.FC = () => {
 
   const PIPELINE_WIDTH = 1100;
   const DOT_COUNT = 6;
-  const upgradeFrame = fps * 8;
+  const upgradeFrame = fps * 12;
   const upgraded = frame > upgradeFrame;
   const upgradeFlash = spring({ frame: frame - upgradeFrame, fps, config: { damping: 10, stiffness: 60 } });
 
@@ -252,7 +252,8 @@ const AttentionPipeline: React.FC = () => {
   const softmaxColor = upgraded
     ? theme.colors.accent
     : theme.colors.amber;
-  const softmaxLabel = upgraded ? 'Softmax 2x' : 'Softmax';
+  const softmaxLabel = 'Softmax';
+  const badgeOpacity = upgraded ? interpolate(upgradeFlash, [0, 0.5], [0, 1], { extrapolateRight: 'clamp' }) : 0;
 
   // Dot speed
   const baseSpeed = 1.8;
@@ -270,12 +271,29 @@ const AttentionPipeline: React.FC = () => {
         <div style={{ width: 80, height: 3, background: theme.colors.textMuted }} />
         <div style={{ fontSize: 36, color: theme.colors.textMuted, margin: '0 6px' }}>→</div>
         <div style={{ width: 80, height: 3, background: theme.colors.textMuted }} />
-        <PipelineBox
-          label={softmaxLabel}
-          color={softmaxColor}
-          width={softmaxWidth}
-          glow={upgraded && upgradeFlash > 0.3}
-        />
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+          <PipelineBox
+            label={softmaxLabel}
+            color={softmaxColor}
+            width={softmaxWidth}
+            glow={upgraded && upgradeFlash > 0.3}
+          />
+          <div style={{
+            position: 'absolute',
+            top: -16,
+            right: -16,
+            background: theme.colors.accent,
+            color: theme.colors.bgDark,
+            fontSize: 22,
+            fontWeight: 800,
+            borderRadius: 20,
+            padding: '4px 12px',
+            opacity: badgeOpacity,
+            transform: `scale(${interpolate(badgeOpacity, [0, 1], [0.5, 1])})`,
+          }}>
+            2x
+          </div>
+        </div>
         <div style={{ width: 80, height: 3, background: theme.colors.textMuted }} />
         <div style={{ fontSize: 36, color: theme.colors.textMuted, margin: '0 6px' }}>→</div>
         <div style={{ width: 80, height: 3, background: theme.colors.textMuted }} />
