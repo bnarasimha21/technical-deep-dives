@@ -43,7 +43,7 @@ export const TableRow: React.FC<TableRowProps> = ({
       {cells.map((cell, i) => {
         const cellHlDelay = cellHighlightDelays?.[i];
         const cellHlProgress = (cellHlDelay != null && frame >= cellHlDelay)
-          ? spring({ frame: Math.max(0, frame - cellHlDelay), fps, config: { damping: 10, stiffness: 120 } })
+          ? spring({ frame: Math.max(0, frame - cellHlDelay), fps, config: { damping: 14, stiffness: 40 } })
           : 0;
         // Bounce: scale up to 1.8 then back to 1
         const bounceScale = cellHlProgress > 0
