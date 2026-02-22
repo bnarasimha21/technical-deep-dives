@@ -16,7 +16,47 @@ const RevealLine: React.FC<{ children: React.ReactNode; delay: number; color?: s
   const translateX = interpolate(progress, [0, 1], [-20, 0]);
 
   return (
-    <div style={{ opacity, transform: `translateX(${translateX}px)`, fontSize: 30, color: color || theme.colors.text, lineHeight: 1.8 }}>
+    <div style={{ opacity, transform: `translateX(${translateX}px)`, fontSize: 34, color: color || theme.colors.text, lineHeight: 1.9 }}>
+      {children}
+    </div>
+  );
+};
+
+/** Animated card wrapper with scale-up entrance and border glow */
+const ConnectCard: React.FC<{
+  children: React.ReactNode;
+  title: string;
+  delay: number;
+  accentColor: string;
+}> = ({ children, title, delay, accentColor }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+
+  const pop = spring({ frame: frame - delay, fps, config: { damping: 12, stiffness: 60 } });
+  const scale = interpolate(pop, [0, 0.5, 0.8, 1], [0.85, 1.04, 0.98, 1], { extrapolateRight: 'clamp' });
+  const opacity = interpolate(pop, [0, 0.15], [0, 1], { extrapolateRight: 'clamp' });
+  const glowOpacity = interpolate(pop, [0, 0.4, 1], [0, 0.7, 0], { extrapolateRight: 'clamp' });
+
+  return (
+    <div
+      style={{
+        flex: 1,
+        opacity,
+        transform: `scale(${scale})`,
+        background: 'rgba(255, 255, 255, 0.05)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        borderLeft: `4px solid ${accentColor}`,
+        padding: '36px 40px',
+        borderRadius: '0 12px 12px 0',
+        boxShadow: `0 0 ${20 * glowOpacity}px ${8 * glowOpacity}px ${accentColor}33`,
+      }}
+    >
+      <div style={{ fontSize: 42, fontWeight: 700, color: accentColor, marginBottom: 14 }}>
+        {title}
+      </div>
+      <div style={{ height: 1, background: `${accentColor}40`, marginBottom: 20 }} />
       {children}
     </div>
   );
@@ -64,62 +104,28 @@ export const Scene7MultiGpu: React.FC = () => {
       {/* NVLink + inter-node */}
       <Sequence from={fps * 38} durationInFrames={fps * 48}>
         <CenteredSlide padding="0 100px">
-          <div style={{ display: 'flex', gap: 40, justifyContent: 'center', width: '100%', maxWidth: 1100 }}>
+          <div style={{ display: 'flex', gap: 48, justifyContent: 'center', width: '100%', maxWidth: 1300 }}>
             {/* Intra-node card */}
-            <FadeIn delay={0} style={{ flex: 1 }}>
-              <div
-                style={{
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  backdropFilter: 'blur(12px)',
-                  WebkitBackdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  borderLeft: `4px solid ${theme.colors.accent}`,
-                  padding: '28px 32px',
-                  borderRadius: '0 12px 12px 0',
-                }}
-              >
-                <div style={{ fontSize: 36, fontWeight: 700, color: theme.colors.accent, marginBottom: 16 }}>
-                  Intra-node: NVLink 5
-                </div>
-                <RevealLine delay={fps * 4}>2x 5th-gen NVSwitch</RevealLine>
-                <RevealLine delay={fps * 8}>14.4 TB/s aggregate</RevealLine>
-                <RevealLine delay={fps * 12}>1,800 GB/s per GPU</RevealLine>
-                <RevealLine delay={fps * 16} color={theme.colors.accent}>2x faster than Hopper</RevealLine>
-              </div>
-            </FadeIn>
+            <ConnectCard title="Intra-node: NVLink 5" delay={0} accentColor={theme.colors.accent}>
+              <RevealLine delay={fps * 4}>2x 5th-gen NVSwitch</RevealLine>
+              <RevealLine delay={fps * 8}><span style={{ color: theme.colors.accent, fontWeight: 700 }}>1,800 GB/s</span> per GPU</RevealLine>
+              <RevealLine delay={fps * 12}><span style={{ color: theme.colors.accent, fontWeight: 700 }}>14.4 TB/s</span> aggregate</RevealLine>
+              <RevealLine delay={fps * 16} color={theme.colors.accent}>2x faster than Hopper</RevealLine>
+            </ConnectCard>
 
             {/* Inter-node card */}
-            <FadeIn delay={fps * 20} style={{ flex: 1 }}>
-              <div
-                style={{
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  backdropFilter: 'blur(12px)',
-                  WebkitBackdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  borderLeft: `4px solid ${theme.colors.accent2}`,
-                  padding: '28px 32px',
-                  borderRadius: '0 12px 12px 0',
-                }}
-              >
-                <div style={{ fontSize: 36, fontWeight: 700, color: theme.colors.accent2, marginBottom: 16 }}>
-                  Inter-node: up to 800 Gb/s
-                </div>
-                <RevealLine delay={fps * 24}>InfiniBand or Ethernet</RevealLine>
-                <RevealLine delay={fps * 28}>via NVIDIA ConnectX-8</RevealLine>
-                <RevealLine delay={fps * 32}>Standard datacenter networking</RevealLine>
-              </div>
-            </FadeIn>
+            <ConnectCard title="Inter-node: up to 800 Gb/s" delay={fps * 20} accentColor={theme.colors.accent2}>
+              <RevealLine delay={fps * 24}>InfiniBand or Ethernet</RevealLine>
+              <RevealLine delay={fps * 28}>via NVIDIA <span style={{ color: theme.colors.accent2, fontWeight: 700 }}>ConnectX-8</span></RevealLine>
+              <RevealLine delay={fps * 32}>Standard datacenter networking</RevealLine>
+            </ConnectCard>
           </div>
 
           <Callout delay={fps * 38} style={{ marginTop: 36, maxWidth: 900 }}>
             <span style={{ color: theme.colors.accent, fontWeight: 700 }}>Two-tier architecture:</span> NVLink inside the node, high-speed networking outside.
           </Callout>
 
-          <FadeIn delay={fps * 38}>
-            <p style={{ fontSize: 30, color: theme.colors.textMuted, textAlign: 'center', marginTop: 20 }}>
-              Scale from <span style={{ color: theme.colors.accent, fontWeight: 700 }}>1 node</span> to <span style={{ color: theme.colors.accent2, fontWeight: 700 }}>thousands</span> — same software stack.
-            </p>
-          </FadeIn>
+
         </CenteredSlide>
       </Sequence>
     </Background>
