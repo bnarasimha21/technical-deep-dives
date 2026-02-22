@@ -97,7 +97,12 @@ export const Scene6Memory: React.FC = () => {
       <Sequence from={0} durationInFrames={fps * 39}>
         <CenteredSlide padding="0 100px">
           <FadeIn delay={0}>
-            <SceneTitle title="288 GB HBM3e" subtitle="8x 12-Hi stacks · 8 TB/s bandwidth · 8,192-bit interface" />
+            <SceneTitle title="288 GB HBM3e" />
+          </FadeIn>
+          <FadeIn delay={fps * 7}>
+            <p style={{ fontSize: 40, color: theme.colors.textMuted, textAlign: 'center', marginTop: -34 }}>
+              8x 12-Hi stacks · 8 TB/s bandwidth · 8,192-bit interface
+            </p>
           </FadeIn>
 
           {/* 8 HBM stacks appear one by one with layers building up (5–18s) */}
@@ -114,17 +119,17 @@ export const Scene6Memory: React.FC = () => {
             </p>
           </FadeIn>
 
-          {/* Bandwidth callout at 25s */}
-          <Callout delay={fps * 25} style={{ marginTop: 28, maxWidth: 900 }}>
-            <span style={{ color: theme.colors.accent, fontWeight: 700 }}>8 TB/s bandwidth</span> feeds data to tensor cores fast enough to keep up with compute.
-          </Callout>
-
-          {/* Highlight stat at 31s */}
-          <FadeIn delay={fps * 31}>
+          {/* Highlight stat at 27s */}
+          <FadeIn delay={fps * 25}>
             <p style={{ fontSize: 30, color: theme.colors.textMuted, textAlign: 'center', marginTop: 20 }}>
               That's <span style={{ color: theme.colors.accent, fontWeight: 700 }}>8,192-bit memory interface</span> — 4,096 bits per die
             </p>
           </FadeIn>
+
+          {/* Bandwidth callout at 30s */}
+          <Callout delay={fps * 30} style={{ marginTop: 28, maxWidth: 900 }}>
+            <span style={{ color: theme.colors.accent, fontWeight: 700 }}>8 TB/s bandwidth</span> feeds data to tensor cores fast enough to keep up with compute.
+          </Callout>
         </CenteredSlide>
       </Sequence>
 
