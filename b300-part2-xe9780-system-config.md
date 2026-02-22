@@ -591,3 +591,563 @@ When your XE9780 is available:
 
 *Created: 2026-02-22*
 *Configuration: Dell PowerEdge XE9780 + 8x NVIDIA B300 + 800G RoCEv2*
+
+---
+
+## Advanced Use Case 1: Pre-training a 7B LLM from Scratch
+
+### Overview
+
+Train a GPT-style 7B parameter model from scratch using NeMo Framework with FP8 precision on 8x B300.
+
+### Why This Configuration Works
+
+| Requirement | 8x B300 Capability |
+|-------------|-------------------|
+| Model weights (7B, FP8) | ~7GB (fits easily) |
+| Optimizer states | ~56GB (Adam) |
+| Activations (batch=32, seq=4096) | ~200GB |
+| Total per-GPU | ~33GB (192GB available) |
+| **Result** | Large batch sizes possible |
+
+### Environment Setup
+
+```bash
+# Create conda environment
+conda create -n nemo python=3.10 -y
+conda activate nemo
+
+# Install NeMo Framework
+pip install nemo_toolkit[all]
+pip install transformer_engine
+pip install megatron-core
+
+# Verify TransformerEngine FP8 support
+python -c "import transformer_engine; print(transformer_engine.__version__)"
+```
+
+### Model Configuration
+
+```yaml
+# config/7b_fp8_config.yaml
+trainer:
+  devices: 8
+  num_nodes: 1
+  accelerator: gpu
+  precision: bf16-mixed
+  max_steps: 100000
+  val_check_interval: 1000
+  
+model:
+  micro_batch_size: 4
+  global_batch_size: 256
+  tensor_model_parallel_size: 2
+  pipeline_model_parallel_size: 1
+  
+  encoder_seq_length: 4096
+  max_position_embeddings: 4096
+  
+  num_layers: 32
+  hidden_size: 4096
+  ffn_hidden_size: 11008
+  num_attention_heads: 32
+  num_query_groups: 8  # GQA
+  
+  # FP8 Configuration
+  fp8: true
+  fp8_e4m3: true
+  fp8_hybrid: true
+  fp8_amax_history_len: 1024
+  fp8_amax_compute_algo: max
+  
+  tokenizer:
+    library: huggingface
+    type: meta-llama/Llama-2-7b-hf
+    
+  data:
+    data_impl: mmap
+    splits_string: "99,1,0"
+    seq_length: 4096
+    
+  optim:
+    name: fused_adam
+    lr: 3e-4
+    betas: [0.9, 0.95]
+    weight_decay: 0.1
+```
+
+### Data Preparation
+
+```python
+# prepare_data.py
+"""Prepare FineWeb dataset for pre-training"""
+
+from datasets import load_dataset
+from transformers import AutoTokenizer
+import numpy as np
+from pathlib import Path
+
+def prepare_fineweb():
+    # Load FineWeb-Edu (high quality web text)
+    dataset = load_dataset(
+        "HuggingFaceFW/fineweb-edu",
+        "sample-10BT",  # 10B tokens sample
+        split="train",
+        streaming=True
+    )
+    
+    tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
+    
+    output_dir = Path("data/fineweb")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Process in chunks
+    buffer = []
+    file_idx = 0
+    tokens_per_file = 100_000_000  # 100M tokens per file
+    
+    for example in dataset:
+        tokens = tokenizer.encode(example["text"])
+        buffer.extend(tokens)
+        
+        if len(buffer) >= tokens_per_file:
+            # Save as memory-mapped file
+            arr = np.array(buffer[:tokens_per_file], dtype=np.uint16)
+            np.save(output_dir / f"train_{file_idx:04d}.npy", arr)
+            buffer = buffer[tokens_per_file:]
+            file_idx += 1
+            print(f"Saved file {file_idx}, {file_idx * tokens_per_file / 1e9:.1f}B tokens")
+
+if __name__ == "__main__":
+    prepare_fineweb()
+```
+
+### Training Script
+
+```python
+# train_7b.py
+"""Pre-train 7B model with FP8 on 8x B300"""
+
+import nemo.collections.nlp as nemo_nlp
+from nemo.core.config import hydra_runner
+from nemo.utils import logging
+from omegaconf import DictConfig, OmegaConf
+import torch
+
+@hydra_runner(config_path="config", config_name="7b_fp8_config")
+def main(cfg: DictConfig):
+    logging.info(f"Config:\n{OmegaConf.to_yaml(cfg)}")
+    
+    # Initialize trainer with FP8
+    trainer = nemo_nlp.trainers.MegatronTrainerBuilder(cfg).create_trainer()
+    
+    # Initialize model
+    model = nemo_nlp.models.megatron_gpt_model.MegatronGPTModel(cfg.model, trainer)
+    
+    # Log GPU memory
+    for i in range(8):
+        allocated = torch.cuda.memory_allocated(i) / 1e9
+        logging.info(f"GPU {i}: {allocated:.1f} GB allocated")
+    
+    # Start training
+    trainer.fit(model)
+    
+    # Save final checkpoint
+    trainer.save_checkpoint("checkpoints/7b_final.ckpt")
+
+if __name__ == "__main__":
+    main()
+```
+
+### Launch Training
+
+```bash
+#!/bin/bash
+# launch_training.sh
+
+export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
+export NCCL_P2P_LEVEL=NVL
+export NCCL_DEBUG=INFO
+
+# 8 GPUs, tensor parallel = 2, data parallel = 4
+torchrun \
+    --nproc_per_node=8 \
+    --nnodes=1 \
+    --master_addr=localhost \
+    --master_port=29500 \
+    train_7b.py \
+    trainer.devices=8 \
+    model.tensor_model_parallel_size=2 \
+    model.global_batch_size=256
+```
+
+### Expected Performance
+
+| Metric | Value |
+|--------|-------|
+| Throughput | ~45,000 tokens/sec |
+| Time per 1B tokens | ~6.2 hours |
+| Time for 100B tokens | ~26 days |
+| GPU Memory per device | ~80GB (of 192GB) |
+| Power consumption | ~5,600W |
+
+### Monitoring
+
+```python
+# monitor_training.py
+import wandb
+
+wandb.init(project="b300-7b-pretrain")
+
+# Log during training
+wandb.log({
+    "loss": loss.item(),
+    "learning_rate": scheduler.get_last_lr()[0],
+    "tokens_per_second": tokens_processed / elapsed_time,
+    "gpu_memory_gb": torch.cuda.max_memory_allocated() / 1e9,
+})
+```
+
+---
+
+## Advanced Use Case 2: Multi-Node Training with NVLink + RoCEv2
+
+### Overview
+
+Scale training across 2 XE9780 nodes (16x B300 total) using NVLink within nodes and 800G RoCEv2 between nodes.
+
+### Architecture
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                         NODE 1 (XE9780)                        │
+│  ┌─────────────────────────────────────────────────────────┐  │
+│  │                    NVLink 5.0 Mesh                       │  │
+│  │   GPU0 ── GPU1 ── GPU2 ── GPU3                          │  │
+│  │     │       │       │       │                            │  │
+│  │   GPU4 ── GPU5 ── GPU6 ── GPU7                          │  │
+│  └─────────────────────────────────────────────────────────┘  │
+│                            │                                   │
+│                    ConnectX-8 (800G)                          │
+└────────────────────────────┼───────────────────────────────────┘
+                             │
+                      800G RoCEv2 Fabric
+                             │
+┌────────────────────────────┼───────────────────────────────────┐
+│                    ConnectX-8 (800G)                          │
+│                            │                                   │
+│  ┌─────────────────────────────────────────────────────────┐  │
+│  │                    NVLink 5.0 Mesh                       │  │
+│  │   GPU8 ── GPU9 ── GPU10 ── GPU11                        │  │
+│  │     │       │        │        │                          │  │
+│  │   GPU12 ── GPU13 ── GPU14 ── GPU15                      │  │
+│  └─────────────────────────────────────────────────────────┘  │
+│                         NODE 2 (XE9780)                        │
+└────────────────────────────────────────────────────────────────┘
+```
+
+### Parallelism Strategy
+
+For 70B model on 16 GPUs:
+
+| Parallelism | Dimension | Reasoning |
+|-------------|-----------|-----------|
+| Tensor Parallel | 8 (within node) | Uses fast NVLink |
+| Pipeline Parallel | 1 | Avoid bubble overhead |
+| Data Parallel | 2 (across nodes) | Uses RoCEv2 |
+
+### Network Configuration
+
+```bash
+# verify_rdma.sh - Run on each node
+
+# Check RDMA devices
+rdma link show
+
+# Check RoCEv2 mode
+cat /sys/class/infiniband/*/ports/*/gid_attrs/types/*
+
+# Test RDMA bandwidth
+ib_write_bw -d mlx5_0 -F --report_gbits
+
+# Expected: ~780 Gbps (of 800G theoretical)
+```
+
+### NCCL Configuration for Multi-Node
+
+```bash
+# nccl_env.sh
+
+# Force NVLink for intra-node
+export NCCL_P2P_LEVEL=NVL
+
+# Enable GPUDirect RDMA for inter-node
+export NCCL_NET_GDR_LEVEL=5
+export NCCL_IB_GID_INDEX=3  # RoCEv2
+
+# Optimal settings
+export NCCL_IB_HCA=mlx5_0
+export NCCL_SOCKET_IFNAME=eth0
+export NCCL_BUFFSIZE=8388608  # 8MB buffers
+
+# Debug
+export NCCL_DEBUG=INFO
+export NCCL_DEBUG_SUBSYS=INIT,NET
+```
+
+### Multi-Node Training Script
+
+```python
+# train_multinode.py
+"""70B model training across 2 nodes (16x B300)"""
+
+import os
+import torch
+import torch.distributed as dist
+from torch.nn.parallel import DistributedDataParallel as DDP
+from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
+from torch.distributed.fsdp.wrap import transformer_auto_wrap_policy
+import transformer_engine.pytorch as te
+
+def setup_distributed():
+    """Initialize distributed training with NCCL"""
+    
+    # From SLURM or launch script
+    rank = int(os.environ["RANK"])
+    world_size = int(os.environ["WORLD_SIZE"])
+    local_rank = int(os.environ["LOCAL_RANK"])
+    
+    # Set device before init
+    torch.cuda.set_device(local_rank)
+    
+    # Initialize with NCCL
+    dist.init_process_group(
+        backend="nccl",
+        rank=rank,
+        world_size=world_size,
+    )
+    
+    return rank, world_size, local_rank
+
+def create_model_70b():
+    """Create 70B model with FSDP sharding"""
+    
+    from transformers import LlamaConfig, LlamaForCausalLM
+    
+    config = LlamaConfig(
+        vocab_size=32000,
+        hidden_size=8192,
+        intermediate_size=28672,
+        num_hidden_layers=80,
+        num_attention_heads=64,
+        num_key_value_heads=8,
+        max_position_embeddings=4096,
+    )
+    
+    # Initialize with meta device (no memory yet)
+    with torch.device("meta"):
+        model = LlamaForCausalLM(config)
+    
+    return model
+
+def main():
+    rank, world_size, local_rank = setup_distributed()
+    
+    if rank == 0:
+        print(f"Training on {world_size} GPUs across {world_size // 8} nodes")
+    
+    # Create model
+    model = create_model_70b()
+    
+    # Wrap with FSDP
+    from transformers.models.llama.modeling_llama import LlamaDecoderLayer
+    
+    auto_wrap_policy = transformer_auto_wrap_policy(
+        transformer_layer_cls={LlamaDecoderLayer},
+    )
+    
+    model = FSDP(
+        model,
+        auto_wrap_policy=auto_wrap_policy,
+        device_id=local_rank,
+        sharding_strategy="FULL_SHARD",
+        mixed_precision=torch.distributed.fsdp.MixedPrecision(
+            param_dtype=torch.bfloat16,
+            reduce_dtype=torch.bfloat16,
+            buffer_dtype=torch.bfloat16,
+        ),
+    )
+    
+    # Log memory usage
+    mem_allocated = torch.cuda.memory_allocated() / 1e9
+    if rank == 0:
+        print(f"Memory per GPU after FSDP init: {mem_allocated:.1f} GB")
+    
+    # Optimizer
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
+    
+    # Training loop
+    for step in range(1000):
+        # Dummy data (replace with real dataloader)
+        input_ids = torch.randint(0, 32000, (2, 4096), device=f"cuda:{local_rank}")
+        
+        # Forward with FP8
+        with te.fp8_autocast(enabled=True):
+            outputs = model(input_ids=input_ids, labels=input_ids)
+            loss = outputs.loss
+        
+        # Backward
+        loss.backward()
+        optimizer.step()
+        optimizer.zero_grad()
+        
+        if rank == 0 and step % 10 == 0:
+            print(f"Step {step}, Loss: {loss.item():.4f}")
+    
+    dist.destroy_process_group()
+
+if __name__ == "__main__":
+    main()
+```
+
+### SLURM Launch Script
+
+```bash
+#!/bin/bash
+#SBATCH --job-name=b300-70b
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=8
+#SBATCH --gpus-per-node=8
+#SBATCH --cpus-per-task=12
+#SBATCH --mem=0
+#SBATCH --time=48:00:00
+
+# Load modules
+module load cuda/12.4
+module load nccl/2.20
+
+# Set master
+export MASTER_ADDR=$(scontrol show hostnames $SLURM_JOB_NODELIST | head -n 1)
+export MASTER_PORT=29500
+
+# NCCL settings
+source nccl_env.sh
+
+# Launch
+srun --ntasks-per-node=8 \
+    torchrun \
+    --nnodes=2 \
+    --nproc_per_node=8 \
+    --rdzv_id=$SLURM_JOB_ID \
+    --rdzv_backend=c10d \
+    --rdzv_endpoint=$MASTER_ADDR:$MASTER_PORT \
+    train_multinode.py
+```
+
+### Manual Launch (Without SLURM)
+
+```bash
+# On Node 1 (master):
+export MASTER_ADDR=10.0.0.1
+export MASTER_PORT=29500
+torchrun \
+    --nnodes=2 \
+    --nproc_per_node=8 \
+    --node_rank=0 \
+    --master_addr=$MASTER_ADDR \
+    --master_port=$MASTER_PORT \
+    train_multinode.py
+
+# On Node 2:
+export MASTER_ADDR=10.0.0.1
+export MASTER_PORT=29500
+torchrun \
+    --nnodes=2 \
+    --nproc_per_node=8 \
+    --node_rank=1 \
+    --master_addr=$MASTER_ADDR \
+    --master_port=$MASTER_PORT \
+    train_multinode.py
+```
+
+### Scaling Efficiency Test
+
+```python
+# benchmark_scaling.py
+"""Measure scaling efficiency across nodes"""
+
+import torch
+import torch.distributed as dist
+import time
+
+def benchmark_allreduce(size_mb, iterations=50):
+    """Benchmark all-reduce at different scales"""
+    
+    rank = dist.get_rank()
+    world_size = dist.get_world_size()
+    
+    num_elements = (size_mb * 1024 * 1024) // 4
+    tensor = torch.randn(num_elements, device=f"cuda:{rank % 8}")
+    
+    # Warmup
+    for _ in range(10):
+        dist.all_reduce(tensor)
+    torch.cuda.synchronize()
+    
+    # Benchmark
+    start = time.perf_counter()
+    for _ in range(iterations):
+        dist.all_reduce(tensor)
+    torch.cuda.synchronize()
+    elapsed = time.perf_counter() - start
+    
+    if rank == 0:
+        # Calculate bandwidth
+        # All-reduce: 2 * (n-1) / n * size
+        algobw = (2 * (world_size - 1) / world_size * size_mb * iterations) / elapsed / 1024
+        print(f"Size: {size_mb:5} MB | Algo BW: {algobw:.1f} GB/s")
+        
+        # Expected:
+        # Intra-node (8 GPU): ~750 GB/s (NVLink)
+        # Inter-node (16 GPU): ~350 GB/s (limited by RoCEv2)
+
+if __name__ == "__main__":
+    setup_distributed()
+    
+    for size in [10, 100, 1000, 5000]:
+        benchmark_allreduce(size)
+```
+
+### Expected Multi-Node Performance
+
+| Configuration | Tokens/sec | Scaling Efficiency |
+|--------------|------------|-------------------|
+| 1 node (8 GPU) | 25,000 | 100% (baseline) |
+| 2 nodes (16 GPU) | 47,000 | 94% |
+| 4 nodes (32 GPU) | 90,000 | 90% |
+
+### Troubleshooting
+
+```bash
+# Check NVLink is being used intra-node
+nvidia-smi nvlink -s
+
+# Check RDMA is working inter-node
+ibstat
+
+# Test inter-node connectivity
+# On node 1:
+ib_write_bw -d mlx5_0 --report_gbits
+
+# On node 2:
+ib_write_bw -d mlx5_0 10.0.0.1 --report_gbits
+
+# NCCL debug for communication issues
+export NCCL_DEBUG=TRACE
+export NCCL_DEBUG_FILE=/tmp/nccl_debug.%h.%p.log
+```
+
+---
+
+*Updated: 2026-02-22*
+*Added: Advanced Use Cases for 7B pre-training and multi-node training*
