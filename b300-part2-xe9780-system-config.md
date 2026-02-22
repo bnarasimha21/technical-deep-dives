@@ -2,6 +2,9 @@
 
 > Extension of the B300 GPU deep dive video - focusing on the full server configuration
 
+> **Ready-to-run code:** https://github.com/bnarasimha21/b300-ready
+
+
 ## System Architecture Overview
 
 ### Hardware Configuration
