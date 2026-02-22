@@ -15,7 +15,7 @@ export const Scene8Performance: React.FC = () => {
     <Background>
       <Audio src={staticFile('scene8-performance.m4a')} />
       {/* Per-GPU claims */}
-      <Sequence from={0} durationInFrames={fps * 25}>
+      <Sequence from={0} durationInFrames={fps * 22}>
         <CenteredSlide padding="0 100px">
           <SceneTitle title="Performance That Matters" subtitle="Official NVIDIA claims" />
 
@@ -33,7 +33,7 @@ export const Scene8Performance: React.FC = () => {
       </Sequence>
 
       {/* System-level claims */}
-      <Sequence from={fps * 25} durationInFrames={fps * 25}>
+      <Sequence from={fps * 22} durationInFrames={fps * 16}>
         <CenteredSlide>
           <FadeIn delay={0}>
             <h3
@@ -58,7 +58,7 @@ export const Scene8Performance: React.FC = () => {
       </Sequence>
 
       {/* Efficiency + closing */}
-      <Sequence from={fps * 50} durationInFrames={fps * 32}>
+      <Sequence from={fps * 38} durationInFrames={fps * 41}>
         <CenteredSlide padding="0 140px">
           <StatBox number="5x" label="Throughput per Megawatt vs Hopper" delay={0} />
 
@@ -74,14 +74,11 @@ export const Scene8Performance: React.FC = () => {
           </Callout>
 
           {/* End card */}
-          <FadeIn delay={fps * 22} style={{ marginTop: 48 }}>
+          <FadeIn delay={fps * 29} style={{ marginTop: 48 }}>
             <div style={{ textAlign: 'center' }}>
               <p style={{ fontSize: 36, color: theme.colors.text }}>
                 Next video:{' '}
                 <span style={{ color: theme.colors.accent, fontWeight: 700 }}>Should You Switch to B300?</span>
-              </p>
-              <p style={{ fontSize: 28, color: theme.colors.textMuted, marginTop: 12 }}>
-                Sources: NVIDIA Developer Blog, NVIDIA Newsroom, NVIDIA NVFP4 Blog
               </p>
             </div>
           </FadeIn>

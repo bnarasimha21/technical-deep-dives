@@ -30,7 +30,7 @@ export const sceneDurations = {
   scene5_tensorCores: 159,
   scene6_memory: 70,
   scene7_multiGpu: 86,
-  scene8_performance: 82,
+  scene8_performance: 79,
 } as const;
 
 // Convert seconds to frames
