@@ -29,7 +29,7 @@ export const sceneDurations = {
   scene4_dualReticle: 61,
   scene5_tensorCores: 159,
   scene6_memory: 70,
-  scene7_multiGpu: 89,
+  scene7_multiGpu: 86,
   scene8_performance: 82,
 } as const;
 

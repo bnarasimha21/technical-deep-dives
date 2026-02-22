@@ -1,11 +1,26 @@
 import React from 'react';
-import { Sequence, useVideoConfig, Audio, staticFile, Img } from 'remotion';
+import { Sequence, useCurrentFrame, useVideoConfig, Audio, staticFile, Img, spring, interpolate } from 'remotion';
 import { Background } from '../components/Background';
 import { CenteredSlide } from '../components/CenteredSlide';
 import { SceneTitle } from '../components/SceneTitle';
 import { StatBox } from '../components/StatBox';
 import { FadeIn } from '../components/FadeIn';
+import { Callout } from '../components/Callout';
 import { theme } from '../theme';
+
+const RevealLine: React.FC<{ children: React.ReactNode; delay: number; color?: string }> = ({ children, delay, color }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const progress = spring({ frame: frame - delay, fps, config: { damping: 18, stiffness: 80 } });
+  const opacity = interpolate(progress, [0, 1], [0, 1]);
+  const translateX = interpolate(progress, [0, 1], [-20, 0]);
+
+  return (
+    <div style={{ opacity, transform: `translateX(${translateX}px)`, fontSize: 30, color: color || theme.colors.text, lineHeight: 1.8 }}>
+      {children}
+    </div>
+  );
+};
 
 export const Scene7MultiGpu: React.FC = () => {
   const { fps } = useVideoConfig();
@@ -14,18 +29,19 @@ export const Scene7MultiGpu: React.FC = () => {
     <Background>
       <Audio src={staticFile('scene7-multi-gpu.m4a')} />
       {/* 8-GPU system overview */}
-      <Sequence from={0} durationInFrames={fps * 35}>
+      <Sequence from={0} durationInFrames={fps * 38}>
         <CenteredSlide padding="0 100px">
-          <SceneTitle title="Multi-GPU Scaling" subtitle="8x B300 GPUs + Intel Xeon CPUs + 2 TB system memory" />
+          <FadeIn delay={0}>
+            <SceneTitle title="Multi-GPU Scaling" />
+          </FadeIn>
+          <FadeIn delay={fps * 7}>
+            <p style={{ fontSize: 32, color: theme.colors.textMuted, textAlign: 'center', marginTop: 8 }}>
+              8x B300 GPUs + Intel Xeon CPUs + 2 TB system memory
+            </p>
+          </FadeIn>
 
-          <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 40 }}>
-            <StatBox number="2.1 TB" label="GPU Memory" delay={15} />
-            <StatBox number="108" label="PFLOPS FP4 Dense" delay={30} />
-            <StatBox number="~14 kW" label="System Power" delay={45} />
-          </div>
-
-          {/* DGX B300 exploded view */}
-          <FadeIn delay={fps * 2} style={{ marginTop: 36, textAlign: 'center' }}>
+          {/* DGX B300 image — appears with subtitle */}
+          <FadeIn delay={fps * 7} style={{ marginTop: 36, textAlign: 'center' }}>
             <Img
               src={staticFile('dgx-b300-exploded.png')}
               style={{
@@ -34,67 +50,68 @@ export const Scene7MultiGpu: React.FC = () => {
                 borderRadius: 12,
               }}
             />
-            <p style={{ fontSize: 24, color: theme.colors.textMuted, textAlign: 'center', marginTop: 12 }}>
-              DGX B300 — 144 PFLOPS FP4 sparse | 72 PFLOPS FP8 training
-            </p>
           </FadeIn>
+
+          <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 40 }}>
+            <StatBox number="2.1 TB" label="GPU Memory" delay={fps * 16} />
+            <StatBox number="108" label="PFLOPS FP4 Dense" delay={fps * 23} />
+            <StatBox number="~14 kW" label="System Power" delay={fps * 35} />
+          </div>
+
         </CenteredSlide>
       </Sequence>
 
       {/* NVLink + inter-node */}
-      <Sequence from={fps * 35} durationInFrames={fps * 54}>
+      <Sequence from={fps * 38} durationInFrames={fps * 48}>
         <CenteredSlide padding="0 100px">
-          <div style={{ display: 'flex', gap: 32, justifyContent: 'center', width: '100%', maxWidth: 1000 }}>
-            <FadeIn delay={fps * 3} style={{ flex: 1 }}>
+          <div style={{ display: 'flex', gap: 40, justifyContent: 'center', width: '100%', maxWidth: 1100 }}>
+            {/* Intra-node card */}
+            <FadeIn delay={0} style={{ flex: 1 }}>
               <div
                 style={{
                   background: 'rgba(118,185,0,0.08)',
                   borderLeft: `4px solid ${theme.colors.accent}`,
-                  padding: '24px 28px',
+                  padding: '28px 32px',
                   borderRadius: '0 12px 12px 0',
                 }}
               >
-                <div style={{ fontSize: 34, fontWeight: 700, color: theme.colors.accent }}>
+                <div style={{ fontSize: 36, fontWeight: 700, color: theme.colors.accent, marginBottom: 16 }}>
                   Intra-node: NVLink 5
                 </div>
-                <div style={{ fontSize: 30, color: theme.colors.text, marginTop: 12, lineHeight: 1.6 }}>
-                  2x 5th-gen NVSwitch
-                  <br />
-                  14.4 TB/s aggregate
-                  <br />
-                  1,800 GB/s per GPU
-                  <br />
-                  <span style={{ color: theme.colors.accent }}>2x faster than Hopper</span>
-                </div>
+                <RevealLine delay={fps * 4}>2x 5th-gen NVSwitch</RevealLine>
+                <RevealLine delay={fps * 8}>14.4 TB/s aggregate</RevealLine>
+                <RevealLine delay={fps * 12}>1,800 GB/s per GPU</RevealLine>
+                <RevealLine delay={fps * 16} color={theme.colors.accent}>2x faster than Hopper</RevealLine>
               </div>
             </FadeIn>
 
-            <FadeIn delay={fps * 15} style={{ flex: 1 }}>
+            {/* Inter-node card */}
+            <FadeIn delay={fps * 20} style={{ flex: 1 }}>
               <div
                 style={{
                   background: 'rgba(0,128,255,0.08)',
                   borderLeft: `4px solid ${theme.colors.accent2}`,
-                  padding: '24px 28px',
+                  padding: '28px 32px',
                   borderRadius: '0 12px 12px 0',
                 }}
               >
-                <div style={{ fontSize: 34, fontWeight: 700, color: theme.colors.accent2 }}>
+                <div style={{ fontSize: 36, fontWeight: 700, color: theme.colors.accent2, marginBottom: 16 }}>
                   Inter-node: up to 800 Gb/s
                 </div>
-                <div style={{ fontSize: 30, color: theme.colors.text, marginTop: 12, lineHeight: 1.6 }}>
-                  InfiniBand or Ethernet
-                  <br />
-                  via NVIDIA ConnectX-8
-                  <br />
-                  Standard datacenter networking
-                </div>
+                <RevealLine delay={fps * 24}>InfiniBand or Ethernet</RevealLine>
+                <RevealLine delay={fps * 28}>via NVIDIA ConnectX-8</RevealLine>
+                <RevealLine delay={fps * 32}>Standard datacenter networking</RevealLine>
               </div>
             </FadeIn>
           </div>
 
-          <FadeIn delay={fps * 30} style={{ marginTop: 32 }}>
-            <p style={{ fontSize: 32, color: theme.colors.textMuted, textAlign: 'center' }}>
-              Two-tier architecture: NVLink inside the node, high-speed networking outside.
+          <Callout delay={fps * 38} style={{ marginTop: 36, maxWidth: 900 }}>
+            <span style={{ color: theme.colors.accent, fontWeight: 700 }}>Two-tier architecture:</span> NVLink inside the node, high-speed networking outside.
+          </Callout>
+
+          <FadeIn delay={fps * 38}>
+            <p style={{ fontSize: 30, color: theme.colors.textMuted, textAlign: 'center', marginTop: 20 }}>
+              Scale from <span style={{ color: theme.colors.accent, fontWeight: 700 }}>1 node</span> to <span style={{ color: theme.colors.accent2, fontWeight: 700 }}>thousands</span> — same software stack.
             </p>
           </FadeIn>
         </CenteredSlide>
