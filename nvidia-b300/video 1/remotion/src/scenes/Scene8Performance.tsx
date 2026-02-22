@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sequence, useVideoConfig } from 'remotion';
+import { Sequence, useVideoConfig, Audio, staticFile } from 'remotion';
 import { Background } from '../components/Background';
 import { CenteredSlide } from '../components/CenteredSlide';
 import { SceneTitle } from '../components/SceneTitle';
@@ -13,6 +13,7 @@ export const Scene8Performance: React.FC = () => {
 
   return (
     <Background>
+      <Audio src={staticFile('scene8-performance.m4a')} />
       {/* Per-GPU claims */}
       <Sequence from={0} durationInFrames={fps * 25}>
         <CenteredSlide padding="0 100px">
@@ -24,7 +25,7 @@ export const Scene8Performance: React.FC = () => {
           </div>
 
           <FadeIn delay={fps * 2.5} style={{ marginTop: 36 }}>
-            <p style={{ fontSize: 26, color: theme.colors.textMuted, textAlign: 'center' }}>
+            <p style={{ fontSize: 34, color: theme.colors.textMuted, textAlign: 'center' }}>
               Raw compute gains per GPU
             </p>
           </FadeIn>
@@ -37,7 +38,7 @@ export const Scene8Performance: React.FC = () => {
           <FadeIn delay={0}>
             <h3
               style={{
-                fontSize: 36,
+                fontSize: 46,
                 color: theme.colors.accent2,
                 fontWeight: 700,
                 textAlign: 'center',
@@ -51,29 +52,35 @@ export const Scene8Performance: React.FC = () => {
           <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 40 }}>
             <StatBox number="11x" label="Faster LLM Inference vs Hopper" delay={15} />
             <StatBox number="7x" label="More Compute" delay={30} />
-            <StatBox number="4x" label="More Memory" delay={45} />
+            <StatBox number="3.6x" label="More Memory" delay={45} />
           </div>
         </CenteredSlide>
       </Sequence>
 
       {/* Efficiency + closing */}
-      <Sequence from={fps * 50} durationInFrames={fps * 25}>
+      <Sequence from={fps * 50} durationInFrames={fps * 32}>
         <CenteredSlide padding="0 140px">
           <StatBox number="5x" label="Throughput per Megawatt vs Hopper" delay={0} />
 
-          <Callout delay={fps * 2} style={{ marginTop: 40, maxWidth: 900 }}>
+          <Callout delay={fps * 8} style={{ marginTop: 40, maxWidth: 900 }}>
             The number that matters for total cost of ownership. Each watt delivers significantly more useful AI work
             than the previous generation.
           </Callout>
 
+          <Callout delay={fps * 15} style={{ marginTop: 16, maxWidth: 900 }}>
+            For cloud customers renting GPU instances, this translates to{' '}
+            <span style={{ color: theme.colors.accent, fontWeight: 700 }}>more AI throughput per GPU-hour</span> —
+            serve more requests or run larger models on fewer instances.
+          </Callout>
+
           {/* End card */}
-          <FadeIn delay={fps * 5} style={{ marginTop: 48 }}>
+          <FadeIn delay={fps * 22} style={{ marginTop: 48 }}>
             <div style={{ textAlign: 'center' }}>
-              <p style={{ fontSize: 28, color: theme.colors.text }}>
+              <p style={{ fontSize: 36, color: theme.colors.text }}>
                 Next video:{' '}
                 <span style={{ color: theme.colors.accent, fontWeight: 700 }}>Should You Switch to B300?</span>
               </p>
-              <p style={{ fontSize: 20, color: theme.colors.textMuted, marginTop: 12 }}>
+              <p style={{ fontSize: 28, color: theme.colors.textMuted, marginTop: 12 }}>
                 Sources: NVIDIA Developer Blog, NVIDIA Newsroom, NVIDIA NVFP4 Blog
               </p>
             </div>

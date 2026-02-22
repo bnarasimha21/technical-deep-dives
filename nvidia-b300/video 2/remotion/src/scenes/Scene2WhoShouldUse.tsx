@@ -80,10 +80,10 @@ export const Scene2WhoShouldUse: React.FC = () => {
                 </h3>
               </FadeIn>
               <CheckItem text="LLM inference at scale" detail="Primary use case" delay={20} />
-              <CheckItem text="AI reasoning / chain-of-thought" detail="2x attention acceleration" delay={35} />
+              <CheckItem text="AI reasoning / chain-of-thought" detail="Doubles attention calculation speed" delay={35} />
               <CheckItem text="Multimodal AI" detail="Vision + language" delay={50} />
               <CheckItem text="Training large foundation models" delay={65} />
-              <CheckItem text="Mixture of Experts" detail="Tensor Memory reduces switching overhead" delay={80} />
+              <CheckItem text="Mixture of Experts" detail="Tensor Memory reduces expert-switching overhead" delay={80} />
             </div>
 
             {/* Not ideal for */}
@@ -102,9 +102,16 @@ export const Scene2WhoShouldUse: React.FC = () => {
               </FadeIn>
               <CrossItem text="FP64 scientific computing" detail="Only 1.2 TFLOPS" delay={fps * 3 + 15} />
               <CrossItem text="Edge deployment" detail="1,400W" delay={fps * 3 + 30} />
-              <CrossItem text="Budget-constrained workloads" detail="H100 may be smarter" delay={fps * 3 + 45} />
+              <CrossItem text="Budget-constrained workloads" detail="H100 may be the smarter choice" delay={fps * 3 + 45} />
             </div>
           </div>
+
+          {/* Transition */}
+          <FadeIn delay={fps * 5} style={{ marginTop: 40 }}>
+            <p style={{ fontSize: 28, color: theme.colors.accent, textAlign: 'center', fontWeight: 600 }}>
+              What does this mean for cloud developers?
+            </p>
+          </FadeIn>
         </CenteredSlide>
       </Sequence>
     </Background>

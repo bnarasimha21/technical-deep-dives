@@ -52,11 +52,11 @@ export const Scene5Summary: React.FC = () => {
               alignItems: 'center',
             }}
           >
-            <TakeawayCard number="1" text="15 PFLOPS of FP4 compute. The fastest AI GPU available today." delay={10} />
+            <TakeawayCard number="1" text="15 PFLOPS of FP4 compute. The single fastest AI GPU you can get today." delay={10} />
             <TakeawayCard number="2" text="288 GB HBM3e. Fit 400B+ parameter models on a single GPU." delay={25} />
-            <TakeawayCard number="3" text="2x attention acceleration. Purpose-built for reasoning models." delay={40} />
-            <TakeawayCard number="4" text="NVFP4: ~3.5x memory savings vs FP16 with ~1% accuracy trade-off." delay={55} />
-            <TakeawayCard number="5" text="You don't need to buy hardware. Use it in the cloud." delay={70} />
+            <TakeawayCard number="3" text="Doubles attention calculation speed. Purpose-built for the reasoning model era." delay={40} />
+            <TakeawayCard number="4" text="NVFP4: ~3.5x memory savings vs FP16 with ~1% accuracy trade-off. This changes the deployment math." delay={55} />
+            <TakeawayCard number="5" text="You don't need to buy hardware. Use it in the Cloud." delay={70} />
           </div>
         </CenteredSlide>
       </Sequence>
@@ -84,8 +84,50 @@ export const Scene5Summary: React.FC = () => {
         </CenteredSlide>
       </Sequence>
 
-      {/* End card */}
+      {/* Closing graphic */}
       <Sequence from={fps * 45} durationInFrames={fps * 15}>
+        <CenteredSlide padding="0 140px">
+          <FadeIn delay={0}>
+            <p style={{ fontSize: 36, color: theme.colors.accent, textAlign: 'center', fontWeight: 700, margin: 0 }}>
+              The B300 is the most capable AI GPU available.
+            </p>
+          </FadeIn>
+          <FadeIn delay={fps * 1.5} style={{ marginTop: 32 }}>
+            <div style={{ display: 'flex', gap: 32, justifyContent: 'center' }}>
+              {[
+                'Developers building inference-heavy applications',
+                'Startups scaling AI products',
+                'Teams training the next generation of models',
+              ].map((text, i) => (
+                <FadeIn key={text} delay={fps * 2 + i * 15} direction="up">
+                  <div
+                    style={{
+                      border: `1px solid ${theme.colors.accent}`,
+                      borderRadius: 12,
+                      padding: '20px 24px',
+                      width: 260,
+                      textAlign: 'center',
+                      fontSize: 22,
+                      color: theme.colors.text,
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {text}
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+          </FadeIn>
+          <FadeIn delay={fps * 4}>
+            <p style={{ fontSize: 28, color: theme.colors.textMuted, textAlign: 'center', marginTop: 24 }}>
+              This is the hardware that makes it possible.
+            </p>
+          </FadeIn>
+        </CenteredSlide>
+      </Sequence>
+
+      {/* End card */}
+      <Sequence from={fps * 60} durationInFrames={fps * 15}>
         <CenteredSlide>
           <FadeIn delay={0}>
             <h1
@@ -111,8 +153,17 @@ export const Scene5Summary: React.FC = () => {
               Part 2 of the NVIDIA B300 Blackwell Ultra Series
             </p>
           </FadeIn>
-          <FadeIn delay={fps * 2}>
-            <p style={{ fontSize: 18, color: theme.colors.textMuted, marginTop: 32, textAlign: 'center' }}>
+          <FadeIn delay={fps * 1.5} style={{ marginTop: 24 }}>
+            <div style={{ display: 'flex', gap: 24, justifyContent: 'center' }}>
+              <span style={{ fontSize: 20, color: theme.colors.accent }}>Subscribe</span>
+              <span style={{ fontSize: 20, color: theme.colors.textMuted }}>|</span>
+              <span style={{ fontSize: 20, color: theme.colors.accent }}>Watch Part 1</span>
+              <span style={{ fontSize: 20, color: theme.colors.textMuted }}>|</span>
+              <span style={{ fontSize: 20, color: theme.colors.accent }}>More Deep Dives</span>
+            </div>
+          </FadeIn>
+          <FadeIn delay={fps * 2.5}>
+            <p style={{ fontSize: 18, color: theme.colors.textMuted, marginTop: 24, textAlign: 'center' }}>
               Sources: NVIDIA Developer Blog, NVIDIA Newsroom, NVIDIA NVFP4 Blog
             </p>
           </FadeIn>

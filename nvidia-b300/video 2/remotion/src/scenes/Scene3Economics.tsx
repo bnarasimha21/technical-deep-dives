@@ -19,7 +19,7 @@ export const Scene3Economics: React.FC = () => {
           <SceneTitle title="Cloud GPU Economics" subtitle="More AI work per GPU-hour, even at a higher per-hour price" />
 
           <div style={{ display: 'flex', gap: 48, justifyContent: 'center', marginTop: 40 }}>
-            <StatBox number="5x" label="Throughput/MW vs Hopper" delay={15} />
+            <StatBox number="5x" label="Throughput/MW vs Hopper (NVIDIA claim)" delay={15} />
             <StatBox number="288 GB" label="Fewer GPUs needed" delay={30} />
           </div>
 
@@ -87,11 +87,18 @@ export const Scene3Economics: React.FC = () => {
                   <br />
                   Experimentation
                   <br />
-                  FP64 scientific workloads
+                  Need FP64 for scientific workloads
                 </div>
               </div>
             </FadeIn>
           </div>
+
+          {/* Transition */}
+          <FadeIn delay={fps * 4} style={{ marginTop: 36 }}>
+            <p style={{ fontSize: 28, color: theme.colors.accent, textAlign: 'center', fontWeight: 600 }}>
+              Quick note on the software stack
+            </p>
+          </FadeIn>
         </CenteredSlide>
       </Sequence>
     </Background>

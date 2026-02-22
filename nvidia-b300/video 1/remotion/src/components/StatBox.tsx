@@ -31,17 +31,17 @@ export const StatBox: React.FC<StatBoxProps> = ({
     <div
       style={{
         textAlign: 'center',
-        padding: '24px 36px',
+        padding: '32px 48px',
         border: `2px solid ${color}`,
         borderRadius: 16,
-        minWidth: 200,
+        width: 420,
         opacity,
         transform: `scale(${scale})`,
       }}
     >
       <div
         style={{
-          fontSize: 64,
+          fontSize: 84,
           fontWeight: 800,
           color,
           lineHeight: 1.1,
@@ -51,9 +51,10 @@ export const StatBox: React.FC<StatBoxProps> = ({
       </div>
       <div
         style={{
-          fontSize: 22,
+          fontSize: 24,
           color: theme.colors.textMuted,
-          marginTop: 8,
+          marginTop: 10,
+          lineHeight: 1.3,
         }}
       >
         {label}

@@ -49,11 +49,35 @@ export const Scene4Software: React.FC = () => {
 
   return (
     <Background>
-      <Sequence from={0} durationInFrames={fps * 45}>
+      {/* Compatibility checklist */}
+      <Sequence from={0} durationInFrames={fps * 20}>
         <CenteredSlide>
-          <SceneTitle title="Software Stack" subtitle="Seamless compatibility. No rewrites needed." />
+          <SceneTitle title="Software Compatibility" subtitle="Good news for developers: the software story is seamless" />
 
-          {/* Stack pyramid */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginTop: 40, alignItems: 'flex-start', maxWidth: 700, margin: '40px auto 0' }}>
+            {[
+              { text: 'Full CUDA 12 compatibility — existing code runs without changes', delay: 15 },
+              { text: 'PyTorch, TensorFlow, JAX — all supported', delay: 30 },
+              { text: 'vLLM, SGLang, TensorRT-LLM — NVFP4 support from day one', delay: 45 },
+              { text: 'cuDNN, cuBLAS, NCCL — all updated for B300', delay: 60 },
+              { text: 'NCCL is NVLink 5 aware — faster multi-GPU communication', delay: 75 },
+            ].map((item) => (
+              <FadeIn key={item.text} delay={item.delay} direction="up">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <span style={{ fontSize: 24, color: theme.colors.accent }}>✓</span>
+                  <span style={{ fontSize: 24, color: theme.colors.text }}>{item.text}</span>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </CenteredSlide>
+      </Sequence>
+
+      {/* Stack pyramid */}
+      <Sequence from={fps * 20} durationInFrames={fps * 25}>
+        <CenteredSlide>
+          <SceneTitle title="Software Stack" />
+
           <div
             style={{
               display: 'flex',
@@ -72,10 +96,10 @@ export const Scene4Software: React.FC = () => {
             />
             <StackLayer
               label="Frameworks"
-              items={['PyTorch', 'TensorFlow', 'JAX', 'vLLM', 'SGLang', 'TensorRT-LLM']}
+              items={['PyTorch', 'TensorFlow', 'JAX', 'vLLM', 'SGLang', 'TensorRT-LLM (NVFP4 from day one)']}
               delay={30}
               color={theme.colors.accent2}
-              width={620}
+              width={680}
             />
             <StackLayer
               label="Libraries"
@@ -105,6 +129,13 @@ export const Scene4Software: React.FC = () => {
             <span style={{ color: theme.colors.accent, fontWeight: 700 }}>NVFP4 quantization</span> for the biggest
             memory and throughput gains.
           </Callout>
+
+          {/* Transition */}
+          <FadeIn delay={fps * 5} style={{ marginTop: 24 }}>
+            <p style={{ fontSize: 28, color: theme.colors.accent, textAlign: 'center', fontWeight: 600 }}>
+              Wrapping up
+            </p>
+          </FadeIn>
         </CenteredSlide>
       </Sequence>
     </Background>

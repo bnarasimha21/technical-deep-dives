@@ -27,7 +27,7 @@ export const sceneDurations = {
   scene2_whoShouldUse: 60,
   scene3_economics: 75,
   scene4_software: 45,
-  scene5_summary: 60,
+  scene5_summary: 75,
 } as const;
 
 // Convert seconds to frames

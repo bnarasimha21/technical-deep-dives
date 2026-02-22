@@ -82,7 +82,7 @@ To go beyond that, NVIDIA puts two dies in one package and connects them with a 
 
 ***[NV-HBI callout: 10 TB/s]***
 
-This runs at 10 terabytes per second, bidirectional. That's fast enough that the two dies behave as a single GPU. Your CUDA code doesn't know or care that there are two dies underneath. The two chips share a unified 50-megabyte L2 cache and maintain coherent memory across both dies. For all intents and purposes, software sees it as a single device.
+This runs at 10 terabytes per second, bidirectional. That's fast enough that the two dies behave as a single GPU. Your CUDA code doesn't know or care that there are two dies underneath. The two chips share a unified 192-megabyte L2 cache and maintain coherent memory across both dies. For all intents and purposes, software sees it as a single device.
 
 ***[Single CUDA device highlight]***
 
@@ -118,11 +118,11 @@ NVFP4 uses a clever two-level scaling system. Each block of 16 values gets a mic
 
 ***[Diagram: 16 weights in FP4 (4 bits each) + 1 FP8 micro-scale factor + 1 FP32 macro-scale factor]***
 
-The impact is dramatic. Compared to FP16:
+The impact is dramatic.
 
 ***[Comparison table animates in]***
 
-4 bits per weight instead of 16. NVIDIA reports about 3.5x memory savings versus FP16, and about 1.8x versus FP8. On the compute side, FP4 delivers 4x higher throughput than FP16. And the accuracy trade-off? About 1 percent or less on most benchmarks.
+Lets campare with FP16: 4 bits per weight instead of 16. NVIDIA reports about 3.5x memory savings versus FP16, and about 1.8x versus FP8. On the compute side, FP4 delivers 4x higher throughput than FP16. And the accuracy trade-off? About 1 percent or less on most benchmarks.
 
 Here's the real-world payoff.
 
@@ -134,7 +134,7 @@ A 671-billion parameter model like DeepSeek-R1 in FP16 needs 1,342 gigabytes. Th
 
 9 GPUs down to 2. That's less hardware, less communication overhead, simpler deployment, and potentially lower total serving cost.
 
-The B300 also doubles attention calculation speed. The softmax operation in transformer attention is a well-known bottleneck, and Blackwell Ultra doubles the special function unit throughput for the exponential and division operations that softmax relies on. This directly speeds up every attention layer.
+Second, The B300 also doubles attention calculation speed. The softmax operation in transformer attention is a well-known bottleneck, and Blackwell Ultra doubles the special function unit throughput for the exponential and division operations that softmax relies on. This directly speeds up every attention layer.
 
 Third, Tensor Memory, or TMEM. 256 kilobytes per SM of dedicated storage for intermediate matrix results. Reduces trips to main memory, especially important for Mixture of Experts models.
 
@@ -174,7 +174,7 @@ One B300 is impressive. But production AI runs on multi-GPU servers.
 
 ***[8-GPU node diagram]***
 
-A typical B300 server packs 8 GPUs into a single node, paired with Intel Xeon processors and 2 terabytes of system memory. That gives you 2.3 terabytes of total GPU memory, enough to run even the largest models without splitting across nodes.
+A typical B300 server packs 8 GPUs into a single node, paired with Intel Xeon processors and 2 terabytes of system memory. That gives you over 2 terabytes of total GPU memory, enough to run even the largest models without splitting across nodes.
 
 At the system level, you get 108 petaflops of dense FP4 compute, or 144 petaflops with sparsity. For FP8 training workloads, that's 72 petaflops. The whole system draws about 14 kilowatts.
 
@@ -200,7 +200,7 @@ Specs are nice. Performance is what you deploy. And here, NVIDIA's official numb
 
 The B300 delivers 1.5x more AI compute than B200 in NVFP4, and 7.5x more than H100 in FP8. Those are the raw compute gains per GPU.
 
-At the 8-GPU system level, NVIDIA says B300 servers deliver 11x faster inference on large language models and 7x more compute compared to the Hopper generation, with 4x more memory.
+At the 8-GPU system level, NVIDIA says B300 servers deliver 11x faster inference on large language models and 7x more compute compared to the Hopper generation, with 3.6x more memory.
 
 ***[Efficiency comparison]***
 

@@ -13,7 +13,7 @@ export const GpuChip: React.FC<GpuChipProps> = ({
   name,
   delay = 0,
   active = false,
-  size = 120,
+  size = 160,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -40,7 +40,7 @@ export const GpuChip: React.FC<GpuChipProps> = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: 20,
+        fontSize: 28,
         fontWeight: 700,
         color: active ? theme.colors.accent : theme.colors.textMuted,
         opacity,
