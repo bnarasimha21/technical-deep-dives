@@ -43,7 +43,8 @@ export const StatBox: React.FC<StatBoxProps> = ({
 
   // Counter roll-up
   const { prefix, value, decimals, suffix } = parseStat(number);
-  const displayed = (value * progress).toFixed(decimals);
+  const hasNumeric = value > 0;
+  const displayed = hasNumeric ? (value * progress).toFixed(decimals) : '';
 
   // Glow pulse — starts after the number has finished counting (progress ≈ 1)
   const glowFrame = frame - delay;
