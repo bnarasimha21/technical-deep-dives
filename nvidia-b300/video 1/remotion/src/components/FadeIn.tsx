@@ -27,6 +27,9 @@ export const FadeIn: React.FC<FadeInProps> = ({
 
   const opacity = interpolate(progress, [0, 1], [0, 1]);
 
+  // Blur-to-sharp reveal
+  const blur = interpolate(progress, [0, 1], [8, 0], { extrapolateRight: 'clamp' });
+
   const translateMap = {
     up: `translateY(${interpolate(progress, [0, 1], [distance, 0])}px)`,
     down: `translateY(${interpolate(progress, [0, 1], [-distance, 0])}px)`,
@@ -40,6 +43,7 @@ export const FadeIn: React.FC<FadeInProps> = ({
       style={{
         opacity,
         transform: translateMap[direction],
+        filter: `blur(${blur}px)`,
         ...style,
       }}
     >

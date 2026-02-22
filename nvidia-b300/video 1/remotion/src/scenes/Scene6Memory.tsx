@@ -67,12 +67,14 @@ const PopCard: React.FC<{
       style={{
         opacity,
         transform: `scale(${scale})`,
-        border: `2px solid ${theme.colors.accent}`,
+        border: `1px solid rgba(255, 255, 255, 0.1)`,
         borderRadius: 16,
         padding: '32px 28px',
         width: 360,
         textAlign: 'center',
-        background: theme.colors.bgCard,
+        background: 'rgba(255, 255, 255, 0.05)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
         boxShadow: `0 0 ${30 * glowOpacity}px ${10 * glowOpacity}px rgba(118, 185, 0, ${0.4 * glowOpacity})`,
       }}
     >

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sequence, useVideoConfig, Audio, staticFile } from 'remotion';
+import { Sequence, useCurrentFrame, useVideoConfig, Audio, staticFile, spring, interpolate } from 'remotion';
 import { Background } from '../components/Background';
 import { CenteredSlide } from '../components/CenteredSlide';
 import { SceneTitle } from '../components/SceneTitle';
@@ -7,6 +7,51 @@ import { StatBox } from '../components/StatBox';
 import { FadeIn } from '../components/FadeIn';
 import { Callout } from '../components/Callout';
 import { theme } from '../theme';
+
+const PillBadge: React.FC<{
+  icon: string;
+  title: string;
+  desc: string;
+  delay: number;
+}> = ({ icon, title, desc, delay }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+
+  const progress = spring({ frame: frame - delay, fps, config: { damping: 18, stiffness: 70 } });
+  const opacity = interpolate(progress, [0, 1], [0, 1]);
+  const translateX = interpolate(progress, [0, 1], [-60, 0]);
+  const scaleX = interpolate(progress, [0, 0.3, 1], [0.6, 1.02, 1], { extrapolateRight: 'clamp' });
+
+  return (
+    <div
+      style={{
+        opacity,
+        transform: `translateX(${translateX}px) scaleX(${scaleX})`,
+        transformOrigin: 'left center',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 28,
+        background: 'rgba(255, 255, 255, 0.04)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        borderLeft: `3px solid ${theme.colors.accent}`,
+        borderRadius: 48,
+        padding: '32px 52px 32px 44px',
+        width: 960,
+      }}
+    >
+      <div style={{ fontSize: 56, flexShrink: 0, lineHeight: 1 }}>{icon}</div>
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ fontSize: 36, fontWeight: 700, color: theme.colors.accent }}>
+          {title}
+        </div>
+        <div style={{ fontSize: 28, color: theme.colors.textMuted, marginTop: 6 }}>
+          {desc}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export const Scene8Performance: React.FC = () => {
   const { fps } = useVideoConfig();
@@ -17,14 +62,19 @@ export const Scene8Performance: React.FC = () => {
       {/* Per-GPU claims */}
       <Sequence from={0} durationInFrames={fps * 22}>
         <CenteredSlide padding="0 100px">
-          <SceneTitle title="Performance That Matters" subtitle="Official NVIDIA claims" />
+          <SceneTitle title="Performance That Matters" />
+          <FadeIn delay={fps * 8}>
+            <p style={{ fontSize: 40, color: theme.colors.textMuted, textAlign: 'center', marginTop: -34 }}>
+              Official NVIDIA claims
+            </p>
+          </FadeIn>
 
           <div style={{ display: 'flex', gap: 48, justifyContent: 'center', marginTop: 48 }}>
-            <StatBox number="1.5x" label="vs B200 (NVFP4)" delay={15} />
-            <StatBox number="7.5x" label="vs H100 (FP8)" delay={30} />
+            <StatBox number="1.5x" label="vs B200 (NVFP4)" delay={fps * 8} speed={30} />
+            <StatBox number="7.5x" label="vs H100 (FP8)" delay={fps * 14} />
           </div>
 
-          <FadeIn delay={fps * 2.5} style={{ marginTop: 36 }}>
+          <FadeIn delay={fps * 19} style={{ marginTop: 36 }}>
             <p style={{ fontSize: 34, color: theme.colors.textMuted, textAlign: 'center' }}>
               Raw compute gains per GPU
             </p>
@@ -35,46 +85,29 @@ export const Scene8Performance: React.FC = () => {
       {/* System-level claims */}
       <Sequence from={fps * 22} durationInFrames={fps * 16}>
         <CenteredSlide>
-          <FadeIn delay={0}>
-            <h3
-              style={{
-                fontSize: 46,
-                color: theme.colors.accent2,
-                fontWeight: 700,
-                textAlign: 'center',
-                margin: 0,
-              }}
-            >
-              8-GPU System Level
-            </h3>
-          </FadeIn>
+          <SceneTitle title="Performance That Matters" subtitle="8-GPU System Level vs Hopper" />
 
           <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 40 }}>
-            <StatBox number="11x" label="Faster LLM Inference vs Hopper" delay={15} />
-            <StatBox number="7x" label="More Compute" delay={30} />
-            <StatBox number="3.6x" label="More Memory" delay={45} />
+            <StatBox number="11x" label="Faster LLM Inference" delay={fps * 6} />
+            <StatBox number="7x" label="More Compute" delay={fps * 9} />
+            <StatBox number="3.6x" label="More Memory" delay={fps * 13} />
           </div>
         </CenteredSlide>
       </Sequence>
 
       {/* Efficiency + closing */}
       <Sequence from={fps * 38} durationInFrames={fps * 41}>
-        <CenteredSlide padding="0 140px">
+        <CenteredSlide padding="0 100px">
           <StatBox number="5x" label="Throughput per Megawatt vs Hopper" delay={0} />
 
-          <Callout delay={fps * 8} style={{ marginTop: 40, maxWidth: 900 }}>
-            The number that matters for total cost of ownership. Each watt delivers significantly more useful AI work
-            than the previous generation.
-          </Callout>
-
-          <Callout delay={fps * 15} style={{ marginTop: 16, maxWidth: 900 }}>
-            For cloud customers renting GPU instances, this translates to{' '}
-            <span style={{ color: theme.colors.accent, fontWeight: 700 }}>more AI throughput per GPU-hour</span> —
-            serve more requests or run larger models on fewer instances.
-          </Callout>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 56, alignItems: 'center', marginTop: 48 }}>
+            <PillBadge icon="💰" title="Total Cost of Ownership" desc="Each watt delivers more useful AI work" delay={fps * 8} />
+            <PillBadge icon="☁️" title="Cloud Economics" desc="More AI throughput per GPU-hour" delay={fps * 13} />
+            <PillBadge icon="📈" title="Scale Smarter" desc="Fewer instances, more requests served" delay={fps * 23} />
+          </div>
 
           {/* End card */}
-          <FadeIn delay={fps * 29} style={{ marginTop: 48 }}>
+          <FadeIn delay={fps * 29} style={{ marginTop: 24 }}>
             <div style={{ textAlign: 'center' }}>
               <p style={{ fontSize: 36, color: theme.colors.text }}>
                 Next video:{' '}

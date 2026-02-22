@@ -19,8 +19,14 @@ export const Callout: React.FC<CalloutProps> = ({
     <FadeIn delay={delay}>
       <div
         style={{
-          background: `${color}14`,
+          // Glassmorphism
+          background: `rgba(255, 255, 255, 0.05)`,
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
           borderLeft: `4px solid ${color}`,
+          border: `1px solid rgba(255, 255, 255, 0.1)`,
+          borderLeftWidth: 4,
+          borderLeftColor: color,
           padding: '24px 36px',
           borderRadius: '0 12px 12px 0',
           fontSize: 36,
