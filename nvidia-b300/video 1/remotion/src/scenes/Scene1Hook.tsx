@@ -54,10 +54,10 @@ const CinematicText: React.FC = () => {
                 opacity,
                 transform: `scale(${scale}) translateY(${translateY}px)`,
                 filter: `blur(${blur}px)`,
-                color: word.accent ? theme.colors.accent : theme.colors.text,
+                color: word.accent ? theme.colors.accent2 : theme.colors.text,
                 fontWeight: word.accent ? 800 : 400,
                 textShadow: word.accent
-                  ? `0 0 ${12 * glow}px rgba(118, 185, 0, ${glow})`
+                  ? `0 0 ${12 * glow}px rgba(0, 128, 255, ${glow})`
                   : 'none',
                 marginRight: 14,
               }}
@@ -121,7 +121,7 @@ export const Scene1Hook: React.FC = () => {
                     <div
                       style={{
                         fontSize: 36,
-                        color: theme.colors.accent,
+                        color: theme.colors.accent2,
                         opacity: interpolate(
                           spring({ frame: frame - delay - 15, fps, config: { damping: 20, stiffness: 100 } }),
                           [0, 1], [0, 1]
@@ -195,7 +195,7 @@ export const Scene1Hook: React.FC = () => {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 32, width: '100%', maxWidth: 900 }}>
             {[
-              { num: '1', text: 'B300 Architecture Deep Dive', color: theme.colors.accent, delay: fps * 2 },
+              { num: '1', text: 'B300 Architecture Deep Dive', color: theme.colors.accent2, delay: fps * 2 },
               { num: '2', text: 'B300 vs B200 vs H100', color: theme.colors.accent2, delay: fps * 4 },
               { num: '3', text: 'What It Means for Developers', color: '#FFB400', delay: fps * 6 },
             ].map((item) => (

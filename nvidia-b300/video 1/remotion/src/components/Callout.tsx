@@ -12,7 +12,7 @@ interface CalloutProps {
 export const Callout: React.FC<CalloutProps> = ({
   children,
   delay = 0,
-  color = theme.colors.accent,
+  color = theme.colors.accent2,
   style,
 }) => {
   return (

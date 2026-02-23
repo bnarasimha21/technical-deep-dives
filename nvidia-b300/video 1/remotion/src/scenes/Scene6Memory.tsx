@@ -75,11 +75,11 @@ const PopCard: React.FC<{
         background: 'rgba(255, 255, 255, 0.05)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
-        boxShadow: `0 0 ${30 * glowOpacity}px ${10 * glowOpacity}px rgba(118, 185, 0, ${0.4 * glowOpacity})`,
+        boxShadow: `0 0 ${30 * glowOpacity}px ${10 * glowOpacity}px rgba(0, 128, 255, ${0.4 * glowOpacity})`,
       }}
     >
       <div style={{ fontSize: 60 }}>{icon}</div>
-      <div style={{ fontSize: 34, fontWeight: 700, color: theme.colors.accent, marginTop: 14 }}>
+      <div style={{ fontSize: 34, fontWeight: 700, color: theme.colors.accent2, marginTop: 14 }}>
         {title}
       </div>
       <div style={{ fontSize: 28, color: theme.colors.textMuted, marginTop: 10, lineHeight: 1.4 }}>{desc}</div>

@@ -701,7 +701,7 @@ export const Scene2WhyB300: React.FC = () => {
           <FadeIn delay={fps * 1} style={{ marginTop: 20 }}>
             <p style={{ fontSize: 42, textAlign: 'center', lineHeight: 1.7, maxWidth: 1000 }}>
               NVIDIA's vision: data centers as{' '}
-              <span style={{ color: theme.colors.accent, fontWeight: 700 }}>AI factories</span>
+              <span style={{ color: theme.colors.accent2, fontWeight: 700 }}>AI factories</span>
             </p>
           </FadeIn>
 

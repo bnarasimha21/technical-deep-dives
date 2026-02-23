@@ -17,9 +17,9 @@ export const TableRow: React.FC<TableRowProps> = ({
   delay = 0,
   isHeader = false,
   highlight = false,
-  highlightColor = theme.colors.accent,
+  highlightColor = theme.colors.accent2,
   cellHighlightDelays,
-  cellHighlightColor = theme.colors.accent,
+  cellHighlightColor = theme.colors.accent2,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -53,17 +53,17 @@ export const TableRow: React.FC<TableRowProps> = ({
 
         const cellStyle: React.CSSProperties = {
           padding: '18px 52px',
-          borderBottom: isHeader ? `2px solid ${theme.colors.accent}` : `1px solid ${theme.colors.border}`,
+          borderBottom: isHeader ? `2px solid ${theme.colors.accent2}` : `1px solid ${theme.colors.border}`,
           fontSize: isHeader ? 30 : 32,
           fontWeight: isHeader ? 700 : (highlight || isHighlighted) ? 700 : 400,
           color: isHeader
-            ? theme.colors.accent
+            ? theme.colors.accent2
             : isHighlighted
               ? cellHighlightColor
               : highlight
                 ? highlightColor
                 : theme.colors.text,
-          background: isHeader ? 'rgba(118, 185, 0, 0.1)' : 'transparent',
+          background: isHeader ? 'rgba(0, 128, 255, 0.1)' : 'transparent',
         };
 
         return (

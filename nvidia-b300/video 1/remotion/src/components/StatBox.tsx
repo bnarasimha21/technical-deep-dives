@@ -26,7 +26,7 @@ export const StatBox: React.FC<StatBoxProps> = ({
   number,
   label,
   delay = 0,
-  color = theme.colors.accent,
+  color = theme.colors.accent2,
   speed = 80,
 }) => {
   const frame = useCurrentFrame();
@@ -79,7 +79,7 @@ export const StatBox: React.FC<StatBoxProps> = ({
           color,
           lineHeight: 1.1,
           textShadow: glowActive
-            ? `0 0 ${glowSpread}px rgba(118, 185, 0, ${glowAlpha})`
+            ? `0 0 ${glowSpread}px ${color}99`
             : 'none',
         }}
       >

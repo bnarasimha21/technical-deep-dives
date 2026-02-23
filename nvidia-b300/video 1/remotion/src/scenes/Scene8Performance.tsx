@@ -34,7 +34,7 @@ const PillBadge: React.FC<{
         background: 'rgba(255, 255, 255, 0.04)',
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
-        borderLeft: `3px solid ${theme.colors.accent}`,
+        borderLeft: `3px solid ${theme.colors.accent2}`,
         borderRadius: 48,
         padding: '32px 52px 32px 44px',
         width: 960,
@@ -42,7 +42,7 @@ const PillBadge: React.FC<{
     >
       <div style={{ fontSize: 56, flexShrink: 0, lineHeight: 1 }}>{icon}</div>
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <div style={{ fontSize: 36, fontWeight: 700, color: theme.colors.accent }}>
+        <div style={{ fontSize: 36, fontWeight: 700, color: theme.colors.accent2 }}>
           {title}
         </div>
         <div style={{ fontSize: 28, color: theme.colors.textMuted, marginTop: 6 }}>
@@ -111,7 +111,7 @@ export const Scene8Performance: React.FC = () => {
             <div style={{ textAlign: 'center' }}>
               <p style={{ fontSize: 36, color: theme.colors.text }}>
                 Next video:{' '}
-                <span style={{ color: theme.colors.accent, fontWeight: 700 }}>Should You Switch to B300?</span>
+                <span style={{ color: theme.colors.accent2, fontWeight: 700 }}>Should You Switch to B300?</span>
               </p>
             </div>
           </FadeIn>

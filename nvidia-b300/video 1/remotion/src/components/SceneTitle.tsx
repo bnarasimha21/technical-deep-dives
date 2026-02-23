@@ -16,7 +16,7 @@ export const SceneTitle: React.FC<SceneTitleProps> = ({ title, subtitle, delay =
           style={{
             fontSize: 92,
             fontWeight: 700,
-            color: theme.colors.accent,
+            color: theme.colors.accent2,
             margin: 0,
             fontFamily: theme.fonts.heading,
           }}
