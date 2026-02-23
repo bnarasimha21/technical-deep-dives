@@ -101,9 +101,9 @@ export const Scene8Performance: React.FC = () => {
           <StatBox number="5x" label="Throughput per Megawatt vs Hopper" delay={0} />
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 56, alignItems: 'center', marginTop: 48 }}>
-            <PillBadge icon="💰" title="Total Cost of Ownership" desc="Each watt delivers more useful AI work" delay={fps * 8} />
-            <PillBadge icon="☁️" title="Cloud Economics" desc="More AI throughput per GPU-hour" delay={fps * 13} />
-            <PillBadge icon="📈" title="Scale Smarter" desc="Fewer instances, more requests served" delay={fps * 23} />
+            <PillBadge icon="" title="Total Cost of Ownership" desc="Each watt delivers more useful AI work" delay={fps * 8} />
+            <PillBadge icon="" title="Cloud Economics" desc="More AI throughput per GPU-hour" delay={fps * 13} />
+            <PillBadge icon="" title="Scale Smarter" desc="Fewer instances, more requests served" delay={fps * 23} />
           </div>
 
           {/* End card */}

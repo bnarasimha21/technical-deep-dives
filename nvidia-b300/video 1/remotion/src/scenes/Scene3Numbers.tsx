@@ -142,7 +142,7 @@ export const Scene3Numbers: React.FC = () => {
                 style={{ width: 50, height: 50, borderRadius: 8 }}
               />
               <p style={{ fontSize: 28, color: theme.colors.textMuted }}>
-                DeepSeek-R1 (671B params) — ~383 GB in NVFP4 → fits on <span style={{ color: theme.colors.accent, fontWeight: 700 }}>just 2 B300s</span> vs 9 H100s
+                DeepSeek-R1 (671B params): ~383 GB in NVFP4 → fits on <span style={{ color: theme.colors.accent, fontWeight: 700 }}>just 2 B300s</span> vs 9 H100s
               </p>
             </div>
           </InfoOverlay>
@@ -156,23 +156,23 @@ export const Scene3Numbers: React.FC = () => {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 36, alignItems: 'center', marginTop: 40 }}>
             <PowerPill
-              icon="⚡"
+              icon=""
               value="1,400W per GPU"
               desc="200W more than B200, double the H100"
               delay={fps * 4}
               color={theme.colors.amber}
             />
             <PowerPill
-              icon="🔌"
+              icon=""
               value="~14 kW per 8-GPU system"
               desc="Significant datacenter power budget"
               delay={fps * 15}
               color={theme.colors.amber}
             />
             <PowerPill
-              icon="📈"
+              icon=""
               value="5x throughput per megawatt"
-              desc="vs Hopper — each watt delivers more useful AI work"
+              desc="vs Hopper: each watt delivers more useful AI work"
               delay={fps * 26}
               color={theme.colors.accent}
             />

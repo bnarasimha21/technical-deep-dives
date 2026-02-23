@@ -716,21 +716,21 @@ export const Scene2WhyB300: React.FC = () => {
 
           <div style={{ display: 'flex', gap: 48, justifyContent: 'center', marginTop: 50 }}>
             <FlipCard
-              icon="🧠"
+              icon=""
               title="Memory Capacity"
               desc="Models keep getting bigger"
               color={theme.colors.accent}
               delay={fps * 5}
             />
             <FlipCard
-              icon="⚡"
+              icon=""
               title="NVFP4"
               desc="4-bit precision is production-ready"
               color={theme.colors.accent2}
               delay={fps * 9}
             />
             <FlipCard
-              icon="🔗"
+              icon=""
               title="NVLink Bandwidth"
               desc="MoE architectures are the future"
               color="#FFB400"

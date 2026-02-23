@@ -82,7 +82,7 @@ const ScalingBars: React.FC<{ delay: number }> = ({ delay }) => {
         </div>
         <div style={{ opacity: label2, textAlign: 'center' }}>
           <div style={{ fontSize: 24, color: activeLabel === 1 ? theme.colors.red : theme.colors.textMuted, fontWeight: activeLabel === 1 ? 700 : 400 }}>
-            FP4 only — detail lost
+            FP4 only, detail lost
           </div>
         </div>
         <div style={{ opacity: label3, textAlign: 'center' }}>
@@ -345,7 +345,7 @@ const AttentionPipeline: React.FC = () => {
             color: upgraded ? theme.colors.accent : theme.colors.amber,
             fontWeight: 700,
           }}>
-            {upgraded ? 'Bottleneck resolved — 2x throughput' : 'Softmax bottleneck — data slows down'}
+            {upgraded ? 'Bottleneck resolved: 2x throughput' : 'Softmax bottleneck: data slows down'}
           </span>
         </FadeIn>
       </div>
@@ -586,7 +586,7 @@ export const Scene5TensorCores: React.FC = () => {
           <MemoryHierarchy />
           <FadeIn delay={fps * 16}>
             <p style={{ fontSize: 30, color: theme.colors.textMuted, textAlign: 'center', marginTop: 20 }}>
-              Dedicated on-chip storage — reduces trips to main memory
+              Dedicated on-chip storage: reduces trips to main memory
             </p>
           </FadeIn>
         </CenteredSlide>

@@ -122,7 +122,7 @@ export const Scene6Memory: React.FC = () => {
           {/* Highlight stat at 27s */}
           <FadeIn delay={fps * 25}>
             <p style={{ fontSize: 30, color: theme.colors.textMuted, textAlign: 'center', marginTop: 20 }}>
-              That's <span style={{ color: theme.colors.accent, fontWeight: 700 }}>8,192-bit memory interface</span> — 4,096 bits per die
+              That's <span style={{ color: theme.colors.accent, fontWeight: 700 }}>8,192-bit memory interface</span>, 4,096 bits per die
             </p>
           </FadeIn>
 
@@ -139,9 +139,9 @@ export const Scene6Memory: React.FC = () => {
           <SceneTitle title="Why 288 GB Matters" />
 
           <div style={{ display: 'flex', gap: 40, marginTop: 48, justifyContent: 'center' }}>
-            <PopCard icon="📦" title="Larger Models" desc="Fewer GPUs = simpler deployment, lower cost" delay={fps * 3} />
-            <PopCard icon="🔗" title="Bigger KV Caches" desc="Longer context windows for reasoning models" delay={fps * 11} />
-            <PopCard icon="📊" title="Higher Batch Sizes" desc="Better utilization = more tokens/sec" delay={fps * 21} />
+            <PopCard icon="" title="Larger Models" desc="Fewer GPUs = simpler deployment, lower cost" delay={fps * 3} />
+            <PopCard icon="" title="Bigger KV Caches" desc="Longer context windows for reasoning models" delay={fps * 11} />
+            <PopCard icon="" title="Higher Batch Sizes" desc="Better utilization = more tokens/sec" delay={fps * 21} />
           </div>
 
         </CenteredSlide>
