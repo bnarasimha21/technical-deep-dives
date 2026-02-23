@@ -93,7 +93,7 @@ export const Scene7MultiGpu: React.FC = () => {
           </FadeIn>
 
           <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 40 }}>
-            <StatBox number="2.1 TB" label="GPU Memory" delay={fps * 16} />
+            <StatBox number="2.3 TB" label="GPU Memory" delay={fps * 16} />
             <StatBox number="108" label="PFLOPS FP4 Dense" delay={fps * 23} />
             <StatBox number="~14 kW" label="System Power" delay={fps * 35} />
           </div>

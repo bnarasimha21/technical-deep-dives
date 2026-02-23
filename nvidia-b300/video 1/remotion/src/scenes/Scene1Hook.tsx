@@ -181,7 +181,7 @@ export const Scene1Hook: React.FC = () => {
 
           {/* Stats appear below the title at ~27s */}
           <div style={{ display: 'flex', gap: 60, justifyContent: 'center', marginTop: 40 }}>
-            <StatBox number="15" label="PFLOPS (FP4)" delay={fps * 10} />
+            <StatBox number="15" label="PFLOPS FP4 Sparse" delay={fps * 10} />
             <StatBox number="288" label="GB HBM3e" delay={fps * 13} />
             <StatBox number="208B" label="Transistors" delay={fps * 13 + 120} />
           </div>

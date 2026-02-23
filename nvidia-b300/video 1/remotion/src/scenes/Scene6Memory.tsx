@@ -115,7 +115,7 @@ export const Scene6Memory: React.FC = () => {
           {/* Math text at 19s */}
           <FadeIn delay={fps * 19}>
             <p style={{ fontSize: 30, color: theme.colors.textMuted, textAlign: 'center', marginTop: 16 }}>
-              8 stacks × 12 DRAM layers × 36 GB = <span style={{ color: theme.colors.accent, fontWeight: 700 }}>288 GB total</span>
+              8 stacks × 36 GB per stack = <span style={{ color: theme.colors.accent, fontWeight: 700 }}>288 GB total</span>
             </p>
           </FadeIn>
 

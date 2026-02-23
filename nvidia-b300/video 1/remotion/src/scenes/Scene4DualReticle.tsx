@@ -250,9 +250,9 @@ export const Scene4DualReticle: React.FC = () => {
                 border: `1px solid ${theme.colors.border}`,
               }}
             >
-              <span style={{ fontSize: 30, color: theme.colors.textMuted }}>Reticle limit: </span>
-              <span style={{ fontSize: 30, color: theme.colors.accent, fontWeight: 700 }}>~858 mm²</span>
-              <span style={{ fontSize: 30, color: theme.colors.textMuted }}> on TSMC 4nm</span>
+              <span style={{ fontSize: 30, color: theme.colors.textMuted }}>Each die is at the </span>
+              <span style={{ fontSize: 30, color: theme.colors.accent, fontWeight: 700 }}>reticle limit</span>
+              <span style={{ fontSize: 30, color: theme.colors.textMuted }}> on TSMC 4NP</span>
             </div>
           </FadeIn>
         </div>
