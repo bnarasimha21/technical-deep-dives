@@ -1,0 +1,13 @@
+Every generation of AI has been defined by its hardware. GPT-2 ran on V One Hundreds. GPT-3 needed A One Hundreds. 
+The largest models today need clusters of H One Hundreds.
+
+The B300, also known as Blackwell Ultra, is NVIDIA's latest datacenter GPU, purpose-built for AI training and inference. 
+
+It packs 15 petaflops of AI compute, 288 gigabytes of memory, and 208 billion transistors into a single GPU package.
+
+But specs on a page don't tell you what actually matters.
+
+In this video, we're going to break down the B300 architecture, understand what makes it different from the B200 and H One Hundred, and most importantly, 
+figure out what this means if you're a developer deploying AI models in the cloud.
+
+Let's get into it.

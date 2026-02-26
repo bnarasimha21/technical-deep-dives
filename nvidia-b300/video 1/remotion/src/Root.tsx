@@ -9,6 +9,7 @@ import { Scene5TensorCores } from './scenes/Scene5TensorCores';
 import { Scene6Memory } from './scenes/Scene6Memory';
 import { Scene7MultiGpu } from './scenes/Scene7MultiGpu';
 import { Scene8Performance } from './scenes/Scene8Performance';
+import { Thumbnail } from './scenes/Thumbnail';
 import { theme, sceneFrames, totalFrames } from './theme';
 
 export const RemotionRoot: React.FC = () => {
@@ -37,6 +38,9 @@ export const RemotionRoot: React.FC = () => {
       <Composition id="Scene6-Memory" component={Scene6Memory} durationInFrames={sceneFrames.scene6_memory} {...common} />
       <Composition id="Scene7-MultiGpu" component={Scene7MultiGpu} durationInFrames={sceneFrames.scene7_multiGpu} {...common} />
       <Composition id="Scene8-Performance" component={Scene8Performance} durationInFrames={sceneFrames.scene8_performance} {...common} />
+
+      {/* YouTube Thumbnail — render a single frame as a still image */}
+      <Composition id="Thumbnail" component={Thumbnail} durationInFrames={90} {...common} />
     </>
   );
 };

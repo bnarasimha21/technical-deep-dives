@@ -1,0 +1,6 @@
+288 gigabytes. Let's understand how that's built.
+The B300 has 8 stacks of HBM3e memory. Each stack has 12 layers of DRAM dies stacked vertically, 36 gigabytes each. Connected through an 8,192-bit memory interface, 4,096 bits per die. With 8 terabytes per second of bandwidth, the B300 can feed data to its tensor cores fast enough to keep up with the compute.
+For developers, 288 GB means:
+Larger models on fewer GPUs. Fewer GPUs means simpler deployment, lower cost, less distributed computing headaches.
+Bigger KV caches. That means longer context windows without running out of memory. Critical for reasoning models and long-document processing.
+More room for batching. Higher batch sizes mean better GPU utilization, which means more tokens per second, which means lower cost per inference.

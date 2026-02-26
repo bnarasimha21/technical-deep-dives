@@ -1,0 +1,6 @@
+Specs are nice. Performance is why you deploy. And here, NVIDIA's official numbers tell a compelling story.
+The B300 delivers 1.5x more AI compute than B200 in NVFP4, and 7.5x more than H One Hundred in FP8. Those are the raw compute gains per GPU.
+At the 8-GPU system level, NVIDIA says B300 servers deliver 11x faster inference on large language models and 7x more compute compared to the Hopper generation, with 3.6x more memory.
+On efficiency, NVIDIA reports 5x higher throughput per megawatt compared to Hopper. That's the number that matters for total cost of ownership. Each watt delivers significantly more useful AI work than the previous generation. For cloud customers renting GPU instances, this translates to more AI throughput per GPU-hour, meaning you can serve more requests or run larger models on fewer instances.
+That wraps up our deep dive into the B300 architecture. In the next video, we'll cover who should actually switch to B300, the real-world economics, and the software stack.
+Thanks for watching.

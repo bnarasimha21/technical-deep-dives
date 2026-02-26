@@ -68,7 +68,6 @@ export const Scene7MultiGpu: React.FC = () => {
   return (
     <Background>
       <Audio src={staticFile('scene7-multi-gpu.m4a')} />
-      <Audio src={staticFile('paulyudin-technology-tech-technology-484304.mp3')} volume={0.04} loop />
       {/* 8-GPU system overview */}
       <Sequence from={0} durationInFrames={fps * 40}>
         <CenteredSlide padding="0 100px">

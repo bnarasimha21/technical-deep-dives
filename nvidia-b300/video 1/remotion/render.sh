@@ -9,10 +9,10 @@ mkdir -p "$OUTPUT_DIR"
 
 RAW="$OUTPUT_DIR/b300-deep-dive-raw.mp4"
 BOOSTED="$OUTPUT_DIR/b300-deep-dive-boosted.mp4"
-FINAL="$OUTPUT_DIR/b300-deep-dive-1.25x.mp4"
+FINAL="$OUTPUT_DIR/b300-deep-dive-1.20x.mp4"
 
 echo "=== Rendering full video ==="
-npx remotion render Video1 "$RAW" --timeout=120000 --concurrency=8
+npx remotion render Video1 "$RAW" --timeout=120000 --concurrency=4
 
 echo "=== Boosting audio volume (3x) ==="
 ffmpeg -y -i "$RAW" \
@@ -20,10 +20,10 @@ ffmpeg -y -i "$RAW" \
   -c:v copy \
   "$BOOSTED"
 
-echo "=== Creating 1.25x speed version ==="
+echo "=== Creating 1.20x speed version ==="
 ffmpeg -y -i "$BOOSTED" \
-  -filter:v "setpts=0.8*PTS" \
-  -filter:a "atempo=1.25" \
+  -filter:v "setpts=0.8333*PTS" \
+  -filter:a "atempo=1.20" \
   "$FINAL"
 
 rm -f "$RAW" "$BOOSTED"

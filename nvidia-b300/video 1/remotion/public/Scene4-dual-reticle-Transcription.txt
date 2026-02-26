@@ -1,0 +1,5 @@
+Here's something most people don't realize: the B300 isn't one chip. It's two.
+There's a physical limit in chip manufacturing called the reticle size. In lithography, the process used to print circuits onto silicon, a machine can only expose a certain area in a single shot, about 858 square millimeters on TSMC's 4-nanometer process.
+To go beyond that, NVIDIA puts two dies in one package and connects them with a custom interconnect called NV-HBI, the NVIDIA High-Bandwidth Interface.
+This runs at 10 terabytes per second, bidirectional. That's fast enough that the two dies behave as a single GPU. Your CUDA code doesn't know or care that there are two dies underneath. The two chips share a unified 192-megabyte L2 cache and maintain coherent memory across both dies. 
+For all intents and purposes, software sees it as a single device.

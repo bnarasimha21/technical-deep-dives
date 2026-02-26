@@ -1,0 +1,6 @@
+One B300 is impressive. But production AI runs on multi-GPU servers.
+A typical B300 server packs 8 GPUs into a single node, paired with Intel Xeon processors and 2 terabytes of system memory. That gives you over 2 terabytes of total GPU memory, enough to run even the largest models without splitting across nodes.
+At the system level, you get 108 petaflops of dense FP4 compute, or 144 petaflops with sparsity. For FP8 training workloads, that's 72 petaflops. The whole system draws about 14 kilowatts.
+Inside the node, two fifth-generation NVSwitch chips connect all 8 GPUs over NVLink 5 at 1,800 gigabytes per second per GPU, double what Hopper offered. That's 14.4 terabytes per second of aggregate bandwidth, which dramatically improves synchronization speed for tensor parallelism.
+For even larger workloads, you connect multiple nodes over high-speed networking, up to 800 gigabits per second InfiniBand or Ethernet using NVIDIA ConnectX-8. NVLink handles the fast communication within a node, and the network handles communication between nodes.
+This two-tier architecture, NVLink inside and high-speed networking outside, is how most cloud providers deploy B300 at scale.

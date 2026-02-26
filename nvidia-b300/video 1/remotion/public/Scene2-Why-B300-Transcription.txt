@@ -1,0 +1,7 @@
+To understand the B300, you need to understand the trend it's responding to.
+AI models are growing fast. GPT-3 had 175 billion parameters. DeepSeek-R1 has 671 billion. And now we have reasoning models that need to "think" for extended periods, chaining multiple inference passes together.
+The hardware has to keep up. And for the last few generations, the bottleneck hasn't been raw compute. It's been memory.
+The reality is, the best models available today do not fit on a single GPU. When you split a model across multiple GPUs, that means more hardware, more complexity, more cost.
+NVIDIA's vision is that data centers are becoming AI factories, infrastructure designed specifically to produce AI outputs at massive scale. The B300 is built to be the engine of that factory.
+NVIDIA made deliberate trade-offs with the B300. They prioritized memory capacity, assuming models will keep getting bigger. They invested in NVFP4, betting that 4-bit precision is good enough for production. And they doubled down on NVLink bandwidth for multi-GPU scaling, anticipating that Mixture of Experts architectures are the future. 
+Every design choice points in one direction: large-scale AI inference and training.

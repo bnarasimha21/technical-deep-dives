@@ -1,5 +1,5 @@
 import React from 'react';
-import { Series } from 'remotion';
+import { Series, Audio, staticFile } from 'remotion';
 import { Scene1Hook } from './scenes/Scene1Hook';
 import { Scene2WhyB300 } from './scenes/Scene2WhyB300';
 import { Scene3Numbers } from './scenes/Scene3Numbers';
@@ -12,6 +12,8 @@ import { sceneFrames } from './theme';
 
 export const Video: React.FC = () => {
   return (
+    <>
+    <Audio src={staticFile('paulyudin-technology-tech-technology-484304.mp3')} volume={0.04} loop />
     <Series>
       <Series.Sequence durationInFrames={sceneFrames.scene1_hook}>
         <Scene1Hook />
@@ -38,5 +40,6 @@ export const Video: React.FC = () => {
         <Scene8Performance />
       </Series.Sequence>
     </Series>
+    </>
   );
 };

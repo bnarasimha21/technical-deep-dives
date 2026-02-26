@@ -1,0 +1,7 @@
+Let's look at the numbers, side by side.
+Compute: the B300 delivers 15 petaflops. That's 1.5x the B200, and 7.5x the H One Hundred, which is NVIDIA's previous-generation Hopper architecture, the GPU that's been the workhorse of AI for the last two years.
+Memory: 288 gigabytes of High Bandwidth Memory 3rd Gen Enhanced. That's 50% more than B200's 192 gigs, and 3.6 times the H One Hundred. To put that in perspective, DeepSeek-R1 at 671 billion parameters needs about 383 gigabytes in NVFP4. That fits on just 2 B300s, versus 9 H One Hundreds.
+Bandwidth stays at 8 terabytes per second, same as B200, but still more than double the H One Hundred.
+Now, the trade-off. Power.
+The B300 draws up to 1,400 watts. That's 200 watts more than the base Blackwell's 1,200 watts, and double the H One Hundred's 700 watts. At rack scale, an 8-GPU system draws about 14 kilowatts. Air-cooled configurations are available, though higher-density deployments may require liquid cooling.
+But here's what's interesting. NVIDIA claims 5x higher throughput per megawatt compared to Hopper. More power in, but each watt delivers significantly more useful AI work.

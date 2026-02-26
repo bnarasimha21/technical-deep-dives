@@ -667,7 +667,6 @@ export const Scene2WhyB300: React.FC = () => {
   return (
     <Background>
       <Audio src={staticFile('scene2-whyb300.m4a')} />
-      <Audio src={staticFile('paulyudin-technology-tech-technology-484304.mp3')} volume={0.04} loop />
       {/* GPU timeline animation — animated horizontal line with nodes */}
       <Sequence from={Math.round(fps * 0.5)} durationInFrames={Math.round(fps * 7.5)}>
         <CenteredSlide>

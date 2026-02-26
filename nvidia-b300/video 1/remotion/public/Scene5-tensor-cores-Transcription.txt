@@ -1,0 +1,14 @@
+The B300 has 640 fifth-generation tensor cores. But the generation number matters more than the count.
+Each generation brought something new. Volta introduced matrix multiply. Turing added integer precision. Ampere brought sparsity. Hopper gave us FP8 and the Transformer Engine.
+Most production models today run in FP8. NVFP4 is the next step, trading a small amount of accuracy for nearly double the throughput and memory savings.
+Blackwell's fifth gen adds three things:
+First, native NVFP4 support. This is NVIDIA's 4-bit floating point format.
+NVFP4 uses a clever two-level scaling system. Each block of 16 values gets a micro-scale factor in FP8. Then the entire tensor gets a macro-scale in FP32. This lets you represent weights in just 4 bits while preserving most of the accuracy.
+The impact is dramatic.
+Lets campare with FP16: 4 bits per weight instead of 16. NVIDIA reports about 3.5x memory savings versus FP16, and about 1.8x versus FP8. On the compute side, FP4 delivers 4x higher throughput than FP16. And the accuracy trade-off? About 1 percent or less on most benchmarks.
+
+Here's the real-world payoff.
+A 671-billion parameter model like DeepSeek-R1 in FP16 needs 1,342 gigabytes. That's 17 H One Hundreds. Even in FP8, you still need 9 H One Hundreds. But with NVFP4 on B300? About 383 gigabytes. That fits on just 2 B300s.
+9 GPUs down to 2. That's less hardware, less communication overhead, simpler deployment, and potentially lower total serving cost.
+Second, The B300 also doubles attention calculation speed. The softmax operation in transformer attention is a well-known bottleneck, and Blackwell Ultra doubles the special function unit throughput for the exponential and division operations that softmax relies on. This directly speeds up every attention layer.
+Third, Tensor Memory, or TMEM. 256 kilobytes per SM of dedicated storage for intermediate matrix results. Reduces trips to main memory, especially important for Mixture of Experts models.

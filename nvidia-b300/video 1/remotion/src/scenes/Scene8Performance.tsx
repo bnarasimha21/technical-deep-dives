@@ -59,7 +59,6 @@ export const Scene8Performance: React.FC = () => {
   return (
     <Background>
       <Audio src={staticFile('scene8-performance.m4a')} />
-      <Audio src={staticFile('paulyudin-technology-tech-technology-484304.mp3')} volume={0.04} loop />
       {/* Per-GPU claims */}
       <Sequence from={0} durationInFrames={fps * 24}>
         <CenteredSlide padding="0 100px">

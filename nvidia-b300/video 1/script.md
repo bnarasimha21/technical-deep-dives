@@ -14,7 +14,7 @@ The B300, also known as Blackwell Ultra, is NVIDIA's latest datacenter GPU, purp
 
 But specs on a page don't tell you what actually matters.
 
-In this video, we're going to break down the B300 architecture, understand what makes it different from the B200 and H100, and most importantly, figure out what this means if you're a developer deploying AI models in the cloud.
+In this video, we're going to break down the B300 architecture, understand what makes it different from the B200 and H One Hundred, and most importantly, figure out what this means if you're a developer deploying AI models in the cloud.
 
 Let's get into it.
 
