@@ -182,7 +182,7 @@ export const Scene4DualReticle: React.FC = () => {
     <Background>
       <Audio src={staticFile('scene4-dual-reticle.m4a')} />
       {/* Two dies revealed */}
-      <Sequence from={0} durationInFrames={fps * 62}>
+      <Sequence from={0} durationInFrames={fps * 65}>
         <CenteredSlide padding="0 100px">
           <SceneTitle title="Dual-Reticle Architecture" />
 

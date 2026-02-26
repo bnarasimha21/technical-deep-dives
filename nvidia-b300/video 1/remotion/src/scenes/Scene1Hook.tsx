@@ -188,8 +188,8 @@ export const Scene1Hook: React.FC = () => {
         </CenteredSlide>
       </Sequence>
 
-      {/* What We'll Cover — [40-54s] */}
-      <Sequence from={fps * 40} durationInFrames={fps * 14}>
+      {/* What We'll Cover — [40-56s] */}
+      <Sequence from={fps * 40} durationInFrames={fps * 16}>
         <CenteredSlide padding="0 120px">
           <SceneTitle title="What We'll Cover" />
 

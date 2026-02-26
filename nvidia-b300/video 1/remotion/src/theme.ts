@@ -23,14 +23,14 @@ export const theme = {
 
 // Scene durations in seconds (matched to voiceover audio + 2s padding)
 export const sceneDurations = {
-  scene1_hook: 53,
-  scene2_whyB300: 90,
-  scene3_numbers: 98,
-  scene4_dualReticle: 62,
-  scene5_tensorCores: 159,
-  scene6_memory: 70,
-  scene7_multiGpu: 86,
-  scene8_performance: 79,
+  scene1_hook: 56,
+  scene2_whyB300: 89,
+  scene3_numbers: 94,
+  scene4_dualReticle: 65,
+  scene5_tensorCores: 172,
+  scene6_memory: 68,
+  scene7_multiGpu: 94,
+  scene8_performance: 83,
 } as const;
 
 // Convert seconds to frames

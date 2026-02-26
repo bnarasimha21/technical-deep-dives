@@ -8,27 +8,26 @@ OUTPUT_DIR="out/nvidia-b300-deep-dive"
 mkdir -p "$OUTPUT_DIR"
 
 RAW="$OUTPUT_DIR/b300-deep-dive-raw.mp4"
-NORMAL="$OUTPUT_DIR/b300-deep-dive-1x.mp4"
-FAST="$OUTPUT_DIR/b300-deep-dive-1.05x.mp4"
+BOOSTED="$OUTPUT_DIR/b300-deep-dive-boosted.mp4"
+FINAL="$OUTPUT_DIR/b300-deep-dive-1.25x.mp4"
 
 echo "=== Rendering full video ==="
-npx remotion render Video1 "$RAW"
+npx remotion render Video1 "$RAW" --timeout=120000 --concurrency=2
 
-echo "=== Boosting audio volume ==="
+echo "=== Boosting audio volume (3x) ==="
 ffmpeg -y -i "$RAW" \
   -filter:a "volume=3.0" \
   -c:v copy \
-  "$NORMAL"
+  "$BOOSTED"
 
-echo "=== Creating 1.05x speed version ==="
-ffmpeg -y -i "$NORMAL" \
-  -filter:v "setpts=0.9524*PTS" \
-  -filter:a "atempo=1.05" \
-  "$FAST"
+echo "=== Creating 1.25x speed version ==="
+ffmpeg -y -i "$BOOSTED" \
+  -filter:v "setpts=0.8*PTS" \
+  -filter:a "atempo=1.25" \
+  "$FINAL"
 
-rm -f "$RAW"
+rm -f "$RAW" "$BOOSTED"
 
 echo ""
 echo "=== Done ==="
-echo "  Normal:  $NORMAL"
-echo "  1.05x:   $FAST"
+echo "  Output: $FINAL"

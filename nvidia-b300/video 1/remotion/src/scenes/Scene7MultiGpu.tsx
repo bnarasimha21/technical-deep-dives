@@ -102,7 +102,7 @@ export const Scene7MultiGpu: React.FC = () => {
       </Sequence>
 
       {/* NVLink + inter-node */}
-      <Sequence from={fps * 38} durationInFrames={fps * 48}>
+      <Sequence from={fps * 38} durationInFrames={fps * 56}>
         <CenteredSlide padding="0 100px">
           <div style={{ display: 'flex', gap: 48, justifyContent: 'center', width: '100%', maxWidth: 1300 }}>
             {/* Intra-node card */}

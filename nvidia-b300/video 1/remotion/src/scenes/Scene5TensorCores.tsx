@@ -580,11 +580,11 @@ export const Scene5TensorCores: React.FC = () => {
       </Sequence>
 
       {/* Tensor Memory — animated memory hierarchy */}
-      <Sequence from={fps * 143} durationInFrames={fps * 16}>
+      <Sequence from={fps * 143} durationInFrames={fps * 29}>
         <CenteredSlide padding="0 100px">
           <SceneTitle title="Tensor Memory (TMEM)" />
           <MemoryHierarchy />
-          <FadeIn delay={fps * 16}>
+          <FadeIn delay={fps * 14}>
             <p style={{ fontSize: 30, color: theme.colors.textMuted, textAlign: 'center', marginTop: 20 }}>
               Dedicated on-chip storage: reduces trips to main memory
             </p>

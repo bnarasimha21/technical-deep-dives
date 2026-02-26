@@ -134,7 +134,7 @@ export const Scene6Memory: React.FC = () => {
       </Sequence>
 
       {/* Why it matters */}
-      <Sequence from={fps * 39} durationInFrames={fps * 31}>
+      <Sequence from={fps * 39} durationInFrames={fps * 29}>
         <CenteredSlide>
           <SceneTitle title="Why 288 GB Matters" />
 

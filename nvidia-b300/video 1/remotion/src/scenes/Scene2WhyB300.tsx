@@ -668,7 +668,7 @@ export const Scene2WhyB300: React.FC = () => {
     <Background>
       <Audio src={staticFile('scene2-whyb300.m4a')} />
       {/* GPU timeline animation — animated horizontal line with nodes */}
-      <Sequence from={0} durationInFrames={fps * 8}>
+      <Sequence from={Math.round(fps * 0.5)} durationInFrames={Math.round(fps * 7.5)}>
         <CenteredSlide>
           <SceneTitle title="GPU Evolution" />
           <GpuTimeline />
@@ -710,7 +710,7 @@ export const Scene2WhyB300: React.FC = () => {
       </Sequence>
 
       {/* Deliberate trade-offs — animated gauges */}
-      <Sequence from={fps * 60} durationInFrames={fps * 30}>
+      <Sequence from={fps * 60} durationInFrames={fps * 29}>
         <CenteredSlide padding="0 100px">
           <SceneTitle title="Deliberate Trade-offs" />
 

@@ -150,7 +150,7 @@ export const Scene3Numbers: React.FC = () => {
       </Sequence>
 
       {/* Power & efficiency */}
-      <Sequence from={fps * 58} durationInFrames={fps * 40}>
+      <Sequence from={fps * 58} durationInFrames={fps * 36}>
         <CenteredSlide padding="0 100px">
           <SceneTitle title="The Trade-off: Power" />
 

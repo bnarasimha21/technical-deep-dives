@@ -1,5 +1,7 @@
 # NVIDIA B300 Blackwell Ultra
 
+> **Pronunciation guide:** Say "H one hundred", "V one hundred", "A one hundred", "B two hundred", "B three hundred" (not "H hundred", etc.)
+
 ## 1: Hook & Introduction
 
 Every generation of AI has been defined by its hardware. GPT-2 ran on V100s. GPT-3 needed A100s. The largest models today need clusters of H100s.
@@ -24,7 +26,7 @@ Let's get into it.
 
 To understand the B300, you need to understand the trend it's responding to.
 
-AI models are growing fast. GPT-3 had 175 billion parameters. GPT-4 is estimated at over a trillion. And now we have reasoning models that need to "think" for extended periods, chaining multiple inference passes together.
+AI models are growing fast. GPT-3 had 175 billion parameters. DeepSeek-R1 has 671 billion. And now we have reasoning models that need to "think" for extended periods, chaining multiple inference passes together.
 
 The hardware has to keep up. And for the last few generations, the bottleneck hasn't been raw compute. It's been memory.
 
@@ -44,23 +46,23 @@ NVIDIA made deliberate trade-offs with the B300. They prioritized memory capacit
 
 ***[Animated comparison table building row by row]***
 
-Let's look at the headline numbers, side by side.
+Let's look at the numbers, side by side.
 
-FP4 compute: the B300 delivers 15 petaflops. That's 1.5x the B200, and 7.5x the H100, which is NVIDIA's previous-generation Hopper architecture, the GPU that's been the workhorse of AI for the last two years.
+Compute: the B300 delivers 15 petaflops. That's 1.5x the B200, and 7.5x the H One Hundred, which is NVIDIA's previous-generation Hopper architecture, the GPU that's been the workhorse of AI for the last two years.
 
 ***[B300: 15 PFLOPS highlighted]***
 
-Memory: 288 gigabytes of HBM3e. That's 50% more than B200's 192 gigs, and 3.6 times the H100. To put that in perspective, DeepSeek-R1 at 671 billion parameters needs about 383 gigabytes in NVFP4. That fits on just 2 B300s, versus 9 H100s.
+Memory: 288 gigabytes of High Bandwidth Memory 3rd Gen Enhanced. That's 50% more than B200's 192 gigs, and 3.6 times the H One Hundred. To put that in perspective, DeepSeek-R1 at 671 billion parameters needs about 383 gigabytes in NVFP4. That fits on just 2 B300s, versus 9 H One Hundreds.
 
 ***[Memory row highlights]***
 
-Bandwidth stays at 8 terabytes per second, same as B200, but still more than double the H100.
+Bandwidth stays at 8 terabytes per second, same as B200, but still more than double the H One Hundred.
 
 Now, the trade-off. Power.
 
 ***[TDP row: 1,400W highlighted in amber]***
 
-The B300 draws up to 1,400 watts. That's 200 watts more than the base Blackwell's 1,200 watts, and double the H100's 700. At rack scale, an 8-GPU system draws about 14 kilowatts. Air-cooled configurations are available, though higher-density deployments may require liquid cooling.
+The B300 draws up to 1,400 watts. That's 200 watts more than the base Blackwell's 1,200 watts, and double the H One Hundred's 700 watts. At rack scale, an 8-GPU system draws about 14 kilowatts. Air-cooled configurations are available, though higher-density deployments may require liquid cooling.
 
 But here's what's interesting. NVIDIA claims 5x higher throughput per megawatt compared to Hopper. More power in, but each watt delivers significantly more useful AI work.
 
@@ -83,12 +85,6 @@ To go beyond that, NVIDIA puts two dies in one package and connects them with a 
 ***[NV-HBI callout: 10 TB/s]***
 
 This runs at 10 terabytes per second, bidirectional. That's fast enough that the two dies behave as a single GPU. Your CUDA code doesn't know or care that there are two dies underneath. The two chips share a unified 192-megabyte L2 cache and maintain coherent memory across both dies. For all intents and purposes, software sees it as a single device.
-
-***[Single CUDA device highlight]***
-
-And there's a manufacturing benefit too. Because each die is smaller, NVIDIA gets better manufacturing yield, more usable chips per silicon wafer and fewer defects. That also means potentially better supply availability compared to a single massive die.
-
-The dual-die approach is itself a design choice. NVIDIA chose to push beyond the reticle limit rather than accept smaller chips, because they believed AI workloads would need every transistor they could fit.
 
 ***[Transition: zoom into die → tensor cores]***
 
@@ -128,7 +124,7 @@ Here's the real-world payoff.
 
 ***[Model footprint graphic]***
 
-A 671-billion parameter model like DeepSeek-R1 in FP16 needs 1,342 gigabytes. That's 17 H100s. Even in FP8, you still need 9 H100s. But with NVFP4 on B300? About 383 gigabytes. That fits on just 2 B300s.
+A 671-billion parameter model like DeepSeek-R1 in FP16 needs 1,342 gigabytes. That's 17 H100s. Even in FP8, you still need 9 H One Hundreds. But with NVFP4 on B300? About 383 gigabytes. That fits on just 2 B300s.
 
 ***[GPU comparison: 9× H100 vs 2× B300]***
 
@@ -150,7 +146,7 @@ Third, Tensor Memory, or TMEM. 256 kilobytes per SM of dedicated storage for int
 
 ***[8 stacks around two dies]***
 
-The B300 has 8 stacks of HBM3e memory, that's High Bandwidth Memory, third generation enhanced. Each stack has 12 layers of DRAM dies stacked vertically, 36 gigabytes each. Connected through an 8,192-bit memory interface, 4,096 bits per die. With 8 terabytes per second of bandwidth, the B300 can feed data to its tensor cores fast enough to keep up with the compute.
+The B300 has 8 stacks of HBM3e memory. Each stack has 12 layers of DRAM dies stacked vertically, 36 gigabytes each. Connected through an 8,192-bit memory interface, 4,096 bits per die. With 8 terabytes per second of bandwidth, the B300 can feed data to its tensor cores fast enough to keep up with the compute.
 
 ***[What fits in 288 GB - examples]***
 
@@ -194,11 +190,11 @@ This two-tier architecture, NVLink inside and high-speed networking outside, is 
 
 ***[Animated comparison graphics]***
 
-Specs are nice. Performance is what you deploy. And here, NVIDIA's official numbers tell a compelling story.
+Specs are nice. Performance is why you deploy. And here, NVIDIA's official numbers tell a compelling story.
 
 ***[NVIDIA performance claims]***
 
-The B300 delivers 1.5x more AI compute than B200 in NVFP4, and 7.5x more than H100 in FP8. Those are the raw compute gains per GPU.
+The B300 delivers 1.5x more AI compute than B200 in NVFP4, and 7.5x more than H One Hundred in FP8. Those are the raw compute gains per GPU.
 
 At the 8-GPU system level, NVIDIA says B300 servers deliver 11x faster inference on large language models and 7x more compute compared to the Hopper generation, with 3.6x more memory.
 

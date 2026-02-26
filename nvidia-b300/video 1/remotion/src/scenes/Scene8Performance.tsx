@@ -96,7 +96,7 @@ export const Scene8Performance: React.FC = () => {
       </Sequence>
 
       {/* Efficiency + closing */}
-      <Sequence from={fps * 38} durationInFrames={fps * 41}>
+      <Sequence from={fps * 38} durationInFrames={fps * 45}>
         <CenteredSlide padding="0 100px">
           <StatBox number="5x" label="Throughput per Megawatt vs Hopper" delay={0} />
 
