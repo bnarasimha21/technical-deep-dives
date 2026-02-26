@@ -107,7 +107,7 @@ export const Scene8Performance: React.FC = () => {
           </div>
 
           {/* End card */}
-          <FadeIn delay={fps * 29} style={{ marginTop: 24 }}>
+          <FadeIn delay={fps * 33} style={{ marginTop: 24 }}>
             <div style={{ textAlign: 'center' }}>
               <p style={{ fontSize: 36, color: theme.colors.text }}>
                 Next video:{' '}

@@ -121,7 +121,7 @@ export const Scene7MultiGpu: React.FC = () => {
             </ConnectCard>
           </div>
 
-          <Callout delay={fps * 38} style={{ marginTop: 36, maxWidth: 900 }}>
+          <Callout delay={fps * 44} style={{ marginTop: 36, maxWidth: 900 }}>
             <span style={{ color: theme.colors.accent, fontWeight: 700 }}>Two-tier architecture:</span> NVLink inside the node, high-speed networking outside.
           </Callout>
 

@@ -234,8 +234,8 @@ export const Scene4DualReticle: React.FC = () => {
         </CenteredSlide>
       </Sequence>
 
-      {/* Reticle limit — 17s to 25s */}
-      <Sequence from={fps * 17} durationInFrames={fps * 8}>
+      {/* Reticle limit — 10s to 18s */}
+      <Sequence from={fps * 10} durationInFrames={fps * 8}>
         <div style={{ position: 'absolute', bottom: 80, left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
           <FadeIn delay={0}>
             <div

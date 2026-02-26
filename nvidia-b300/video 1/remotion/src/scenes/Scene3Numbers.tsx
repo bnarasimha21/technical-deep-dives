@@ -86,7 +86,7 @@ export const Scene3Numbers: React.FC = () => {
     <Background>
       <Audio src={staticFile('scene3-numbers.m4a')} />
       {/* Comparison table */}
-      <Sequence from={0} durationInFrames={fps * 58}>
+      <Sequence from={0} durationInFrames={fps * 57}>
         <CenteredSlide>
           <SceneTitle title="B300 vs B200 vs H100" />
 
@@ -104,26 +104,26 @@ export const Scene3Numbers: React.FC = () => {
           >
             <table style={{ borderCollapse: 'collapse', minWidth: 1000 }}>
               <tbody>
-                <TableRow cells={['Metric', 'H100', 'B200', 'B300']} isHeader delay={fps * 3} />
+                <TableRow cells={['Metric', 'H100', 'B200', 'B300']} isHeader delay={fps * 2} />
                 <TableRow
                   cells={['AI Compute', '2 PFLOPS (FP8 dense)', '10 PFLOPS (NVFP4)', '15 PFLOPS (NVFP4)']}
-                  delay={fps * 6}
-                  cellHighlightDelays={[null, fps * 15, fps * 12, fps * 8]}
+                  delay={fps * 5}
+                  cellHighlightDelays={[null, fps * 13, fps * 10, fps * 7]}
                 />
                 <TableRow
                   cells={['HBM3e Memory', '80 GB', '192 GB', '288 GB']}
-                  delay={fps * 23}
-                  cellHighlightDelays={[null, fps * 33, fps * 30, fps * 25]}
+                  delay={fps * 22}
+                  cellHighlightDelays={[null, fps * 32, fps * 29, fps * 24]}
                 />
                 <TableRow
                   cells={['Memory BW', '3.35 TB/s', '8 TB/s', '8 TB/s']}
-                  delay={fps * 49}
-                  cellHighlightDelays={[null, fps * 56, fps * 51, fps * 51]}
+                  delay={fps * 48}
+                  cellHighlightDelays={[null, fps * 54, fps * 50, fps * 50]}
                 />
                 <TableRow
                   cells={['NVLink BW', '900 GB/s', '1,800 GB/s', '1,800 GB/s']}
-                  delay={fps * 52}
-                  cellHighlightDelays={[null, fps * 56, fps * 51, fps * 51]}
+                  delay={fps * 51}
+                  cellHighlightDelays={[null, fps * 54, fps * 50, fps * 50]}
                 />
               </tbody>
             </table>
@@ -132,8 +132,8 @@ export const Scene3Numbers: React.FC = () => {
         </CenteredSlide>
       </Sequence>
 
-      {/* DeepSeek R1 overlay at bottom — [36-49s] */}
-      <Sequence from={fps * 36} durationInFrames={fps * 13}>
+      {/* DeepSeek R1 overlay at bottom — [35-48s] */}
+      <Sequence from={fps * 35} durationInFrames={fps * 13}>
         <div style={{ position: 'absolute', bottom: 80, left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
           <InfoOverlay delay={0}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
@@ -150,7 +150,7 @@ export const Scene3Numbers: React.FC = () => {
       </Sequence>
 
       {/* Power & efficiency */}
-      <Sequence from={fps * 58} durationInFrames={fps * 36}>
+      <Sequence from={fps * 57} durationInFrames={fps * 37}>
         <CenteredSlide padding="0 100px">
           <SceneTitle title="The Trade-off: Power" />
 
@@ -159,21 +159,21 @@ export const Scene3Numbers: React.FC = () => {
               icon=""
               value="1,400W per GPU"
               desc="200W more than B200, double the H100"
-              delay={fps * 4}
+              delay={fps * 3}
               color={theme.colors.amber}
             />
             <PowerPill
               icon=""
               value="~14 kW per 8-GPU system"
               desc="Significant datacenter power budget"
-              delay={fps * 15}
+              delay={fps * 14}
               color={theme.colors.amber}
             />
             <PowerPill
               icon=""
               value="5x throughput per megawatt"
               desc="vs Hopper: each watt delivers more useful AI work"
-              delay={fps * 26}
+              delay={fps * 25}
               color={theme.colors.accent}
             />
           </div>

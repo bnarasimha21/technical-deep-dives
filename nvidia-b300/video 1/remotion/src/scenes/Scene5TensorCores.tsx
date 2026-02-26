@@ -23,8 +23,8 @@ const ScalingBars: React.FC<{ delay: number }> = ({ delay }) => {
   const t = frame - delay;
   const phase1 = spring({ frame: t, fps, config: { damping: 20, stiffness: 60 } }); // original (41s)
   const phase2 = spring({ frame: t - fps * 1.5, fps, config: { damping: 20, stiffness: 60 } }); // fp4 only (~42.5s)
-  const phase3 = spring({ frame: t - fps * 3, fps, config: { damping: 20, stiffness: 60 } }); // + micro (44s)
-  const phase4 = spring({ frame: t - fps * 9, fps, config: { damping: 20, stiffness: 60 } }); // + macro (50s)
+  const phase3 = spring({ frame: t - fps * 11, fps, config: { damping: 20, stiffness: 60 } }); // + micro (~52s abs)
+  const phase4 = spring({ frame: t - fps * 16, fps, config: { damping: 20, stiffness: 60 } }); // + macro (~57s abs)
 
   // Labels fade
   const label1 = interpolate(phase1, [0, 0.3], [0, 1], { extrapolateRight: 'clamp' });
@@ -390,7 +390,7 @@ const MemoryHierarchy: React.FC = () => {
   const diagIn = spring({ frame, fps, config: { damping: 18, stiffness: 60 } });
   const diagOpacity = interpolate(diagIn, [0, 1], [0, 1]);
 
-  const tmemFrame = fps * 9;
+  const tmemFrame = fps * 6;
   const tmemIn = spring({ frame: frame - tmemFrame, fps, config: { damping: 10, stiffness: 60 } });
   const hasTmem = frame > tmemFrame;
 
@@ -526,7 +526,7 @@ export const Scene5TensorCores: React.FC = () => {
       </Sequence>
 
       {/* NVFP4 precision comparison */}
-      <Sequence from={fps * 25} durationInFrames={fps * 61}>
+      <Sequence from={fps * 25} durationInFrames={fps * 68}>
         <CenteredSlide padding="0 100px">
           <SceneTitle title="NVFP4: The Precision Revolution" subtitle="4-bit floating point with two-level scaling" />
 
@@ -544,35 +544,35 @@ export const Scene5TensorCores: React.FC = () => {
             <ScalingBars delay={fps * 16} />
           </div>
 
-          <FadeIn delay={fps * 40} style={{ marginTop: 36 }}>
+          <FadeIn delay={fps * 47} style={{ marginTop: 36 }}>
             <p style={{ fontSize: 40, color: theme.colors.textMuted, textAlign: 'center', margin: 0 }}>
-              <BounceNumber delay={fps * 40}>~3.5x</BounceNumber> memory savings vs FP16 ·{' '}
-              <BounceNumber delay={fps * 46}>~1.8x</BounceNumber> savings vs FP8
+              <BounceNumber delay={fps * 47}>~3.5x</BounceNumber> memory savings vs FP16 ·{' '}
+              <BounceNumber delay={fps * 50}>~1.8x</BounceNumber> savings vs FP8
             </p>
           </FadeIn>
         </CenteredSlide>
       </Sequence>
 
       {/* DeepSeek-R1 real-world example */}
-      <Sequence from={fps * 86} durationInFrames={fps * 34}>
+      <Sequence from={fps * 93} durationInFrames={fps * 37}>
         <CenteredSlide padding="0 100px">
           <SceneTitle title="Real-World Payoff" subtitle="DeepSeek-R1: 671 billion parameters" />
 
           <table style={{ borderCollapse: 'collapse', marginTop: 36, minWidth: 950 }}>
             <tbody>
               <TableRow cells={['GPU', 'Precision', 'Model Size', 'GPUs Needed']} isHeader delay={fps * 3} />
-              <TableRow cells={['H100 (80 GB)', 'FP16', '1,342 GB', '17']} delay={fps * 7} highlightColor={theme.colors.textMuted} highlight cellHighlightDelays={[null, null, null, fps * 10]} cellHighlightColor={theme.colors.textMuted} />
-              <TableRow cells={['H100 (80 GB)', 'FP8', '~671 GB', '9']} delay={fps * 11} highlightColor={theme.colors.textMuted} highlight cellHighlightDelays={[null, null, null, fps * 15]} cellHighlightColor={theme.colors.textMuted} />
-              <TableRow cells={['B300 (288 GB)', 'NVFP4', '~383 GB', '2']} delay={fps * 15} highlight cellHighlightDelays={[null, null, null, fps * 23]} />
+              <TableRow cells={['H100 (80 GB)', 'FP16', '1,342 GB', '17']} delay={fps * 7} highlightColor={theme.colors.textMuted} highlight cellHighlightDelays={[null, null, null, fps * 12]} cellHighlightColor={theme.colors.textMuted} />
+              <TableRow cells={['H100 (80 GB)', 'FP8', '~671 GB', '9']} delay={fps * 14} highlightColor={theme.colors.textMuted} highlight cellHighlightDelays={[null, null, null, fps * 16]} cellHighlightColor={theme.colors.textMuted} />
+              <TableRow cells={['B300 (288 GB)', 'NVFP4', '~383 GB', '2']} delay={fps * 20} highlight cellHighlightDelays={[null, null, null, fps * 26]} />
             </tbody>
           </table>
 
-          <GpuComparison delay={fps * 25} />
+          <GpuComparison delay={fps * 28} />
         </CenteredSlide>
       </Sequence>
 
       {/* Attention acceleration — animated pipeline */}
-      <Sequence from={fps * 120} durationInFrames={fps * 23}>
+      <Sequence from={fps * 130} durationInFrames={fps * 25}>
         <CenteredSlide padding="0 100px">
           <SceneTitle title="Attention Acceleration" />
           <AttentionPipeline />
@@ -580,7 +580,7 @@ export const Scene5TensorCores: React.FC = () => {
       </Sequence>
 
       {/* Tensor Memory — animated memory hierarchy */}
-      <Sequence from={fps * 143} durationInFrames={fps * 29}>
+      <Sequence from={fps * 155} durationInFrames={fps * 17}>
         <CenteredSlide padding="0 100px">
           <SceneTitle title="Tensor Memory (TMEM)" />
           <MemoryHierarchy />
