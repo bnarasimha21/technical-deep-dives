@@ -12,7 +12,7 @@ BOOSTED="$OUTPUT_DIR/b300-deep-dive-boosted.mp4"
 FINAL="$OUTPUT_DIR/b300-deep-dive-1.25x.mp4"
 
 echo "=== Rendering full video ==="
-npx remotion render Video1 "$RAW" --timeout=120000 --concurrency=2
+npx remotion render Video1 "$RAW" --timeout=120000 --concurrency=8
 
 echo "=== Boosting audio volume (3x) ==="
 ffmpeg -y -i "$RAW" \
