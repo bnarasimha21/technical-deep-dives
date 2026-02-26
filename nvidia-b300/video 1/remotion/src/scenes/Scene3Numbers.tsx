@@ -85,6 +85,7 @@ export const Scene3Numbers: React.FC = () => {
   return (
     <Background>
       <Audio src={staticFile('scene3-numbers.m4a')} />
+      <Audio src={staticFile('paulyudin-technology-tech-technology-484304.mp3')} volume={0.04} loop />
       {/* Comparison table */}
       <Sequence from={0} durationInFrames={fps * 57}>
         <CenteredSlide>

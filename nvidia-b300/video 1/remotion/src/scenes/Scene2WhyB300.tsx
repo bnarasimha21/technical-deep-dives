@@ -667,6 +667,7 @@ export const Scene2WhyB300: React.FC = () => {
   return (
     <Background>
       <Audio src={staticFile('scene2-whyb300.m4a')} />
+      <Audio src={staticFile('paulyudin-technology-tech-technology-484304.mp3')} volume={0.04} loop />
       {/* GPU timeline animation — animated horizontal line with nodes */}
       <Sequence from={Math.round(fps * 0.5)} durationInFrames={Math.round(fps * 7.5)}>
         <CenteredSlide>
@@ -683,7 +684,7 @@ export const Scene2WhyB300: React.FC = () => {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24, marginTop: 48 }}>
             <StatBox number="175B" label="GPT-3 (2020)" delay={fps * 2} />
             <GrowthArrow delay={fps * 5} />
-            <StatBox number="671B" label="DeepSeek-R1 (2025)" delay={fps * 6} />
+            <StatBox number="~1T" label="GPT-4 (2023)" delay={fps * 6} />
             <GrowthArrow delay={fps * 9} />
             <StatBox number="∞" label="And Growing..." delay={fps * 10} />
           </div>

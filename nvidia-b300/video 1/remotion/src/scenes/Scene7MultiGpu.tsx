@@ -68,8 +68,9 @@ export const Scene7MultiGpu: React.FC = () => {
   return (
     <Background>
       <Audio src={staticFile('scene7-multi-gpu.m4a')} />
+      <Audio src={staticFile('paulyudin-technology-tech-technology-484304.mp3')} volume={0.04} loop />
       {/* 8-GPU system overview */}
-      <Sequence from={0} durationInFrames={fps * 38}>
+      <Sequence from={0} durationInFrames={fps * 40}>
         <CenteredSlide padding="0 100px">
           <FadeIn delay={0}>
             <SceneTitle title="Multi-GPU Scaling" />
@@ -94,15 +95,15 @@ export const Scene7MultiGpu: React.FC = () => {
 
           <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 40 }}>
             <StatBox number="2.3 TB" label="GPU Memory" delay={fps * 16} />
-            <StatBox number="108" label="PFLOPS FP4 Dense" delay={fps * 23} />
-            <StatBox number="~14 kW" label="System Power" delay={fps * 35} />
+            <StatBox number="108" label="PFLOPS FP4 Dense" delay={fps * 25} />
+            <StatBox number="~14 kW" label="System Power" delay={fps * 37} />
           </div>
 
         </CenteredSlide>
       </Sequence>
 
       {/* NVLink + inter-node */}
-      <Sequence from={fps * 38} durationInFrames={fps * 56}>
+      <Sequence from={fps * 40} durationInFrames={fps * 54}>
         <CenteredSlide padding="0 100px">
           <div style={{ display: 'flex', gap: 48, justifyContent: 'center', width: '100%', maxWidth: 1300 }}>
             {/* Intra-node card */}
@@ -114,10 +115,10 @@ export const Scene7MultiGpu: React.FC = () => {
             </ConnectCard>
 
             {/* Inter-node card */}
-            <ConnectCard title="Inter-node: up to 800 Gb/s" delay={fps * 20} accentColor={theme.colors.accent2}>
-              <RevealLine delay={fps * 24}>InfiniBand or Ethernet</RevealLine>
-              <RevealLine delay={fps * 28}>via NVIDIA <span style={{ color: theme.colors.accent2, fontWeight: 700 }}>ConnectX-8</span></RevealLine>
-              <RevealLine delay={fps * 32}>Standard datacenter networking</RevealLine>
+            <ConnectCard title="Inter-node: up to 800 Gb/s" delay={fps * 26} accentColor={theme.colors.accent2}>
+              <RevealLine delay={fps * 30}>InfiniBand or Ethernet</RevealLine>
+              <RevealLine delay={fps * 34}>via NVIDIA <span style={{ color: theme.colors.accent2, fontWeight: 700 }}>ConnectX-8</span></RevealLine>
+              <RevealLine delay={fps * 38}>Standard datacenter networking</RevealLine>
             </ConnectCard>
           </div>
 

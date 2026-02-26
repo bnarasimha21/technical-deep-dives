@@ -59,8 +59,9 @@ export const Scene8Performance: React.FC = () => {
   return (
     <Background>
       <Audio src={staticFile('scene8-performance.m4a')} />
+      <Audio src={staticFile('paulyudin-technology-tech-technology-484304.mp3')} volume={0.04} loop />
       {/* Per-GPU claims */}
-      <Sequence from={0} durationInFrames={fps * 22}>
+      <Sequence from={0} durationInFrames={fps * 24}>
         <CenteredSlide padding="0 100px">
           <SceneTitle title="Performance That Matters" />
           <FadeIn delay={fps * 8}>
@@ -71,7 +72,7 @@ export const Scene8Performance: React.FC = () => {
 
           <div style={{ display: 'flex', gap: 48, justifyContent: 'center', marginTop: 48 }}>
             <StatBox number="1.5x" label="vs B200 (NVFP4)" delay={fps * 8} speed={30} />
-            <StatBox number="7.5x" label="vs H100 (FP8)" delay={fps * 14} />
+            <StatBox number="7.5x" label="vs H100 (FP8)" delay={fps * 16} />
           </div>
 
           <FadeIn delay={fps * 19} style={{ marginTop: 36 }}>
@@ -83,7 +84,7 @@ export const Scene8Performance: React.FC = () => {
       </Sequence>
 
       {/* System-level claims */}
-      <Sequence from={fps * 22} durationInFrames={fps * 16}>
+      <Sequence from={fps * 24} durationInFrames={fps * 16}>
         <CenteredSlide>
           <SceneTitle title="Performance That Matters" subtitle="8-GPU System Level vs Hopper" />
 
@@ -95,21 +96,25 @@ export const Scene8Performance: React.FC = () => {
         </CenteredSlide>
       </Sequence>
 
-      {/* Efficiency + closing */}
-      <Sequence from={fps * 38} durationInFrames={fps * 45}>
+      {/* Efficiency */}
+      <Sequence from={fps * 40} durationInFrames={fps * 34}>
         <CenteredSlide padding="0 100px">
           <StatBox number="5x" label="Throughput per Megawatt vs Hopper" delay={0} />
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 56, alignItems: 'center', marginTop: 48 }}>
             <PillBadge icon="" title="Total Cost of Ownership" desc="Each watt delivers more useful AI work" delay={fps * 8} />
-            <PillBadge icon="" title="Cloud Economics" desc="More AI throughput per GPU-hour" delay={fps * 13} />
+            <PillBadge icon="" title="Cloud Economics" desc="More AI throughput per GPU-hour" delay={fps * 17} />
             <PillBadge icon="" title="Scale Smarter" desc="Fewer instances, more requests served" delay={fps * 23} />
           </div>
+        </CenteredSlide>
+      </Sequence>
 
-          {/* End card */}
-          <FadeIn delay={fps * 33} style={{ marginTop: 24 }}>
+      {/* End card */}
+      <Sequence from={fps * 74} durationInFrames={fps * 9}>
+        <CenteredSlide>
+          <FadeIn delay={0} style={{ marginTop: 24 }}>
             <div style={{ textAlign: 'center' }}>
-              <p style={{ fontSize: 36, color: theme.colors.text }}>
+              <p style={{ fontSize: 72, color: theme.colors.text }}>
                 Next video:{' '}
                 <span style={{ color: theme.colors.accent2, fontWeight: 700 }}>Should You Switch to B300?</span>
               </p>

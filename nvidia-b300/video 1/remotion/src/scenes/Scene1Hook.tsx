@@ -78,6 +78,7 @@ export const Scene1Hook: React.FC = () => {
   return (
     <Background>
       <Audio src={staticFile('scene1-hook.m4a')} />
+      <Audio src={staticFile('paulyudin-technology-tech-technology-484304.mp3')} volume={0.04} loop />
       {/* GPU Evolution Flash — [0-14s] */}
       <Sequence from={0} durationInFrames={fps * 14}>
         <CenteredSlide padding="0 100px">

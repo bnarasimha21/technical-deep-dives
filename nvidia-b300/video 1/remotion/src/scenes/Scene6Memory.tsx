@@ -93,8 +93,9 @@ export const Scene6Memory: React.FC = () => {
   return (
     <Background>
       <Audio src={staticFile('scene6-memory.m4a')} />
+      <Audio src={staticFile('paulyudin-technology-tech-technology-484304.mp3')} volume={0.04} loop />
       {/* HBM3e architecture */}
-      <Sequence from={0} durationInFrames={fps * 39}>
+      <Sequence from={0} durationInFrames={fps * 36}>
         <CenteredSlide padding="0 100px">
           <FadeIn delay={0}>
             <SceneTitle title="288 GB HBM3e" />
@@ -120,21 +121,21 @@ export const Scene6Memory: React.FC = () => {
           </FadeIn>
 
           {/* Highlight stat at 27s */}
-          <FadeIn delay={fps * 25}>
+          <FadeIn delay={fps * 21}>
             <p style={{ fontSize: 30, color: theme.colors.textMuted, textAlign: 'center', marginTop: 20 }}>
               That's <span style={{ color: theme.colors.accent, fontWeight: 700 }}>8,192-bit memory interface</span>, 4,096 bits per die
             </p>
           </FadeIn>
 
           {/* Bandwidth callout at 30s */}
-          <Callout delay={fps * 30} style={{ marginTop: 28, maxWidth: 900 }}>
+          <Callout delay={fps * 27} style={{ marginTop: 28, maxWidth: 900 }}>
             <span style={{ color: theme.colors.accent, fontWeight: 700 }}>8 TB/s bandwidth</span> feeds data to tensor cores fast enough to keep up with compute.
           </Callout>
         </CenteredSlide>
       </Sequence>
 
       {/* Why it matters */}
-      <Sequence from={fps * 39} durationInFrames={fps * 29}>
+      <Sequence from={fps * 36} durationInFrames={fps * 32}>
         <CenteredSlide>
           <SceneTitle title="Why 288 GB Matters" />
 

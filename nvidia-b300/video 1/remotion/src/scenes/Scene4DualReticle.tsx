@@ -181,6 +181,7 @@ export const Scene4DualReticle: React.FC = () => {
   return (
     <Background>
       <Audio src={staticFile('scene4-dual-reticle.m4a')} />
+      <Audio src={staticFile('paulyudin-technology-tech-technology-484304.mp3')} volume={0.04} loop />
       {/* Two dies revealed */}
       <Sequence from={0} durationInFrames={fps * 65}>
         <CenteredSlide padding="0 100px">
