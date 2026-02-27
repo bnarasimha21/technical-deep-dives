@@ -1,19 +1,9 @@
 import React from 'react';
-import { AbsoluteFill, Img, staticFile, useCurrentFrame, interpolate } from 'remotion';
+import { AbsoluteFill, Img, staticFile, useCurrentFrame } from 'remotion';
 import { theme } from '../theme';
 
-/**
- * YouTube Thumbnail — 1920×1080 (static frame, renders at frame 0)
- *
- * Layout:  Left side = big title text + subtitle
- *          Right side = B300 chip image with glow
- *          Bottom strip = 3 key stats
- *          "9 GPUs → 2" dramatic callout
- */
 export const Thumbnail: React.FC = () => {
   const frame = useCurrentFrame();
-
-  // Subtle glow pulse on the chip
   const glowPulse = 0.6 + Math.sin(frame * 0.1) * 0.3;
 
   return (
@@ -37,7 +27,7 @@ export const Thumbnail: React.FC = () => {
         }}
       />
 
-      {/* Top-left green accent bar */}
+      {/* Top accent bar */}
       <div
         style={{
           position: 'absolute',
@@ -49,122 +39,146 @@ export const Thumbnail: React.FC = () => {
         }}
       />
 
-      {/* Left side — Title block */}
+      {/* Bottom accent bar */}
       <div
         style={{
           position: 'absolute',
-          top: 80,
-          left: 100,
+          bottom: 0,
+          left: 0,
+          width: '100%',
+          height: 4,
+          background: `linear-gradient(90deg, ${theme.colors.accent2}, ${theme.colors.accent})`,
+        }}
+      />
+
+      {/* === LEFT SIDE: Title + chip, filling the left half === */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '52%',
+          height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          gap: 0,
+          justifyContent: 'center',
+          paddingLeft: 60,
           zIndex: 2,
         }}
       >
-        {/* "NVIDIA" label */}
+        {/* "NVIDIA" */}
         <span
           style={{
-            fontSize: 38,
-            fontWeight: 600,
+            fontSize: 62,
+            fontWeight: 700,
             color: theme.colors.textMuted,
-            letterSpacing: 6,
+            letterSpacing: 16,
             textTransform: 'uppercase',
           }}
         >
           NVIDIA
         </span>
 
-        {/* "B300" huge */}
+        {/* "B300" — massive */}
         <span
           style={{
-            fontSize: 200,
+            fontSize: 360,
             fontWeight: 900,
             color: theme.colors.accent,
-            lineHeight: 0.95,
-            textShadow: `0 0 60px rgba(118,185,0,0.4), 0 0 120px rgba(118,185,0,0.2)`,
+            lineHeight: 0.85,
+            textShadow: `0 0 80px rgba(118,185,0,0.5), 0 0 160px rgba(118,185,0,0.2)`,
+            marginLeft: -16,
           }}
         >
           B300
         </span>
 
-        {/* Subtitle */}
+        {/* "Blackwell Ultra" */}
         <span
           style={{
-            fontSize: 52,
+            fontSize: 82,
             fontWeight: 300,
             color: theme.colors.text,
-            marginTop: 4,
+            marginTop: 6,
+            letterSpacing: 3,
           }}
         >
           Blackwell Ultra
         </span>
 
-        {/* Tagline */}
-        <span
-          style={{
-            fontSize: 30,
-            fontWeight: 400,
-            color: theme.colors.accent2,
-            marginTop: 20,
-            letterSpacing: 1,
-          }}
-        >
-          Architecture Deep Dive
-        </span>
-      </div>
-
-      {/* Right side — B300 chip with glow */}
-      <div
-        style={{
-          position: 'absolute',
-          right: 40,
-          top: 20,
-          width: 700,
-          height: 700,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1,
-        }}
-      >
-        {/* Glow behind chip */}
+        {/* Chip + tagline row */}
         <div
           style={{
-            position: 'absolute',
-            width: 500,
-            height: 500,
-            borderRadius: '50%',
-            background: `radial-gradient(circle, rgba(118,185,0,${glowPulse * 0.25}) 0%, rgba(0,128,255,0.08) 50%, transparent 70%)`,
-            filter: 'blur(40px)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 28,
+            marginTop: 30,
           }}
-        />
-        <Img
-          src={staticFile('b300-chip.png')}
-          style={{
-            width: 550,
-            objectFit: 'contain',
-            filter: `drop-shadow(0 0 30px rgba(118,185,0,${glowPulse * 0.5}))`,
-          }}
-        />
+        >
+          {/* Chip */}
+          <div
+            style={{
+              position: 'relative',
+              width: 160,
+              height: 160,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                width: 140,
+                height: 140,
+                borderRadius: '50%',
+                background: `radial-gradient(circle, rgba(118,185,0,${glowPulse * 0.35}) 0%, rgba(0,128,255,0.1) 50%, transparent 70%)`,
+                filter: 'blur(20px)',
+              }}
+            />
+            <Img
+              src={staticFile('b300-chip.png')}
+              style={{
+                width: 140,
+                objectFit: 'contain',
+                filter: `drop-shadow(0 0 20px rgba(118,185,0,${glowPulse * 0.6}))`,
+              }}
+            />
+          </div>
+
+          {/* Tagline */}
+          <span
+            style={{
+              fontSize: 48,
+              fontWeight: 700,
+              color: theme.colors.accent2,
+              letterSpacing: 2,
+              textTransform: 'uppercase',
+            }}
+          >
+            Architecture Deep Dive
+          </span>
+        </div>
       </div>
 
-      {/* Bottom-left — Headshot (blended into dark bg) */}
+      {/* === RIGHT SIDE: Headshot filling the right half === */}
       <div
         style={{
           position: 'absolute',
-          bottom: -20,
-          left: 40,
-          width: 420,
-          height: 500,
+          top: 60,
+          right: 30,
+          bottom: -60,
+          width: '45%',
           zIndex: 3,
-          // Gradient mask: solid in the middle, fades out at edges and bottom
+          // Fade left edge + fade bottom to cut off below chest
           WebkitMaskImage:
-            'linear-gradient(to bottom, transparent 0%, black 12%, black 70%, transparent 100%), ' +
-            'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)',
+            'linear-gradient(to right, transparent 0%, black 10%, black 100%), ' +
+            'linear-gradient(to bottom, black 0%, black 65%, transparent 80%)',
           WebkitMaskComposite: 'destination-in',
           maskImage:
-            'linear-gradient(to bottom, transparent 0%, black 12%, black 70%, transparent 100%), ' +
-            'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)',
+            'linear-gradient(to right, transparent 0%, black 10%, black 100%), ' +
+            'linear-gradient(to bottom, black 0%, black 65%, transparent 80%)',
           maskComposite: 'intersect',
         }}
       >
@@ -174,26 +188,10 @@ export const Thumbnail: React.FC = () => {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            objectPosition: 'center top',
-            // Mix-blend to merge white bg into dark thumbnail
-            mixBlendMode: 'lighten',
+            objectPosition: 'center 30%',
           }}
         />
       </div>
-
-      {/* Subtle diagonal accent line */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          right: 680,
-          width: 2,
-          height: '100%',
-          background: `linear-gradient(180deg, transparent, rgba(118,185,0,0.15) 30%, rgba(0,128,255,0.15) 70%, transparent)`,
-          transform: 'rotate(5deg)',
-          transformOrigin: 'top center',
-        }}
-      />
     </AbsoluteFill>
   );
 };
