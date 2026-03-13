@@ -1,4 +1,4 @@
-# 77% Faster LLM Inference: How Workato AI Labs Uses KV-Aware Routing
+# 77% Faster LLM Inference: How Workato AI Lab Uses KV-Aware Routing
 
 | Field | Value |
 |-------|-------|

@@ -17,7 +17,7 @@ export const Scene6Closing: React.FC = () => {
 
   const brands = [
     { name: 'DigitalOcean', color: colors.doBlue, delay: 5 },
-    { name: 'Workato', color: colors.workatoPurple, delay: 12 },
+    { name: 'Workato AI Lab', color: colors.workatoPurple, delay: 12 },
     { name: 'NVIDIA', color: colors.green, delay: 19 },
   ];
 

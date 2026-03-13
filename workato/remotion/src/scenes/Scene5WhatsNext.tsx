@@ -215,7 +215,7 @@ export const Scene5WhatsNext: React.FC = () => {
               "Exploring B300 nodes for NVFP4 — the next step in dense inference."
             </span>
             <div style={{ fontFamily: fonts.mono, fontSize: 14, color: colors.workatoLight, marginTop: 8 }}>
-              — Kevin Huang, Workato AI Labs
+              — Kevin Huang, Workato AI Lab
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
