@@ -260,7 +260,7 @@ export const Scene4Benchmarks: React.FC = () => {
                   A deployment that needed <strong style={{ color: colors.white, fontWeight: 600 }}>10 GPUs</strong> now runs on <strong style={{ color: colors.green, fontWeight: 600 }}>6</strong>.
                 </div>
                 <div style={{ fontFamily: fonts.body, fontSize: 26, color: colors.textSecondary, lineHeight: 1.6, marginTop: 16 }}>
-                  67% lower inference cost: <strong style={{ color: colors.green, fontWeight: 600 }}>$0.77 per million tokens</strong> at Workato's trillion-workload scale.
+                  67% lower inference cost: <strong style={{ color: colors.green, fontWeight: 600 }}>$0.77 per million tokens</strong> at Workato AI Lab's trillion-workload scale.
                 </div>
               </div>
             </div>
