@@ -23,11 +23,11 @@ const voiceovers: Record<string, string[]> = {
     'vo-Scene3-KV-Paragraph2.mp3',
     'vo-Scene3-KV-Paragraph3.mp3',
     'vo-Scene3-KV-Paragraph4.mp3',
+    'vo-Scene3-KV-Paragraph5.mp3',
   ],
   Scene4Benchmarks: [
     'vo-Scene4-Benchmarks-Paragraph1.mp3',
     'vo-Scene4-Benchmarks-Paragraph2.mp3',
-    'vo-Scene4-Benchmarks-Paragraph3.mp3',
   ],
   Scene6Closing: ['vo-Scene5-Closing.mp3'],
 };
@@ -47,11 +47,11 @@ const voOffsets: Record<string, number[]> = {
     voDurations.scene3KVRouting.p1,
     voDurations.scene3KVRouting.p1 + voDurations.scene3KVRouting.p2,
     voDurations.scene3KVRouting.p1 + voDurations.scene3KVRouting.p2 + voDurations.scene3KVRouting.p3,
+    voDurations.scene3KVRouting.p1 + voDurations.scene3KVRouting.p2 + voDurations.scene3KVRouting.p3 + voDurations.scene3KVRouting.p4,
   ],
   Scene4Benchmarks: [
     0,
     voDurations.scene4Benchmarks.p1,
-    voDurations.scene4Benchmarks.p1 + voDurations.scene4Benchmarks.p2,
   ],
   Scene6Closing: [0],
 };

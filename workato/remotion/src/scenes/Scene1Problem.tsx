@@ -56,22 +56,22 @@ export const Scene1Problem: React.FC = () => {
 
   // Phase transitions — timed to VO paragraphs
   // Phase 1: Who is Workato (P1+P2: 0-1008)
-  const phase1Opacity = interpolate(frame, [0, 20, 930, 1010], [0, 1, 1, 0], {
+  const phase1Opacity = interpolate(frame, [0, 15, 990, 1010], [0, 1, 1, 0], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
   // Phase 2: Prefill vs Decode (P3: 1008-1813)
-  const phase2Opacity = interpolate(frame, [1008, 1060, 1740, 1815], [0, 1, 1, 0], {
+  const phase2Opacity = interpolate(frame, [1008, 1028, 1793, 1813], [0, 1, 1, 0], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
   // Phase 3a: Agentic patterns + O(n²) (P4: 1813-3084)
-  const phase3aOpacity = interpolate(frame, [1813, 1870, 3010, 3090], [0, 1, 1, 0], {
+  const phase3aOpacity = interpolate(frame, [1813, 1833, 3064, 3084], [0, 1, 1, 0], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
   // Phase 3b: GPU redundancy bars (P5: 3084-3727)
-  const phase3bOpacity = interpolate(frame, [3084, 3140], [0, 1], {
+  const phase3bOpacity = interpolate(frame, [3084, 3104], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
     easing: Easing.out(Easing.cubic),
@@ -96,19 +96,19 @@ export const Scene1Problem: React.FC = () => {
       {/* Title — changes per phase */}
       <div style={{ position: 'relative', marginBottom: 20, minHeight: 90 }}>
         {/* Phase 1 title */}
-        <div style={{ position: 'absolute', top: 0, left: 0, opacity: interpolate(frame, [0, 30, 930, 1010], [0, 1, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, opacity: interpolate(frame, [0, 15, 990, 1010], [0, 1, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) }}>
           <h1 style={{ fontFamily: fonts.heading, fontWeight: 800, fontSize: 52, color: colors.white, margin: 0, lineHeight: 1.1, letterSpacing: -1 }}>
             Meet <span style={{ color: colors.workatoPurple }}>Workato AI Research Lab</span>
           </h1>
         </div>
         {/* Phase 2 title */}
-        <div style={{ position: 'absolute', top: 0, left: 0, opacity: interpolate(frame, [1008, 1060, 1740, 1815], [0, 1, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, opacity: interpolate(frame, [1008, 1028, 1793, 1813], [0, 1, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) }}>
           <h1 style={{ fontFamily: fonts.heading, fontWeight: 800, fontSize: 52, color: colors.white, margin: 0, lineHeight: 1.1, letterSpacing: -1 }}>
             How LLMs <span style={{ color: colors.cyan }}>Process Requests</span>
           </h1>
         </div>
         {/* Phase 3a title */}
-        <div style={{ position: 'absolute', top: 0, left: 0, opacity: interpolate(frame, [1813, 1870, 3010, 3090], [0, 1, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, opacity: interpolate(frame, [1813, 1833, 3064, 3084], [0, 1, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) }}>
           <h1 style={{ fontFamily: fonts.heading, fontWeight: 800, fontSize: 52, color: colors.white, margin: 0, lineHeight: 1.1, letterSpacing: -1 }}>
             The Redundancy Problem in<br /><span style={{ color: colors.red }}>Agentic Workloads</span>
           </h1>

@@ -45,14 +45,17 @@ Workato AI Lab needed to power their agentic workload on as few GPUs as possible
 ## Scene 3: KV-Aware Routing Deep Dive
 
 **Visual Direction:**
-- Phase 1: KV-aware routing diagram on the left. Three explanation cards on the right, appearing sequentially.
-- Phase 2: Cost function formula visual - cost = overlap_score x prefill_blocks + decode_blocks - showing how NVIDIA Dynamo scores each GPU before routing.
-- Phase 3: Result cards.
+- Phase 1: Animated infrastructure build-up (DOKS cluster, worker nodes, H200 GPUs, tensor parallelism), then crossfade to architecture image when NVIDIA Dynamo is mentioned. Three explanation cards (Global Orchestration, Shared Prefix Detection, Warm Cache Routing) appear alongside the architecture image.
+- Phase 2: A/B comparison setup, two side-by-side cards: Config A (vLLM alone, blind globally) vs Config B (NVIDIA Dynamo + vLLM, KV-aware routing) with animated request routing diagrams.
+- Phase 3: Cost function formula visual: cost = overlap_score x prefill_blocks + decode_blocks, showing how NVIDIA Dynamo scores each GPU before routing.
+- Phase 4: Result cards.
 
 **Voiceover:**
 For their agentic AI workload, Workato AI Lab chose DigitalOcean Kubernetes Service with interconnected NVIDIA H200 GPUs and eight-way tensor parallelism across each worker node. But fast hardware alone doesn't eliminate redundant computation. That's where NVIDIA Dynamo comes in.
 
 NVIDIA Dynamo is a global inference orchestrator with full cluster visibility. When multiple requests share common input prefixes (which happens constantly in agentic workflows) NVIDIA Dynamo routes them to the same GPU that already has a warm KV cache, a stored copy of the processed prompt data from the previous request. So it skips the expensive prefill phase entirely. No redundant computation. No wasted cycles.
+
+Two configurations. Same hardware, same model. The only difference: one routes requests at random, where each GPU makes smart local decisions but has no idea what the others are doing. The other uses NVIDIA Dynamo's KV-aware routing with full cluster visibility and cache-aware scheduling.
 
 Under the hood, NVIDIA Dynamo scores every GPU for each incoming request, weighing how much prefill work it can skip against how busy that GPU is with decoding. It's not just a load balancer. It's a state-aware scheduler.
 
@@ -65,15 +68,9 @@ Let's look at the numbers.
 ## Scene 4: The Benchmarks
 
 **Visual Direction:**
-Opens with A/B comparison setup, two side-by-side cards:
-- Config A: vLLM alone (smart locally, blind globally)
-- Config B: NVIDIA Dynamo + vLLM (KV-aware routing)
-
-Then four benchmark graphs cycling through with crossfade. Each graph fills the left side with an explanation card on the right.
+Opens directly with four benchmark graphs cycling through with crossfade. Each graph fills the left side with an explanation card on the right. Ends with "40% fewer GPUs" impact summary.
 
 **Voiceover:**
-Two configurations. Same hardware, same model. The only difference: one routes requests at random, where each GPU makes smart local decisions but has no idea what the others are doing. The other uses NVIDIA Dynamo's KV-aware routing with full cluster visibility and cache-aware scheduling.
-
 Token throughput: sixty-seven percent higher. 13,561 tokens per second versus 8,111 on the same hardware.
 
 Time-to-first-token: seventy-seven percent faster. 1,455 milliseconds versus nearly 6,500 at 32 concurrent requests.

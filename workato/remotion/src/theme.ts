@@ -53,8 +53,8 @@ export const layout = {
 export const sceneDurations = {
   scene0Hook: 640,              // 0:00 - 0:21 (21.3s — VO ends at 626, minimal pad)
   scene1Problem: 3742,          // VO ends at 3727, minimal pad
-  scene3KVRouting: 2403,        // VO ends at 2403, no pad — immediate transition to benchmarks
-  scene4Benchmarks: 2720,       // 3:57 - 5:28 (90.7s — VO ends at 2708, minimal pad)
+  scene3KVRouting: 3052,        // VO: 2403 + 649 (A/B comparison moved from Scene4)
+  scene4Benchmarks: 2094,       // VO: P1(1429) + P2(653) + 12 pad — graphs only, A/B moved to Scene3
   scene6Closing: 450,           // 5:31 - 5:46 (15s — VO: 12.1s + 3s pad)
 };
 
@@ -74,13 +74,13 @@ export const voDurations = {
   scene3KVRouting: {
     p1: 636,   // 21.22s — DO + H200 infra
     p2: 899,   // 29.95s — Dynamo routing
-    p3: 507,   // 16.89s — cost function
-    p4: 361,   // 12.03s — result
+    p3: 649,   // 21.63s — A/B comparison (moved from Scene4)
+    p4: 507,   // 16.89s — cost function
+    p5: 361,   // 12.03s — result
   },
   scene4Benchmarks: {
-    p1: 649,   // 21.63s — A/B setup
-    p2: 1429,  // 47.64s — benchmark results
-    p3: 630,   // 21.0s — practical impact (trimmed, 44% fewer GPUs)
+    p1: 1429,  // 47.64s — benchmark results (was P2)
+    p2: 653,   // 21.75s — practical impact (new recording)
   },
   scene6Closing: { p1: 364 },  // 12.14s
 };
