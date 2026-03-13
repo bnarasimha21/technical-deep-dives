@@ -40,3 +40,6 @@ export const sceneFrames = Object.fromEntries(
 
 export const totalDuration = Object.values(sceneDurations).reduce((a, b) => a + b, 0);
 export const totalFrames = totalDuration * theme.fps;
+
+// Promo video (vertical 9:16, 35 seconds)
+export const promoDurationFrames = 960;

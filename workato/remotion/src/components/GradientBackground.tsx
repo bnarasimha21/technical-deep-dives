@@ -4,7 +4,7 @@ import { colors, layout } from '../theme';
 import { ensureFontsLoaded } from '../fonts';
 
 export const GradientBackground: React.FC<{
-  variant?: 'default' | 'problem' | 'solution' | 'results';
+  variant?: 'default' | 'hook' | 'problem' | 'solution' | 'results' | 'future';
   children: React.ReactNode;
 }> = ({ variant = 'default', children }) => {
   ensureFontsLoaded();
@@ -12,9 +12,11 @@ export const GradientBackground: React.FC<{
 
   const gradients: Record<string, string> = {
     default: colors.gradientDark,
+    hook: `linear-gradient(135deg, #050D1A 0%, #0A1628 50%, #0D0520 100%)`,
     problem: `linear-gradient(135deg, #1A0A0A 0%, #0A1628 50%, #1A0A2E 100%)`,
     solution: colors.gradientSubtle,
     results: `linear-gradient(135deg, #0A1628 0%, #0D2847 50%, #1A0A2E 100%)`,
+    future: `linear-gradient(135deg, #0A1628 0%, #0D1A2E 50%, #1A1035 100%)`,
   };
 
   // Slow breathing orb animation using sine waves

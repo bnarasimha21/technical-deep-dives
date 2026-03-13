@@ -25,6 +25,8 @@ export const Callout: React.FC<CalloutProps> = ({
           borderRadius: '0 12px 12px 0',
           fontSize: 28,
           lineHeight: 1.6,
+          fontFamily: theme.fonts.body,
+          color: theme.colors.text,
           ...style,
         }}
       >

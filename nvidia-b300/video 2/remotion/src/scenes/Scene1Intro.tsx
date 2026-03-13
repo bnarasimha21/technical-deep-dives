@@ -48,21 +48,39 @@ export const Scene1Intro: React.FC = () => {
       </Sequence>
 
       {/* Quick recap */}
-      <Sequence from={fps * 15} durationInFrames={fps * 15}>
+      <Sequence from={fps * 15} durationInFrames={fps * 25}>
         <CenteredSlide>
           <FadeIn delay={0}>
-            <p style={{ fontSize: 28, color: theme.colors.textMuted, textAlign: 'center', marginBottom: 32 }}>
+            <p style={{ fontSize: 28, color: theme.colors.textMuted, textAlign: 'center', marginBottom: 24 }}>
               Quick recap from Video 1
             </p>
           </FadeIn>
 
-          <div style={{ display: 'flex', gap: 48, justifyContent: 'center' }}>
-            <StatBox number="15" label="PFLOPS (FP4)" delay={10} />
-            <StatBox number="288" label="GB HBM3e" delay={22} />
-            <StatBox number="208B" label="Transistors" delay={34} />
+          {/* Single B300 stats */}
+          <FadeIn delay={5}>
+            <p style={{ fontSize: 20, color: theme.colors.accent, textAlign: 'center', marginBottom: 12, fontWeight: 600, letterSpacing: 1 }}>
+              PER GPU
+            </p>
+          </FadeIn>
+          <div style={{ display: 'flex', gap: 36, justifyContent: 'center' }}>
+            <StatBox number="15" label="PFLOPS (FP4)" delay={8} />
+            <StatBox number="288" label="GB HBM3e" delay={16} />
+            <StatBox number="208B" label="Transistors" delay={24} />
           </div>
 
-          <FadeIn delay={fps * 2} style={{ marginTop: 36 }}>
+          {/* 8×B300 stats */}
+          <FadeIn delay={fps * 1.5}>
+            <p style={{ fontSize: 20, color: theme.colors.accent2, textAlign: 'center', marginTop: 20, marginBottom: 12, fontWeight: 600, letterSpacing: 1 }}>
+              8×B300 RACK
+            </p>
+          </FadeIn>
+          <div style={{ display: 'flex', gap: 36, justifyContent: 'center' }}>
+            <StatBox number="120" label="PFLOPS (FP4)" delay={fps * 1.5 + 5} color={theme.colors.accent2} />
+            <StatBox number="2,304" label="GB HBM3e" delay={fps * 1.5 + 13} color={theme.colors.accent2} />
+            <StatBox number="NVLink 5" label="GPU Interconnect" delay={fps * 1.5 + 21} color={theme.colors.accent2} numberFontSize={44} />
+          </div>
+
+          <FadeIn delay={fps * 3.5} style={{ marginTop: 24 }}>
             <p style={{ fontSize: 30, color: theme.colors.text, textAlign: 'center' }}>
               Now the question: <span style={{ color: theme.colors.accent, fontWeight: 700 }}>should you actually use it?</span>
             </p>

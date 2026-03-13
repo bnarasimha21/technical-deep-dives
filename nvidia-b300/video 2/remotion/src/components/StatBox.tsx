@@ -7,6 +7,7 @@ interface StatBoxProps {
   label: string;
   delay?: number;
   color?: string;
+  numberFontSize?: number;
 }
 
 export const StatBox: React.FC<StatBoxProps> = ({
@@ -14,6 +15,7 @@ export const StatBox: React.FC<StatBoxProps> = ({
   label,
   delay = 0,
   color = theme.colors.accent,
+  numberFontSize,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -31,27 +33,29 @@ export const StatBox: React.FC<StatBoxProps> = ({
     <div
       style={{
         textAlign: 'center',
-        padding: '24px 36px',
+        padding: '20px 28px',
         border: `2px solid ${color}`,
         borderRadius: 16,
-        minWidth: 200,
+        width: 260,
         opacity,
         transform: `scale(${scale})`,
       }}
     >
       <div
         style={{
-          fontSize: 64,
+          fontSize: numberFontSize ?? 64,
           fontWeight: 800,
           color,
           lineHeight: 1.1,
+          fontFamily: theme.fonts.heading,
+          whiteSpace: 'nowrap',
         }}
       >
         {number}
       </div>
       <div
         style={{
-          fontSize: 22,
+          fontSize: 20,
           color: theme.colors.textMuted,
           marginTop: 8,
         }}

@@ -13,7 +13,7 @@ import { sceneFrames } from './theme';
 export const Video: React.FC = () => {
   return (
     <>
-    <Audio src={staticFile('paulyudin-technology-tech-technology-484304.mp3')} volume={0.03} playbackRate={0.85} loop />
+    <Audio src={staticFile('paulyudin-technology-tech-technology-484304.mp3')} volume={0.03} playbackRate={0.75} loop />
     <Series>
       <Series.Sequence durationInFrames={sceneFrames.scene1_hook}>
         <Scene1Hook />

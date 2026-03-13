@@ -1,5 +1,6 @@
 import React from 'react';
 import { AbsoluteFill } from 'remotion';
+import { theme } from '../theme';
 
 interface CenteredSlideProps {
   children: React.ReactNode;
@@ -18,6 +19,8 @@ export const CenteredSlide: React.FC<CenteredSlideProps> = ({
         alignItems: 'center',
         justifyContent: 'center',
         padding,
+        fontFamily: theme.fonts.body,
+        color: theme.colors.text,
       }}
     >
       {children}

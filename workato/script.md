@@ -1,98 +1,84 @@
-# Workato x DigitalOcean Customer Story - Script
+# 77% Faster LLM Inference: How Workato Uses KV-Aware Routing
 
-**Video Length:** ~5.5 minutes (approx. 825 words)
+**Video Length:** ~4:45 (approx. 700 words)
 **Format:** 1920x1080, 30fps
-**Style:** Conversational story-driven (Problem > Solution > Results)
-**Music Suggestion:** Ambient electronic with a slow build — starts reflective/tense during the problem, opens up during the solution, becomes confident/uplifting during results. Think: Tycho, Hammock, or corporate-cinematic ambient.
+**Style:** Technical deep dive, lead with the infrastructure problem and solution, not the partnership
+**Music Suggestion:** Ambient electronic with a slow build: tense during problem, opens during solution, confident during benchmarks.
 
 ---
 
-## Scene 1: The Hook (0:00 - 0:20)
+## Scene 0: The Hook (0:00 - 0:17)
 
-**[VISUAL: Bold stat reveal — "1 TRILLION" workloads, Workato + DigitalOcean + NVIDIA co-branding. "March 3, 2026" date badge.]**
+**[VISUAL: Dark screen. Quick stat flashes - "77% faster TTFT", "67% lower cost", "40% fewer GPUs" - alternating positions with punchy scale-in animations. Ends with: "You don't need a new GPU. You need smarter routes." Then show two-column comparison: left and right columns each show a GPU icon (pop up on "Same GPUs") and a model icon underneath (pop up on "Same model"). Left column gets a red turtle icon, right column gets a green rabbit icon. Right column pulses with "77% faster TTFT" above it. No co-branding, pure technical hook.]**
 
 **VOICEOVER:**
-Workato processes one trillion automated workloads every year. Their AI Research Lab was building the next generation of agentic AI — intelligent systems that reason, plan, and act autonomously. But to make that production-ready, they needed inference infrastructure that could keep up. This is the story of how DigitalOcean, Workato, and NVIDIA came together to make it happen.
+Same GPUs. Same model. But this one has seventy-seven percent faster time-to-first-token. How? It comes down to a single infrastructure trick, implemented for a company that's pushing LLMs to the limit.
 
 ---
 
-## Scene 2: Setting the Stage — Who is Workato? (0:20 - 0:55)
+## Scene 1: The Problem (0:17 - 1:25)
 
-**[VISUAL: Workato branding, animated icons representing automation/integration, enterprise scale]**
+**[VISUAL: Three phases. Phase 1 (0:17-0:35): "Who is Workato" - company context cards: enterprise automation leader, thousands of global customers, 1T workloads/year, AI Research Lab pushing into agentic AI. Phase 2 (0:35-0:55): "How LLMs Process Requests" - two-column comparison showing Prefill (compute-heavy, reads entire prompt) vs Decode (memory-bound, generates tokens). Phase 3 (0:55-1:25): The redundancy problem - GPU bars showing 80%+ wasted on repeated prefill, O(n²) callout.]**
 
 **VOICEOVER:**
-Workato is the leading enterprise automation platform. They connect apps, automate workflows, and power business processes for some of the world's largest companies. But they weren't just automating tasks — their AI Research Lab was pushing into agentic AI, building systems that go beyond simple prompts. These agents need to understand long, complex contexts — we're talking prompts with a hundred thousand tokens — and respond fast enough for real-time enterprise workflows.
+Workato connects and orchestrates enterprise data, processes, and applications, serving thousands of customers globally, running over a trillion tasks per year. Their AI Research Lab is pushing into agentic AI, building agents that execute work across entire organizations. Powering agents at this scale requires significant inference capacity, but if you're not smart about how you set it up, much of that capacity goes to waste. And wasted capacity means wasted money.
+
+To understand the problem, you need to know how LLMs process requests. Every request goes through two phases. First, prefill: the model reads your entire input prompt and builds the KV cache. This phase is compute-heavy and scales quadratically with prompt length. Then, decode: the model generates tokens one at a time using those cached values.
+
+For agentic and business-oriented applications, a fundamental challenge exists at the prefill stage. Every request carries long system prompts, tool definitions, and multi-turn conversation history. At Workato, these prompts run to a hundred thousand tokens. Because prefill scales quadratically, doubling the prompt length roughly quadruples the compute required. And much of this prefill work is repeated across requests. The system prompts, tool definitions, and shared context are identical every time, meaning GPUs are recalculating the same KV values over and over. This wastes GPU capacity, cycles, and ultimately, money. Workato needed to power their agentic workload on as few GPUs as possible. Without optimization, serving it would require roughly ten GPUs. The question was whether smarter infrastructure could close that gap.
 
 ---
 
-## Scene 3: The Problem (0:55 - 1:50)
+## Scene 2: KV-Aware Routing Deep Dive (1:25 - 2:30)
 
-**[VISUAL: Animated visualization of scaling challenges — GPU utilization bars, latency spikes, cost meters climbing. Technical callout: quadratic attention complexity]**
+**[VISUAL: Architecture diagram briefly showing DOKS cluster + H200 GPUs, then transitions to KV-aware routing diagram (existing PNG) on the left. Three explanation cards on the right, appearing sequentially. Cost function formula visual - "cost = overlap_score × prefill_blocks + decode_blocks" - showing how Dynamo scores each GPU before routing. Result cards.]**
 
 **VOICEOVER:**
-Here's the challenge. When you're running large language models at enterprise scale, every millisecond of latency and every wasted GPU cycle hits your bottom line. And long-context workloads make this exponentially harder. A hundred-thousand-token prompt requires roughly ten billion attention operations during the prefill phase. That's quadratic complexity — and it crushes GPU throughput.
+For their agentic AI workload, Workato chose DigitalOcean Kubernetes Service with interconnected NVIDIA H200 GPUs and eight-way tensor parallelism across each worker node. But fast hardware alone doesn't eliminate redundant computation. That's where NVIDIA Dynamo comes in. Dynamo is an open-source inference orchestrator with full cluster visibility. When multiple requests share common input prefixes (which happens constantly in agentic workflows) Dynamo routes them to the same GPU.
 
-The result? Redundant computation across your cluster. GPUs doing the same prefill work over and over. Latency climbing. Costs spiraling. For Workato, this wasn't a theoretical problem — it was blocking their path to production-ready agentic AI.
+That GPU already has a warm KV cache, a stored copy of the processed prompt data from the previous request. So it skips the expensive prefill phase entirely. No redundant computation. No wasted cycles.
+
+Under the hood, Dynamo scores every GPU for each incoming request, weighing how much prefill work it can skip against how busy that GPU is with decoding. It's not a blind load balancer. It's a state-aware scheduler.
+
+The result: same hardware, dramatically better performance. No code changes, no new models, just smarter infrastructure. Let's look at the numbers.
 
 ---
 
-## Scene 4: The Solution — Agentic Inference Cloud (1:50 - 3:10)
+## Scene 3: The Benchmarks (2:30 - 4:00)
 
-**[VISUAL: Architecture diagram animation — DigitalOcean cloud, NVIDIA Dynamo orchestration, KV-aware routing flow, GPU nodes. Build up layer by layer. Reference: Workato Architecture diagram PNG, KV-aware routing graph from visual assets.]**
+**[VISUAL: Opens with A/B comparison setup, two side-by-side cards: "Config A: vLLM alone (smart locally, blind globally)" vs "Config B: Dynamo + vLLM (KV-aware routing)". Then four benchmark graphs cycling through with crossfade. Each graph fills left side with explanation card on the right. Closes with "40% fewer GPUs" callout.]**
 
 **VOICEOVER:**
-In a joint effort, DigitalOcean, Workato, and NVIDIA came together to solve this. Workato deployed on DigitalOcean's Agentic Inference Cloud — a purpose-built inference stack running on DigitalOcean Kubernetes Service, powered by NVIDIA Hopper GPUs.
+Two configurations. Same hardware, same model. The only difference: one routes requests at random, where each GPU makes smart local decisions but has no idea what the others are doing. The other uses Dynamo's KV-aware routing with full cluster visibility and cache-aware scheduling.
 
-The hardware foundation: NVIDIA H200 GPUs with 141 gigabytes of HBM3e memory — enough to hold a full large language model and its hundred-thousand-token context in a single GPU. The team deployed 8-way tensor parallelism per node for optimal throughput and latency stability.
+Llama 3.3 70B with FP8 quantization, compressing the model to 8-bit precision so it runs faster with minimal accuracy loss.
 
-But the real breakthrough was KV-aware routing. Here's how it works: when multiple requests share common input prefixes — which happens constantly in agentic workflows — KV-aware routing directs them to the same GPU. That GPU already has a warm KV cache from the previous request, so it can skip the expensive prefill phase entirely.
+Token throughput: sixty-seven percent higher. 13,561 tokens per second versus 8,111 on the same hardware.
 
-NVIDIA Dynamo sits at the orchestration layer — a global scheduler with full cluster visibility. Instead of each node working in isolation, Dynamo prevents redundant computation by intelligently routing requests to the right GPU at the right time. Same hardware. Dramatically better performance.
+Time-to-first-token: seventy-seven percent faster. 1,455 milliseconds versus nearly 6,500 at 32 concurrent requests.
+
+Time per output token stays flat under load, no degradation even as you scale.
+
+End-to-end P50 latency (the median response time): 14 seconds versus nearly 70 at peak concurrency.
+
+What does that mean in practice? Forty percent fewer GPUs to serve the same workload. A deployment that needed 10 GPUs now runs on 6. And the bottom line: sixty-seven percent lower inference cost, 77 cents per million tokens at Workato's trillion-workload scale.
 
 ---
 
-## Scene 5: The Results (3:10 - 4:25)
+## Scene 4: Closing (4:00 - 4:20)
 
-**[VISUAL: Animated metric cards revealing one by one. Show benchmark graphs: Token Throughput comparison chart, Median TTFT graph, Median TPOT graph, P50 latency graph — reference visual assets from performance data spreadsheet (Sheet 10).]**
-
-**VOICEOVER:**
-The results speak for themselves.
-
-Sixty-seven percent higher throughput per GPU — from 8,111 tokens per second to 13,561 tokens per second on the same hardware. You can see it clearly in the token throughput comparison.
-
-Seventy-nine percent faster time-to-first-token — 1,455 milliseconds under high load. Look at the TTFT benchmark — that's the difference between an agent that feels instant and one that feels sluggish.
-
-Sixty-seven percent lower inference costs — down to 77 cents per million tokens. At Workato's scale, processing a trillion workloads annually, that's transformational.
-
-And perhaps most importantly — time-to-value accelerated by more than 2X. What used to take weeks of infrastructure setup and tuning was reduced to days.
-
-This isn't a benchmark on a whiteboard. This is production-ready AI inference at scale.
-
----
-
-## Scene 6: The Bigger Picture (4:25 - 5:05)
-
-**[VISUAL: Expanding view — from Workato's use case to the broader industry. Three-way partnership: DigitalOcean + Workato + NVIDIA logos together. "Powering the Agentic Enterprise" tagline. Cloud infrastructure visualization.]**
+**[VISUAL: Clean co-branded closing. DigitalOcean + Workato + NVIDIA. CTA: setup guide and benchmark reproduction steps.]**
 
 **VOICEOVER:**
-On March 3rd, 2026, DigitalOcean, Workato, and NVIDIA jointly announced this partnership — a signal that production-ready agentic AI is here. What they proved together is that intelligent infrastructure design — the right hardware, smart routing, and cloud-native orchestration — can fundamentally change the economics of AI inference. Not just faster models, but smarter infrastructure that powers the agentic enterprise and makes every GPU count.
-
----
-
-## Scene 7: Closing & CTA (5:05 - 5:30)
-
-**[VISUAL: Co-branded closing card — DigitalOcean + Workato logos. URL/QR code to blog post or landing page. Clean, confident typography.]**
-
-**VOICEOVER:**
-DigitalOcean's Agentic Inference Cloud — powering Workato's agentic enterprise with production-scale AI from NVIDIA. Read the full technical deep dive at digitalocean.com, or get started building today.
+Want to try this yourself? Full setup guide and benchmark reproduction steps linked below. Built on DigitalOcean, powered by NVIDIA Dynamo.
 
 ---
 
 ## Production Notes
 
-- **Total word count:** ~820 words (~5:30 at natural narration pace)
-- **Scene transitions:** Smooth crossfades with slight overlap to maintain flow
-- **Color palette:** DigitalOcean blue (#0069FF) + Workato purple/magenta — gradient interplay
-- **Typography:** Clean sans-serif (Inter or similar), bold for metrics, light for narration support text
-- **Data visualizations:** Animate in from zero to final value for impact
-- **Architecture diagram:** Build up progressively as voiceover explains each layer
+- **Total word count:** ~690 words (~4:45 at natural narration pace)
+- **Scene transitions:** Smooth crossfades with slight overlap
+- **Color palette:** DigitalOcean blue (#0069FF) + Workato purple, gradient interplay
+- **Typography:** Inter (headings/body) + JetBrains Mono (technical labels)
+- **Key shift from v1:** Technical deep dive angle, not corporate customer story. Lead with the problem and solution, partnership is context.
+- **Benchmark data source:** NVIDIA Dynamo v0.4.1 benchmarking with vLLM, Llama-3.3-70B-Instruct-FP8

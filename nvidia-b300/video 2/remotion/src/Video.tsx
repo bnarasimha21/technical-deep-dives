@@ -2,9 +2,10 @@ import React from 'react';
 import { Series } from 'remotion';
 import { Scene1Intro } from './scenes/Scene1Intro';
 import { Scene2WhoShouldUse } from './scenes/Scene2WhoShouldUse';
-import { Scene3Economics } from './scenes/Scene3Economics';
-import { Scene4Software } from './scenes/Scene4Software';
-import { Scene5Summary } from './scenes/Scene5Summary';
+import { Scene3Benchmarks } from './scenes/Scene3Benchmarks';
+import { Scene4Economics } from './scenes/Scene4Economics';
+import { Scene5Software } from './scenes/Scene5Software';
+import { Scene6Summary } from './scenes/Scene6Summary';
 import { sceneFrames } from './theme';
 
 export const Video: React.FC = () => {
@@ -16,14 +17,17 @@ export const Video: React.FC = () => {
       <Series.Sequence durationInFrames={sceneFrames.scene2_whoShouldUse}>
         <Scene2WhoShouldUse />
       </Series.Sequence>
-      <Series.Sequence durationInFrames={sceneFrames.scene3_economics}>
-        <Scene3Economics />
+      <Series.Sequence durationInFrames={sceneFrames.scene3_benchmarks}>
+        <Scene3Benchmarks />
       </Series.Sequence>
-      <Series.Sequence durationInFrames={sceneFrames.scene4_software}>
-        <Scene4Software />
+      <Series.Sequence durationInFrames={sceneFrames.scene4_economics}>
+        <Scene4Economics />
       </Series.Sequence>
-      <Series.Sequence durationInFrames={sceneFrames.scene5_summary}>
-        <Scene5Summary />
+      <Series.Sequence durationInFrames={sceneFrames.scene5_software}>
+        <Scene5Software />
+      </Series.Sequence>
+      <Series.Sequence durationInFrames={sceneFrames.scene6_summary}>
+        <Scene6Summary />
       </Series.Sequence>
     </Series>
   );

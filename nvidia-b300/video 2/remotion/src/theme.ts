@@ -21,13 +21,14 @@ export const theme = {
   height: 1080,
 } as const;
 
-// Scene durations in seconds (from storyboard)
+// Scene durations in seconds
 export const sceneDurations = {
-  scene1_intro: 30,
-  scene2_whoShouldUse: 60,
-  scene3_economics: 75,
-  scene4_software: 45,
-  scene5_summary: 75,
+  scene1_intro: 40,
+  scene2_whoShouldUse: 210,
+  scene3_benchmarks: 25,
+  scene4_economics: 50,
+  scene5_software: 50,
+  scene6_summary: 60,
 } as const;
 
 // Convert seconds to frames

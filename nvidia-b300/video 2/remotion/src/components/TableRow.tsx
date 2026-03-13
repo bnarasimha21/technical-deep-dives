@@ -34,6 +34,7 @@ export const TableRow: React.FC<TableRowProps> = ({
     borderBottom: isHeader ? `2px solid ${theme.colors.accent}` : `1px solid ${theme.colors.border}`,
     fontSize: isHeader ? 24 : 26,
     fontWeight: isHeader ? 700 : highlight ? 700 : 400,
+    fontFamily: theme.fonts.body,
     color: isHeader
       ? theme.colors.accent
       : highlight

@@ -31,6 +31,8 @@ export const SceneTitle: React.FC<SceneTitleProps> = ({ title, subtitle, delay =
               fontSize: 32,
               color: theme.colors.textMuted,
               marginTop: 12,
+              fontFamily: theme.fonts.body,
+              maxWidth: 1400,
             }}
           >
             {subtitle}
